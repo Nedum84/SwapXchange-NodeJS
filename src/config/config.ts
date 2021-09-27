@@ -24,7 +24,7 @@ const envVarsSchema = Joi.object()
     DB_PORT: Joi.number().default(5432),
     PAYSTACK_TEST_KEY: Joi.string().default("key"),
     PAYSTACK_LIVE_KEY: Joi.string().default("key"),
-    AGORA_APP_ID: Joi.string().default("agora_app_cert"),
+    AGORA_APP_ID: Joi.string().default("agora_app_id"),
     AGORA_APP_CERT: Joi.string().default("agora_app_cert"),
   })
   .unknown();
