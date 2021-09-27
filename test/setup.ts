@@ -22,7 +22,7 @@ declare global {
   var signin: () => Promise<SignInData>;
 }
 
-jest.setTimeout(5000); //--> 5 secs
+// jest.setTimeout(5000); //--> 5 secs
 
 async function reset() {
   await sequelize.sync({ force: true });
