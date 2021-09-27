@@ -15,6 +15,10 @@ const data = (props: object = {}): any => {
     name: faker.name.firstName(),
     email: faker.internet.email(),
     mobile_number: faker.phone.phoneNumber(),
+    radius: 200,
+    address_lat: faker.datatype.number({ min: -10, max: 10 }),
+    address_long: faker.datatype.number({ min: -10, max: 10 }),
+    user_level: 2, //-->admin
   };
   return { ...defaultProps, ...props };
 };

@@ -1,4 +1,5 @@
 import sequelize from "../src/models";
+import { runAssociations } from "../src/models/associations";
 import { UserAttributes } from "../src/models/user.model";
 import tokenService from "../src/services/token.service";
 import clearTestDb from "./clear.test.db";
@@ -23,15 +24,19 @@ declare global {
 
 jest.setTimeout(5000); //--> 5 secs
 
-beforeAll(async () => {
+async function reset() {
   await sequelize.sync({ force: true });
+  runAssociations();
+
+  // await clearTestDb();
+}
+beforeAll(async () => {
+  await reset();
 });
 
 beforeEach(async () => {
   jest.clearAllMocks();
-
-  await sequelize.sync({ force: true });
-  // await clearTestDb();
+  // await reset();
 });
 
 afterAll(async () => {

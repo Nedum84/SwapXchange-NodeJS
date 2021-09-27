@@ -1,26 +1,67 @@
 import request from "supertest";
 import * as faker from "faker";
 import { app } from "../../src/app";
+import productFake from "../factories/product.fake";
 
-describe("test for balance enquiry", () => {
-  it("should succeed when I add money and get my balance", async () => {
+describe("Product", () => {
+  it("Can add product", async () => {
     const { tokens, user } = await global.signin();
 
-    // //Load money
-    // await request(app)
-    //   .post("/addmoney")
-    //   .set("authorization", `bearer ${tokens?.access?.token}`)
-    //   .send({
-    //     amount,
-    //   })
-    //   .expect(200);
-    // //get balance
-    // const res = await request(app)
-    //   .get("/balance")
-    //   .set("authorization", `bearer ${tokens?.access?.token}`);
+    const { user_id, ...others } = productFake.fakeProduct;
 
-    // expect(res.body.data).toHaveProperty("balance");
-    // expect(res.body.data).toHaveProperty("point_earn");
-    // expect(res.body.data.balance).toEqual(amount);
+    const response = await request(app)
+      .post("/v1/products")
+      .set("authorization", `bearer ${tokens?.access?.token}`)
+      .send({
+        ...others,
+        images: [
+          {
+            image_path: "https/asbahjsbhjas.com",
+          },
+        ],
+      });
+
+    expect(response.body.data).toHaveProperty("product");
+    expect(response.body.data.product).toHaveProperty("product_name");
+    expect(response.body.data.product).toHaveProperty("user");
+    expect(response.statusCode).toEqual(201);
+    expect(response.body).toMatchObject({
+      success: true,
+    });
+  });
+  it("Can get products", async () => {
+    const { tokens, user } = await global.signin();
+
+    const { user_id, ...others } = productFake.fakeProduct;
+
+    await request(app)
+      .post("/v1/products")
+      .set("authorization", `bearer ${tokens?.access?.token}`)
+      .send({
+        ...others,
+        order_id: faker.datatype.number({ max: 36000 }).toString(),
+        user_address_lat: user.address_lat,
+        user_address_long: user.address_long,
+        images: [
+          {
+            image_path: "https/asbahjsbhjas.com",
+          },
+        ],
+      })
+      .expect(201);
+    //--> bulk create
+    // await productFake.createBulk();
+
+    const response = await request(app)
+      .get("/v1/products/all/0/60")
+      .set("authorization", `bearer ${tokens?.access?.token}`)
+      .send();
+
+    expect(response.body.data).toHaveProperty("products");
+    expect(response.body.data.products.length).toBeGreaterThan(0);
+    expect(response.statusCode).toEqual(200);
+    expect(response.body).toMatchObject({
+      success: true,
+    });
   });
 });

@@ -128,7 +128,7 @@ Product.prototype.toJSON = function () {
   exclude.forEach((e) => delete values[e]);
   return values;
 };
-async function productAssociate(): Promise<void> {
+function productAssociate() {
   Product.belongsTo(User, {
     as: "user",
     foreignKey: "user_id",

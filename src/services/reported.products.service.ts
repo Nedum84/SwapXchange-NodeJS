@@ -15,6 +15,10 @@ const findOne = async (reported_id: string) => {
 const update = async (req: Request) => {
   const { reported_id } = req.params;
   const { status } = req.body;
+  const { user_level } = req.user;
+  if (!user_level || user_level == 1) {
+    throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
+  }
   const report = await findOne(reported_id);
   report.status = status;
   await report.save();

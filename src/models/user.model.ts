@@ -146,7 +146,7 @@ User.prototype.toJSON = function () {
   return values;
 };
 
-async function userAssociate() {
+function userAssociate() {
   User.hasMany(Product, {
     as: "products",
     foreignKey: "user_id",

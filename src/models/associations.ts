@@ -16,8 +16,8 @@ export const runAssociations = async () => {
   productChatsAssociate();
   imageProductAssociate();
   coinsAssociate();
-  await productAssociate();
-  await userAssociate();
+  productAssociate();
+  userAssociate();
   categoryAssociate();
   subcategoryAssociate();
 };

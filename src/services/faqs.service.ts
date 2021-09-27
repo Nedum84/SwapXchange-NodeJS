@@ -16,7 +16,7 @@ const update = async (req: Request) => {
   const faq = await findOne(faq_id);
 
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
   Object.assign(faq, { question, answer });
@@ -28,7 +28,7 @@ const create = async (req: Request) => {
   const { user_id } = req.user;
 
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
   const faq = await Faqs.create({

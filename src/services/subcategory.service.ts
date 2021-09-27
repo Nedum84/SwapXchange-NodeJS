@@ -25,7 +25,7 @@ const update = async (req: Request) => {
   const body: SubCategoryAttributes = req.body;
 
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
   const category = await findOne(sub_category_id);
@@ -38,7 +38,7 @@ const create = async (req: Request) => {
   const body: SubCategoryAttributes = req.body;
 
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
   const category = await SubCategory.create(body);

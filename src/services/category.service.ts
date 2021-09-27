@@ -22,7 +22,7 @@ const update = async (req: Request) => {
   const { category_id } = req.params;
   const body: CategoryAttributes = req.body;
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
 
@@ -35,7 +35,7 @@ const update = async (req: Request) => {
 const create = async (req: Request) => {
   const body: CategoryAttributes = req.body;
   const { user_level } = req.user;
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
 

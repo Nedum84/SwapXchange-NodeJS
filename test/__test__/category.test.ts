@@ -1,38 +1,37 @@
 import request from "supertest";
 import { app } from "../../src/app";
 
-describe("test add money", () => {
-  it("should succeed when I add money with valid auth tokens", async () => {
+describe("Category test", () => {
+  it("should succeed when create category", async () => {
     const { tokens } = await global.signin();
 
-    // const response = await request(app)
-    //   .post("/addmoney")
-    //   .set("authorization", `bearer ${tokens?.access?.token}`)
-    //   .send({
-    //     amount: 1200,
-    //   });
+    const response = await request(app)
+      .post("/v1/category")
+      .set("authorization", `bearer ${tokens?.access?.token}`)
+      .send({
+        category_name: "Shoess",
+        category_icon:
+          "https://www.seekpng.com/png/detail/186-1864322_overwatch-icon-button-overwatch-logo.png",
+      });
 
-    // expect(response.body.data).toHaveProperty("wallet");
-    // expect(response.body.data).toHaveProperty("point_earn");
-    // expect(response.statusCode).toEqual(200);
-    // expect(response.body).toMatchObject({
-    //   success: true,
-    // });
+    expect(response.body).toHaveProperty("data");
+    expect(response.statusCode).toEqual(201);
+    expect(response.body).toMatchObject({
+      success: true,
+    });
   });
 
-  it("should fail for invalid amount", async () => {
+  it("Can get all categories", async () => {
     const { tokens } = await global.signin();
 
-    // const response = await request(app)
-    //   .post("/addmoney")
-    //   .set("authorization", `bearer ${tokens?.access?.token}`)
-    //   .send({
-    //     amount: "InvalidInt",
-    //   });
+    const response = await request(app)
+      .get("/v1/category")
+      .set("authorization", `bearer ${tokens?.access?.token}`)
+      .send();
 
-    // expect(response.body).toMatchObject({
-    //   success: false,
-    // });
-    // expect(response.statusCode).toEqual(400);
+    expect(response.body).toMatchObject({
+      success: true,
+    });
+    expect(response.statusCode).toEqual(200);
   });
 });

@@ -100,7 +100,7 @@ const createForUser = async (req: Request) => {
   const { user_level } = req.user;
   const { user_id } = req.params;
 
-  if (user_level == 1) {
+  if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
 
