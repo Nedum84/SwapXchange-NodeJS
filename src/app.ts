@@ -13,7 +13,7 @@ const xss = require("xss-clean");
 const app = express();
 
 app.use(json());
-// parse json request body!
+// parse json request body
 app.use(express.json({ limit: "50mb" }));
 
 if (config.env !== "test") {
