@@ -50,10 +50,10 @@ describe("Product", () => {
       })
       .expect(201);
     //--> bulk create
-    // await productFake.createBulk();
+    await productFake.createBulk();
 
     const response = await request(app)
-      .get("/v1/products/all/0/60")
+      .get("/v1/products/all?offset=0&limit=60")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send();
 

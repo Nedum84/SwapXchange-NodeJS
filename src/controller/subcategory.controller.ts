@@ -5,24 +5,24 @@ import subcategoryService from "../services/subcategory.service";
 const findOne = async (req: Request, res: Response) => {
   const { sub_category_id } = req.params;
   const result = await subcategoryService.findOne(sub_category_id);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { subcategory: result });
 };
 const update = async (req: Request, res: Response) => {
   const result = await subcategoryService.update(req);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { subcategory: result });
 };
 const create = async (req: Request, res: Response) => {
   const result = await subcategoryService.create(req);
-  ApiResponse.created(res, result);
+  ApiResponse.created(res, { subcategory: result });
 };
 const findByCategoryId = async (req: Request, res: Response) => {
   const { category_id } = req.params;
   const result = await subcategoryService.findByCategoryId(category_id);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { subcategory: result });
 };
 const findAll = async (req: Request, res: Response) => {
   const result = await subcategoryService.findAll(req);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { subcategory: result });
 };
 
 export default {

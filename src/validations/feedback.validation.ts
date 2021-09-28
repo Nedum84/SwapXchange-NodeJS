@@ -8,7 +8,7 @@ const findOne = {
   }),
 };
 const findAll = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     status: Joi.string()
       .default("all")
       .valid("all", ...Object.values(FeedbackStatus)),

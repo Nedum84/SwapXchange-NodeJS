@@ -20,7 +20,7 @@ const logout = async (req: Request, res: Response) => {
 
 const refreshToken = async (req: Request, res: Response) => {
   const tokens = await authService.refreshToken(req);
-  ApiResponse.ok(res, { ...tokens });
+  ApiResponse.ok(res, { tokens });
 };
 
 export default {

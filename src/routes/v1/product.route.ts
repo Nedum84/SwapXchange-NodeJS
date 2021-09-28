@@ -13,43 +13,43 @@ router.patch(
 );
 //---> offset/limit  eg all/1/21
 router.get(
-  "/all/:offset/:limit",
+  "/all",
   validate(productValidation.findAll),
   productController.findAll
 );
 //---> search suggestions
 router.get(
-  "/search/suggest/:search_query",
+  "/search/suggest",
   validate(productValidation.findSearchSuggestions),
   productController.findSearchSuggestions
 );
 router.get(
-  "/search/:search_query/:filters/:offset/:limit",
+  "/search",
   validate(productValidation.findBySearch),
   productController.findBySearch
 );
 router.get(
-  "/category/:category/:offset/:limit",
+  "/category/:category",
   validate(productValidation.findByCategory),
   productController.findByCategory
 );
 router.get(
-  "/subcategory/:subcategory/:filters/:offset/:limit",
+  "/subcategory/:subcategory",
   validate(productValidation.findBySubCategory),
   productController.findBySubCategory
 );
 router.get(
-  "/me/:offset/:limit",
+  "/me",
   validate(productValidation.findMyProducts),
   productController.findMyProducts
 );
 router.get(
-  "/user/:user_id/:filter/:offset/:limit",
+  "/user/:user_id",
   validate(productValidation.findUserProducts),
   productController.findUserProducts
 );
 router.get(
-  "/exchange/:product_id/:offset/:limit",
+  "/exchange/:product_id",
   validate(productValidation.findExchangeOptions),
   productController.findExchangeOptions
 );

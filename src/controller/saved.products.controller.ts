@@ -8,7 +8,7 @@ const removeSaved = async (req: Request, res: Response) => {
 };
 const findAllForUser = async (req: Request, res: Response) => {
   const result = await savedProductsService.findAllForUser(req);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { products: result });
 };
 const checkSaved = async (req: Request, res: Response) => {
   const { user_id } = req.user;

@@ -6,7 +6,7 @@ import feedbackController from "../../controller/feedback.controller";
 const router = express.Router();
 
 router.get(
-  "/all/:status",
+  "/all",
   validate(feedbackValidation.findAll),
   feedbackController.findAll
 );

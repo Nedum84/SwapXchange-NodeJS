@@ -122,7 +122,7 @@ const create = async (req: Request) => {
 const findByCategory = async (req: Request) => {
   const { user_id } = req.user;
   const { category } = req.params;
-  const options = Helpers.getPaginate(req.params);
+  const options = Helpers.getPaginate(req.query);
 
   const cat = await categoryService.findOne(category);
 
@@ -140,7 +140,7 @@ const findByCategory = async (req: Request) => {
 const findBySubCategory = async (req: Request) => {
   const { user_id } = req.user;
   const { subcategory } = req.params;
-  const options = Helpers.getPaginate(req.params);
+  const options = Helpers.getPaginate(req.query);
 
   const sub_cat = await subcategoryService.findOne(subcategory);
 
@@ -157,8 +157,8 @@ const findBySubCategory = async (req: Request) => {
 };
 const findBySearch = async (req: Request) => {
   const { user_id } = req.user;
-  const { search_query, filters } = req.params;
-  const options = Helpers.getPaginate(req.params);
+  const { search_query, filters } = req.query;
+  const options = Helpers.getPaginate(req.query);
 
   const searchQuery = search_query != "none" ? search_query : "";
   const extra = `
@@ -211,7 +211,7 @@ const findBySearch = async (req: Request) => {
   return products;
 };
 const findSearchSuggestions = async (req: Request) => {
-  const { search_query } = req.params;
+  const { search_query } = req.query;
   const query = `SELECT DISTINCT product_name as item FROM "Product" WHERE product_name LIKE '%${search_query}%'
               UNION
             SELECT DISTINCT category_name as item FROM "Category" WHERE category_name LIKE '%${search_query}%'
@@ -228,7 +228,7 @@ const findSearchSuggestions = async (req: Request) => {
 const findExchangeOptions = async (req: Request) => {
   const { user_id } = req.user;
   const { product_id } = req.params;
-  const options = Helpers.getPaginate(req.params);
+  const options = Helpers.getPaginate(req.query);
   const product = await findOne(product_id);
   const suggestions = product.product_suggestion.map((i) => `'${i}'`);
 
@@ -245,7 +245,7 @@ const findExchangeOptions = async (req: Request) => {
 };
 const findMyProducts = async (req: Request) => {
   const { user_id } = req.user;
-  const { limit, offset } = Helpers.getPaginate(req.params);
+  const { limit, offset } = Helpers.getPaginate(req.query);
 
   const query = `SELECT "Product".*, 
                   ${ProductUtils.imgSubQuery()}, 
@@ -265,8 +265,9 @@ const findMyProducts = async (req: Request) => {
   return products;
 };
 const findUserProducts = async (req: Request) => {
-  const { user_id, filter } = req.params;
-  const { limit, offset } = Helpers.getPaginate(req.params);
+  const { user_id } = req.params;
+  const { filter } = req.query;
+  const { limit, offset } = Helpers.getPaginate(req.query);
   const extra = filter == "all" ? "" : `AND product_status = '${filter}'`;
 
   const user = await userService.findOne(user_id);
@@ -314,7 +315,7 @@ const findNearUsers = async (req: Request) => {
 };
 const findAll = async (req: Request) => {
   const { user_id } = req.user;
-  const options = Helpers.getPaginate(req.params);
+  const options = Helpers.getPaginate(req.query);
 
   const query = await ProductUtils.selectQuery({ user_id, ...options });
 

@@ -16,8 +16,8 @@ const data = (props: object = {}): any => {
     email: faker.internet.email(),
     mobile_number: faker.phone.phoneNumber(),
     radius: 200,
-    address_lat: faker.datatype.number({ min: -10, max: 10 }),
-    address_long: faker.datatype.number({ min: -10, max: 10 }),
+    address_lat: faker.datatype.number({ min: 0, max: 2 }),
+    address_long: faker.datatype.number({ min: 0, max: 2 }),
     user_level: 2, //-->admin
   };
   return { ...defaultProps, ...props };

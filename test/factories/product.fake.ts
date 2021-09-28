@@ -18,20 +18,20 @@ const fake: ProductAttributes = {
   user_id: faker.datatype.uuid(),
   user_address: faker.random.words(),
   user_address_city: faker.random.words(),
-  user_address_lat: faker.datatype.number({ min: -10, max: 10 }),
-  user_address_long: faker.datatype.number({ min: -10, max: 10 }),
+  user_address_lat: faker.datatype.number({ min: 0, max: 2 }),
+  user_address_long: faker.datatype.number({ min: 0, max: 2 }),
   upload_price: faker.datatype.number(),
 };
-const fakes = Array.from(Array(10000).keys()).map((i) => {
+const fakes = Array.from(Array(20).keys()).map((i) => {
   const order_id = `${faker.datatype.number({ max: 36000 })}-${i}`;
   return { ...fake, order_id } as ProductAttributes;
 });
 
 const createBulk = async () => {
-  await Product.bulkCreate(fakes);
+  return Product.bulkCreate(fakes);
 };
 const createOne = async () => {
-  await Product.create(fake);
+  return Product.create(fake);
 };
 
 export default {

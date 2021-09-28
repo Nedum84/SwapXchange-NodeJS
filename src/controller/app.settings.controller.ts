@@ -5,7 +5,7 @@ import appSettingsService from "../services/app.settings.service";
 const findOne = async (req: Request, res: Response) => {
   const { key } = req.params;
   const result = await appSettingsService.findOne(key);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { [key]: result });
 };
 const update = async (req: Request, res: Response) => {
   const result = await appSettingsService.update(req);

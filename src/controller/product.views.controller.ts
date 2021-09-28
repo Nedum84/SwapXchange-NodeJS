@@ -6,7 +6,7 @@ const findAll = async (req: Request, res: Response) => {
   const { product_id } = req.params;
 
   const result = await productViewsService.findAll(product_id);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { views: result });
 };
 const create = async (req: Request, res: Response) => {
   const result = await productViewsService.create(req);

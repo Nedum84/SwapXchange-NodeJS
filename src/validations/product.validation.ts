@@ -8,17 +8,21 @@ const findOne = {
   }),
 };
 const findAll = {
-  params: Joi.object().keys(paginateDefault),
+  query: Joi.object().keys(paginateDefault),
 };
 const findByCategory = {
   params: Joi.object().keys({
     category: Joi.string().required(),
+  }),
+  query: Joi.object().keys({
     ...paginateDefault,
   }),
 };
 const findBySubCategory = {
   params: Joi.object().keys({
     subcategory: Joi.string().required(),
+  }),
+  query: Joi.object().keys({
     filters: Joi.string()
       .default("newest")
       .valid("best-match", "price-high", "price-low", "newest", "oldest"),
@@ -26,7 +30,7 @@ const findBySubCategory = {
   }),
 };
 const findBySearch = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     search_query: Joi.string().required(),
     filters: Joi.string()
       .default(null)
@@ -37,11 +41,13 @@ const findBySearch = {
 const findExchangeOptions = {
   params: Joi.object().keys({
     product_id: Joi.string().required(),
+  }),
+  query: Joi.object().keys({
     ...paginateDefault,
   }),
 };
 const findMyProducts = {
-  params: Joi.object().keys(paginateDefault),
+  query: Joi.object().keys(paginateDefault),
 };
 const findNearUsers = {
   params: Joi.object().keys({
@@ -49,13 +55,15 @@ const findNearUsers = {
   }),
 };
 const findSearchSuggestions = {
-  params: Joi.object().keys({
+  query: Joi.object().keys({
     search_query: Joi.string().required(),
   }),
 };
 const findUserProducts = {
   params: Joi.object().keys({
     user_id: Joi.string().required(),
+  }),
+  query: Joi.object().keys({
     filter: Joi.string()
       .default("all")
       .valid("all", ...Object.values(ProductStatus)),

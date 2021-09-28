@@ -38,11 +38,11 @@ const findMyProducts = async (req: Request, res: Response) => {
 };
 const findNearUsers = async (req: Request, res: Response) => {
   const result = await productService.findNearUsers(req);
-  ApiResponse.ok(res, { products: result });
+  ApiResponse.ok(res, { users: result });
 };
 const findSearchSuggestions = async (req: Request, res: Response) => {
   const result = await productService.findSearchSuggestions(req);
-  ApiResponse.ok(res, { products: result });
+  ApiResponse.ok(res, { suggestions: result });
 };
 const findUserProducts = async (req: Request, res: Response) => {
   const result = await productService.findUserProducts(req);

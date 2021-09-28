@@ -21,7 +21,7 @@ const create = async (req: Request) => {
     role,
     privilegeExpiredTs
   );
-  return { token: tokenA };
+  return tokenA;
 };
 
 export default {

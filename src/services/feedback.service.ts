@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { Feedback } from "../models/feedback.model";
@@ -35,8 +35,9 @@ const create = async (req: Request) => {
 };
 const findAll = async (req: Request) => {
   // const { limit, offset } = Helpers.getPaginate(req.query);
-  const paginateOptions = Helpers.getPaginate(req.params);
-  const { status } = req.params;
+  const paginateOptions = Helpers.getPaginate(req.query);
+
+  const { status } = req.query;
   const where = status === "all" ? {} : { status };
   const feedbacks = await Feedback.findAll({
     where,

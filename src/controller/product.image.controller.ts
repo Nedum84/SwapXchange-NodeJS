@@ -5,12 +5,12 @@ import productImageService from "../services/product.image.service";
 const findOne = async (req: Request, res: Response) => {
   const { image_id } = req.params;
   const result = await productImageService.findOne(image_id);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { image_product: result });
 };
 const findAll = async (req: Request, res: Response) => {
   const { product_id } = req.params;
   const result = await productImageService.findAll(product_id);
-  ApiResponse.ok(res, result);
+  ApiResponse.ok(res, { image_product: result });
 };
 const deleteOne = async (req: Request, res: Response) => {
   const result = await productImageService.deleteOne(req);
@@ -19,11 +19,11 @@ const deleteOne = async (req: Request, res: Response) => {
 const create = async (req: Request, res: Response) => {
   const { body } = req;
   const result = await productImageService.createOne(body);
-  ApiResponse.created(res, result);
+  ApiResponse.created(res, { image_product: result });
 };
 const update = async (req: Request, res: Response) => {
   const result = await productImageService.update(req);
-  ApiResponse.created(res, result);
+  ApiResponse.created(res, { image_product: result });
 };
 
 export default {

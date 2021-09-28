@@ -15,7 +15,8 @@ const update = async (req: Request) => {
 
   setting.value = value;
   await setting.save();
-  return setting.reload();
+  const updated = setting.reload();
+  return { [key]: updated };
 };
 const addNew = async (req: Request) => {
   const { key, value } = req.body;
@@ -26,7 +27,7 @@ const addNew = async (req: Request) => {
     value,
     last_updated_by: user_id,
   });
-  return setting;
+  return { [key]: setting };
 };
 
 export default {
