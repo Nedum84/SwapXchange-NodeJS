@@ -14,7 +14,7 @@ const app = express();
 
 app.use(json());
 // parse json request body
-app.use(express.json({ limit: "50mb" }));
+app.use(express.json({ limit: "5mb" }));
 
 if (config.env !== "test") {
   app.use(morgan.successHandler);
@@ -27,12 +27,24 @@ app.use(helmet());
 // sanitize request data
 app.use(xss());
 
-app.get("/", (req, res) => {
+// enable cors
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE,PATCH");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, Accept, X-Requested-With, Content-Type"
+  );
+
+  next();
+});
+
+app.get("/api/v1", (req, res) => {
   res.send("Hi! Welcome to SwapXchange.");
 });
 
 //Routing to the api
-app.use("/v1", v1Routes);
+app.use("/api/v1", v1Routes);
 
 app.all("*", async (req, res) => {
   throw new NotFoundError();

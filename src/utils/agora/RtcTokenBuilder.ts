@@ -1,5 +1,5 @@
-const AccessToken = require("./AccessToken").AccessToken;
-const Priviledges = require("./AccessToken").priviledges;
+import { AccessToken } from "./AccessToken";
+import { priviledges as Priviledges } from "./AccessToken";
 
 const Role = {
   // DEPRECATED. Role::ATTENDEE has the same privileges as Role.PUBLISHER.
@@ -18,6 +18,8 @@ const Role = {
 };
 
 class RtcTokenBuilder {
+  //@ts-ignore
+  static key: AccessToken;
   /**
    * Builds an RTC token using an Integer uid.
    * @param {*} appID  The App ID issued to you by Agora.
@@ -36,12 +38,12 @@ class RtcTokenBuilder {
    * @return The new Token.
    */
   static buildTokenWithUid(
-    appID,
-    appCertificate,
-    channelName,
-    uid,
-    role,
-    privilegeExpiredTs
+    appID: any,
+    appCertificate: any,
+    channelName: any,
+    uid: any,
+    role: any,
+    privilegeExpiredTs: any
   ) {
     return this.buildTokenWithAccount(
       appID,
@@ -71,12 +73,12 @@ class RtcTokenBuilder {
    * @return The new Token.
    */
   static buildTokenWithAccount(
-    appID,
-    appCertificate,
-    channelName,
-    account,
-    role,
-    privilegeExpiredTs
+    appID: any,
+    appCertificate: any,
+    channelName: any,
+    account: number,
+    role: number,
+    privilegeExpiredTs: any
   ) {
     this.key = new AccessToken(appID, appCertificate, channelName, account);
     this.key.addPriviledge(Priviledges.kJoinChannel, privilegeExpiredTs);
@@ -98,5 +100,7 @@ class RtcTokenBuilder {
   }
 }
 
-module.exports.RtcTokenBuilder = RtcTokenBuilder;
-module.exports.Role = Role;
+const _RtcTokenBuilder = RtcTokenBuilder;
+export { _RtcTokenBuilder as RtcTokenBuilder };
+const _Role = Role;
+export { _Role as Role };

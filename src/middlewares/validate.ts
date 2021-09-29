@@ -4,8 +4,7 @@ import { Request, Response, NextFunction } from "express";
 import { ErrorResponse } from "../apiresponse/error.response";
 
 const validate =
-  (schema: any) =>
-  (req: Request, res: Response, next: NextFunction) => {
+  (schema: any) => (req: Request, res: Response, next: NextFunction) => {
     const validSchema = pick(schema, ["params", "query", "body"]);
     const object = pick(req, Object.keys(validSchema));
     const { value, error } = Joi.compile(validSchema)
@@ -24,6 +23,7 @@ const validate =
 
       return next(new ErrorResponse(errorMessage, httpStatus.BAD_REQUEST));
     }
+
     Object.assign(req, value);
     return next();
   };

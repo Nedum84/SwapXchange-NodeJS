@@ -1,12 +1,14 @@
 import { Request } from "express";
 import config from "../config/config";
-const RtcTokenBuilder =
-  require("../utils/agora/RtcTokenBuilder").RtcTokenBuilder;
-const RtcRole = require("../utils/agora/RtcTokenBuilder").Role;
+// const RtcTokenBuilder =
+//   require("../utils/agora/RtcTokenBuilder").RtcTokenBuilder;
+// const RtcRole = require("../utils/agora/RtcTokenBuilder").Role;
+import { Role } from "../utils/agora/RtcTokenBuilder";
+import { RtcTokenBuilder } from "../utils/agora/RtcTokenBuilder";
 
 const create = async (req: Request) => {
   const { uid, channel_name } = req.body;
-  const role = RtcRole.ATTENDEE;
+  const role = Role.ATTENDEE;
 
   const expirationTimeInSeconds = 600; //--> 10 mins
 

@@ -1,0 +1,12 @@
+
+#To install aws cli 
+curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
+sudo installer -pkg AWSCLIV2.pkg -target /
+
+#To comfigure
+aws configure
+
+#--> To deploy
+sls deploy -v
+
+# https://levelup.gitconnected.com/creating-a-simple-serverless-application-using-typescript-and-aws-part-1-be2188f5ff93
