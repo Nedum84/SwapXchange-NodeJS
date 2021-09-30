@@ -10,3 +10,7 @@ aws configure
 sls deploy -v
 
 # https://levelup.gitconnected.com/creating-a-simple-serverless-application-using-typescript-and-aws-part-1-be2188f5ff93
+
+
+#Sequelize generate migration
+sequelize migration:generate --name quiz

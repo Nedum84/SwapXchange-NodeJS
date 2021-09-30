@@ -1,4 +1,3 @@
-// lambda.js
 "use strict";
 import {
   APIGatewayProxyEvent,
@@ -19,4 +18,3 @@ const handler: APIGatewayProxyHandler = (
 export = {
   handler,
 };
-// exports.handler = handler;
