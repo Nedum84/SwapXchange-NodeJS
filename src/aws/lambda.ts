@@ -2,6 +2,7 @@
 import {
   APIGatewayProxyEvent,
   APIGatewayProxyHandler,
+    Handler,
   Context,
 } from "aws-lambda";
 import awsServerlessExpress from "aws-serverless-express";

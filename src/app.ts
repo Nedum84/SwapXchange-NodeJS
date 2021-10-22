@@ -47,7 +47,7 @@ app.get("/api/v1", (req, res) => {
 app.use("/api/v1", v1Routes);
 
 app.all("*", async (req, res) => {
-  throw new NotFoundError();
+  throw new NotFoundError("Route not found");
 });
 //Catch all Errors
 app.use(errorHandler);

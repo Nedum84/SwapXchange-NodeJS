@@ -1,26 +1,31 @@
-service: test-api
+service: auth-products-service
 frameworkVersion: "2"
 
 provider:
   name: aws
   runtime: nodejs14.x
+  memorySize: 128
+  timeout: 10
+  tags:
+    service: swapxchange
   lambdaHashingVersion: "20201221"
-  stage: "dev"
-  region: us-west-2
-  iamRoleStatements:
-    - Effect: Allow
-      Action:
-        - dynamodb:*
-      Resource:
-        - arn:aws:dynamodb:us-west-2:899172222060:table/SwapXTable
+#  stage: "dev"
+  region: eu-west-2
+  iam:
+    role: arn:aws:iam::899172222060:user/edum
+#    role: arn:aws:iam::899172222060:role/XchangeRole
+#    role: arn:aws:iam::899172222060:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway
+  vpc:
+    securityGroupIds:
+      - sg-0e16ecd2de3007de4 #Private
+    subnetIds:
+      - subnet-06ac3f82667ebe9f0
+      - subnet-0f979ac6191ee988b
+      - subnet-047d66d6a250068ae
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
-
-# custom:
-#   serverless-offline:
-#     noPrependStageInUrl: true
 
 functions:
   api:
@@ -37,16 +42,3 @@ functions:
           method: ANY
           cors: true
 
-resources:
-  Resources:
-    SwapXTable: #Resourse name(could be anything)
-      Type: AWS::DynamoDB::Table #Dynamo db resourses
-      Properties:
-        TableName: SwapXTable #(could be anything)
-        BillingMode: PAY_PER_REQUEST
-        AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: S
-        KeySchema:
-          - AttributeName: id #make id our primary key
-            KeyType: HASH

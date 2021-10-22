@@ -78,7 +78,7 @@ app.get("/api/v1", function (req, res) {
 app.use("/api/v1", v1_1.default);
 app.all("*", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
-        throw new not_found_error_1.NotFoundError();
+        throw new not_found_error_1.NotFoundError("Route not found");
     });
 }); });
 //Catch all Errors

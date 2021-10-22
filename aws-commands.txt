@@ -14,3 +14,10 @@ sls deploy -v
 
 #Sequelize generate migration
 sequelize migration:generate --name quiz
+
+Master username:
+administrator
+Master password:
+SwapXchange90$#*&
+Endpoint:
+auroralab-postgres-serverless.cluster-cyx7d9prylut.eu-west-2.rds.amazonaws.com
