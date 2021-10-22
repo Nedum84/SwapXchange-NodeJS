@@ -6,7 +6,7 @@ export default {
     dbname: config.DB_NAME!,
     username: config.DB_USERNAME!,
     password: config.DB_PASSWORD!,
-    host: config.DB_HOST || "localhost",
+    host: config.DB_HOST,
     dialect: "postgres" as Dialect,
     port: Number(config.DB_PORT) || 5432,
     pool: {
