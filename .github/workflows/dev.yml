@@ -33,31 +33,32 @@ jobs:
 #        OR
 #      - name: Serverless AWS authentication
 #        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: Create env file
-        run: | # cp .env
-          cat > .env << EOF
-          ${{ secrets.ENV }}
-          EOF
+#      - name: Create env file
+#        run: | # cp .env
+#          cat > .env << EOF
+#          ${{ secrets.ENV }}
+#          EOF
 
 #        run2: |
 #          cat << EOF > .env
 #          ${{ secrets.ENV }}
 #          EOF
 
-#        run3: |
-#          cat << EOF > .env
-#          DB_HOST=${{ secrets.DB_HOST }}
-#          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-#          DB_USERNAME=${{ secrets.DB_USERNAME }}
-#          DB_NAME=${{ secrets.DB_NAME }}
-#          JWT_SECRET=${{ secrets.JWT_SECRET }}
-#          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
-#          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
-#          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
-#          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
-#          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
-#          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
-#          EOF
+        run: |
+          cat << EOF > .env
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
+          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
+          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
+          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
+          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
+          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
+          EOF
 
 #        run4: |
 #          touch .env
