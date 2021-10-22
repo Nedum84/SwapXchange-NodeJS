@@ -29,6 +29,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
 #        OR
 #      - name: Serverless AWS authentication
 #        run: sls config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -70,9 +71,7 @@ jobs:
       - name: Deploy Lambda functions (serverless deploy)
 #        run: sls deploy -s dev
         run: sls deploy --stage dev --region $AWS_DEFAULT_REGION
-        uses: serverless/github-action@master
-        with:
-          args: deploy
+
 
 #        env: # or if using AWS credentials directly
 #           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
