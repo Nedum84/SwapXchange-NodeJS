@@ -43,7 +43,7 @@ app.get("/api/v1", (req, res) => {
   res.send("Hi! Welcome to SwapXchange.");
 });
 
-console.log(process.env);
+console.log("::::::",process.env,"--------");
 //Routing to the api
 app.use("/api/v1", v1Routes);
 
