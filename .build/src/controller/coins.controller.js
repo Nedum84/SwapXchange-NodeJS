@@ -52,13 +52,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var api_response_1 = __importDefault(require("../apiresponse/api.response"));
 var coins_service_1 = __importDefault(require("../services/coins.service"));
+var helpers_1 = __importDefault(require("../utils/helpers"));
 var findAllByUserId = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, result;
+    var user_id, limit, result;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 user_id = req.params.user_id;
-                return [4 /*yield*/, coins_service_1.default.findAllByUserId(user_id)];
+                limit = helpers_1.default.getPaginate(req.query).limit;
+                return [4 /*yield*/, coins_service_1.default.findAllByUserId(user_id, limit)];
             case 1:
                 result = _a.sent();
                 api_response_1.default.ok(res, result);

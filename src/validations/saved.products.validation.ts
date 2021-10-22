@@ -7,7 +7,7 @@ const removeSaved = {
   }),
 };
 const findAllForUser = {
-  params: Joi.object().keys(paginateDefault),
+  query: Joi.object().keys(paginateDefault),
 };
 
 const checkSaved = {

@@ -50,126 +50,113 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.userAssociate = exports.User = void 0;
+exports.UserFactory = void 0;
 var sequelize_1 = require("sequelize");
 var sequelize_2 = require("sequelize");
-var _1 = __importDefault(require("."));
 var user_enum_1 = require("../enum/user.enum");
 var constants_1 = __importDefault(require("../utils/constants"));
-var product_model_1 = require("./product.model");
-var User = _1.default.define("User", {
-    id: {
-        type: sequelize_2.DataTypes.BIGINT,
-        autoIncrement: true,
-        primaryKey: true,
-    },
-    user_id: {
-        type: sequelize_2.DataTypes.STRING,
-        defaultValue: constants_1.default.UUID,
-        primaryKey: true,
-        comment: "Users Id",
-    },
-    uid: {
-        type: sequelize_2.DataTypes.STRING,
-        primaryKey: true,
-        allowNull: false,
-    },
-    name: sequelize_2.DataTypes.STRING,
-    mobile_number: sequelize_2.DataTypes.STRING,
-    email: {
-        type: sequelize_2.DataTypes.STRING,
-        unique: true,
-    },
-    radius: sequelize_2.DataTypes.INTEGER,
-    address: sequelize_2.DataTypes.STRING,
-    address_lat: sequelize_2.DataTypes.FLOAT,
-    address_long: sequelize_2.DataTypes.FLOAT,
-    state: sequelize_2.DataTypes.STRING,
-    profile_photo: sequelize_2.DataTypes.STRING,
-    device_token: sequelize_2.DataTypes.STRING,
-    notification: {
-        type: sequelize_2.DataTypes.JSONB,
-        defaultValue: {
-            general: true,
-            call: true,
-            chat: true,
-            product: true,
+function UserFactory(sequelize) {
+    var _this = this;
+    var User = sequelize.define("User", {
+        id: {
+            type: sequelize_2.DataTypes.BIGINT,
+            autoIncrement: true,
+            primaryKey: true,
         },
-    },
-    user_level: sequelize_2.DataTypes.INTEGER,
-    online_status: {
-        type: sequelize_2.DataTypes.ENUM,
-        values: Object.values(user_enum_1.OnlineStatus),
-        defaultValue: user_enum_1.OnlineStatus.ONLINE,
-    },
-    user_app_version: sequelize_2.DataTypes.INTEGER,
-    base_currency: {
-        type: sequelize_2.DataTypes.ENUM,
-        values: Object.values(user_enum_1.BaseCurrency),
-        defaultValue: user_enum_1.BaseCurrency.NGN,
-    },
-    last_login: {
-        type: sequelize_2.DataTypes.DATE,
-        defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
-    },
-    suspended: {
-        type: sequelize_2.DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
-    suspended_at: {
-        type: sequelize_2.DataTypes.DATE,
-        defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
-    },
-    un_suspended_at: {
-        type: sequelize_2.DataTypes.DATE,
-        defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
-    },
-    ip_ban: {
-        type: sequelize_2.DataTypes.BOOLEAN,
-        defaultValue: false,
-    },
-    // is_verified: {
-    //   type: DataTypes.BOOLEAN,
-    //   defaultValue: false,
-    // },
-    version: {
-        type: sequelize_2.DataTypes.INTEGER,
-        allowNull: false,
-        defaultValue: 0,
-    },
-}, {
-    timestamps: true,
-    tableName: "User",
-    version: true,
-    freezeTableName: true,
-    hooks: {
-        beforeCreate: function (user) { return __awaiter(void 0, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                return [2 /*return*/];
-            });
-        }); },
-    },
-});
-exports.User = User;
-User.prototype.toJSON = function () {
-    var values = __assign({}, this.get());
-    var exclude = ["version", "id", "createdAt", "updatedAt"];
-    exclude.forEach(function (e) { return delete values[e]; });
-    return values;
-};
-function userAssociate() {
-    User.hasMany(product_model_1.Product, {
-        as: "products",
-        foreignKey: "user_id",
-        sourceKey: "user_id",
+        user_id: {
+            type: sequelize_2.DataTypes.STRING,
+            defaultValue: constants_1.default.UUID,
+            primaryKey: true,
+            comment: "Users Id",
+        },
+        uid: {
+            type: sequelize_2.DataTypes.STRING,
+            primaryKey: true,
+            allowNull: false,
+        },
+        name: sequelize_2.DataTypes.STRING,
+        mobile_number: sequelize_2.DataTypes.STRING,
+        email: {
+            type: sequelize_2.DataTypes.STRING,
+            unique: true,
+        },
+        radius: sequelize_2.DataTypes.INTEGER,
+        address: sequelize_2.DataTypes.STRING,
+        address_lat: sequelize_2.DataTypes.FLOAT,
+        address_long: sequelize_2.DataTypes.FLOAT,
+        state: sequelize_2.DataTypes.STRING,
+        profile_photo: sequelize_2.DataTypes.STRING,
+        device_token: sequelize_2.DataTypes.STRING,
+        notification: {
+            type: sequelize_2.DataTypes.JSONB,
+            defaultValue: {
+                general: true,
+                call: true,
+                chat: true,
+                product: true,
+            },
+        },
+        user_level: sequelize_2.DataTypes.INTEGER,
+        online_status: {
+            type: sequelize_2.DataTypes.ENUM,
+            values: Object.values(user_enum_1.OnlineStatus),
+            defaultValue: user_enum_1.OnlineStatus.ONLINE,
+        },
+        user_app_version: sequelize_2.DataTypes.INTEGER,
+        base_currency: {
+            type: sequelize_2.DataTypes.ENUM,
+            values: Object.values(user_enum_1.BaseCurrency),
+            defaultValue: user_enum_1.BaseCurrency.NGN,
+        },
+        last_login: {
+            type: sequelize_2.DataTypes.DATE,
+            defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        suspended: {
+            type: sequelize_2.DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        suspended_at: {
+            type: sequelize_2.DataTypes.DATE,
+            defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        un_suspended_at: {
+            type: sequelize_2.DataTypes.DATE,
+            defaultValue: sequelize_1.Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        ip_ban: {
+            type: sequelize_2.DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        is_verified: {
+            type: sequelize_2.DataTypes.BOOLEAN,
+            defaultValue: false,
+        },
+        version: {
+            type: sequelize_2.DataTypes.INTEGER,
+            allowNull: false,
+            defaultValue: 0,
+        },
+    }, {
+        timestamps: true,
+        tableName: "User",
+        version: true,
+        freezeTableName: true,
+        hooks: {
+            beforeCreate: function (user) { return __awaiter(_this, void 0, void 0, function () {
+                return __generator(this, function (_a) {
+                    return [2 /*return*/];
+                });
+            }); },
+        },
     });
-    // User.hasMany(ImageProduct, {
-    //   as: "images",
-    //   onDelete: "cascade",
-    //   foreignKey: "product_id",
-    //   sourceKey: "product_id",
-    // });
-    // await User.sync({ force: true });
+    User.prototype.toJSON = function () {
+        var values = __assign({}, this.get());
+        var exclude = ["version", "id"];
+        exclude.forEach(function (e) { return delete values[e]; });
+        return values;
+    };
+    return User;
 }
-exports.userAssociate = userAssociate;
+exports.UserFactory = UserFactory;
 //# sourceMappingURL=user.model.js.map

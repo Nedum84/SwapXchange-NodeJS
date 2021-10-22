@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ProductViews } from "../models/product.views.model";
+import { ProductViews } from "../models";
 import productService from "./product.service";
 
 const findAll = async (product_id: string) => {

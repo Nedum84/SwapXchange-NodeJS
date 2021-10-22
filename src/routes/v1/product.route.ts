@@ -12,11 +12,7 @@ router.patch(
   productController.update
 );
 //---> offset/limit  eg all/1/21
-router.get(
-  "/all",
-  validate(productValidation.findAll),
-  productController.findAll
-);
+router.get("/", validate(productValidation.findAll), productController.findAll);
 //---> search suggestions
 router.get(
   "/search/suggest",

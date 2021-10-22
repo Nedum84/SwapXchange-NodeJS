@@ -8,7 +8,10 @@ const findOne = {
   }),
 };
 const findAll = {
-  query: Joi.object().keys(paginateDefault),
+  query: Joi.object().keys({
+    filters: Joi.string().valid(...Object.values(ProductStatus), "all"),
+    ...paginateDefault,
+  }),
 };
 const findByCategory = {
   params: Joi.object().keys({
@@ -64,7 +67,7 @@ const findUserProducts = {
     user_id: Joi.string().required(),
   }),
   query: Joi.object().keys({
-    filter: Joi.string()
+    filters: Joi.string()
       .default("all")
       .valid("all", ...Object.values(ProductStatus)),
     ...paginateDefault,
@@ -95,7 +98,7 @@ const update = {
 
 const create = {
   body: Joi.object().keys({
-    order_id: Joi.string().required(),
+    // order_id: Joi.string().required(),
     product_name: Joi.string().required(),
     category: Joi.string().required(),
     sub_category: Joi.string().required(),
@@ -118,6 +121,7 @@ const create = {
           idx: Joi.number().default(200),
         })
       )
+      .min(1)
       .required(),
   }),
 };

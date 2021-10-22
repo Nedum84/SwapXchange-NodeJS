@@ -1,6 +1,7 @@
 import faker from "faker";
 import { ProductCondition, ProductStatus } from "../../src/enum/product.enum";
-import { Product, ProductAttributes } from "../../src/models/product.model";
+import { Product } from "../../src/models";
+import { ProductAttributes } from "../../src/models/product.model";
 
 //@ts-ignore
 const fake: ProductAttributes = {

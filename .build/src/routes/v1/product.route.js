@@ -11,7 +11,7 @@ var router = express_1.default.Router();
 router.post("", (0, validate_1.default)(product_validation_1.default.create), product_controller_1.default.create);
 router.patch("/:product_id", (0, validate_1.default)(product_validation_1.default.update), product_controller_1.default.update);
 //---> offset/limit  eg all/1/21
-router.get("/all", (0, validate_1.default)(product_validation_1.default.findAll), product_controller_1.default.findAll);
+router.get("/", (0, validate_1.default)(product_validation_1.default.findAll), product_controller_1.default.findAll);
 //---> search suggestions
 router.get("/search/suggest", (0, validate_1.default)(product_validation_1.default.findSearchSuggestions), product_controller_1.default.findSearchSuggestions);
 router.get("/search", (0, validate_1.default)(product_validation_1.default.findBySearch), product_controller_1.default.findBySearch);

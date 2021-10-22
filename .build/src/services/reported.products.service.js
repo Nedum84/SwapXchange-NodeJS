@@ -52,14 +52,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
-var reported_products_model_1 = require("../models/reported.products.model");
+var models_1 = require("../models");
 var helpers_1 = __importDefault(require("../utils/helpers"));
 var product_service_1 = __importDefault(require("./product.service"));
 var findOne = function (reported_id) { return __awaiter(void 0, void 0, void 0, function () {
     var report;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, reported_products_model_1.ReportedProducts.findOne({ where: { reported_id: reported_id } })];
+            case 0: return [4 /*yield*/, models_1.ReportedProducts.findOne({ where: { reported_id: reported_id } })];
             case 1:
                 report = _a.sent();
                 if (!report) {
@@ -101,7 +101,7 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 return [4 /*yield*/, product_service_1.default.findOne(product_id)];
             case 1:
                 product = _b.sent();
-                return [4 /*yield*/, reported_products_model_1.ReportedProducts.create({
+                return [4 /*yield*/, models_1.ReportedProducts.create({
                         reported_by: reported_by,
                         product_id: product_id,
                         reported_message: reported_message,
@@ -122,7 +122,7 @@ var findByProductId = function (req) { return __awaiter(void 0, void 0, void 0, 
                 return [4 /*yield*/, product_service_1.default.findOne(product_id)];
             case 1:
                 product = _b.sent();
-                return [4 /*yield*/, reported_products_model_1.ReportedProducts.findAll({
+                return [4 /*yield*/, models_1.ReportedProducts.findAll({
                         where: {
                             status: status,
                             product_id: product.product_id,
@@ -142,7 +142,7 @@ var findAll = function (req) { return __awaiter(void 0, void 0, void 0, function
                 paginateOptions = helpers_1.default.getPaginate(req.params);
                 status = req.params.status;
                 where = status === "all" ? {} : { status: status };
-                return [4 /*yield*/, reported_products_model_1.ReportedProducts.findAll(__assign({ where: where, order: [["id", "DESC"]] }, paginateOptions))];
+                return [4 /*yield*/, models_1.ReportedProducts.findAll(__assign({ where: where, order: [["id", "DESC"]] }, paginateOptions))];
             case 1:
                 reports = _a.sent();
                 return [2 /*return*/, reports];

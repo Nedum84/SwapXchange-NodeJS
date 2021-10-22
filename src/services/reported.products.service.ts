@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
-import { ReportedProducts } from "../models/reported.products.model";
+import { ReportedProducts } from "../models";
 import Helpers from "../utils/helpers";
 import productService from "./product.service";
 

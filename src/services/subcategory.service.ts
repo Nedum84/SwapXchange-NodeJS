@@ -1,15 +1,13 @@
 import { Request } from "express";
 import httpStatus from "http-status";
-import sequelize from "../models";
+import sequelize, { SubCategory } from "../models";
 import { ErrorResponse } from "../apiresponse/error.response";
-import {
-  SubCategory,
-  SubCategoryAttributes,
-} from "../models/subcategory.model";
+import { SubCategoryAttributes } from "../models/subcategory.model";
 import ProductUtils from "../utils/product.utils";
 import { ProductStatus } from "../enum/product.enum";
 import { QueryTypes } from "sequelize";
 import userService from "./user.service";
+import categoryService from "./category.service";
 
 const findOne = async (sub_category_id: string) => {
   const subCat = await SubCategory.findOne({ where: { sub_category_id } });
@@ -41,6 +39,7 @@ const create = async (req: Request) => {
   if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
+  await categoryService.findOne(body.category_id);
   const category = await SubCategory.create(body);
   return category;
 };
@@ -49,10 +48,7 @@ const findAll = async (req: Request) => {
   const user = await userService.findOne(user_id);
 
   const query = `SELECT 
-                  "SubCategory".sub_category_name, 
-                  "SubCategory".sub_category_icon, 
-                  "SubCategory".sub_category_id, 
-                  "SubCategory".idx, 
+                  "SubCategory".*, 
                   (SELECT COUNT(id) 
                     FROM "Product" 
                     WHERE "Product".product_status = '${ProductStatus.ACTIVE}'

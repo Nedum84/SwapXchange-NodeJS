@@ -7,7 +7,7 @@ describe("Coins", () => {
     const { tokens } = await global.signin();
     //Load money
     await request(app)
-      .post("/v1/coins")
+      .post("/api/v1/coins")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         amount: 10,

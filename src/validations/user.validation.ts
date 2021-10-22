@@ -7,7 +7,7 @@ const updateUser = {
     .keys({
       uid: Joi.string(),
       name: Joi.string().custom(name),
-      mobile_number: Joi.string().custom(phone),
+      mobile_number: Joi.string(),
       email: Joi.string().custom(email),
       radius: Joi.number().valid(...Object.values(UserRadius)),
       address: Joi.string(),
@@ -22,7 +22,7 @@ const updateUser = {
         chat: Joi.boolean(),
         product: Joi.boolean(),
       }),
-      user_level: Joi.number(),
+      // user_level: Joi.number(),
       // online_status: Joi.string().valid('away','offline',"online"),
       online_status: Joi.string().valid(...Object.values(OnlineStatus)),
       user_app_version: Joi.number(),

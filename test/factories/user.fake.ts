@@ -1,5 +1,6 @@
 import faker from "faker";
-import { User, UserAttributes } from "../../src/models/user.model";
+import { User } from "../../src/models";
+import { UserAttributes } from "../../src/models/user.model";
 /**
  * Generate an object which container attributes needed
  * to successfully create a wallet instance.

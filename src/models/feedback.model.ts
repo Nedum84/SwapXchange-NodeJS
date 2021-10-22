@@ -1,4 +1,4 @@
-import { Model, Optional, DataTypes } from "sequelize";
+import { Model, Optional, DataTypes, BuildOptions, Sequelize } from "sequelize";
 import sequelize from ".";
 import { FeedbackStatus } from "../enum/feedback.enum";
 import CONSTANTS from "../utils/constants";
@@ -21,43 +21,47 @@ interface FeedbackCreationAttributes
 interface FeedbackInstance
   extends Model<FeedbackAttributes, FeedbackCreationAttributes>,
     FeedbackAttributes {}
+export type FeedbackStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): FeedbackInstance;
+};
 
-const Feedback = sequelize.define<FeedbackInstance>(
-  "Feedback",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
+export function FeedbackFactory(sequelize: Sequelize) {
+  const Feedback = <FeedbackStatic>sequelize.define(
+    "Feedback",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      feedback_id: {
+        type: DataTypes.STRING,
+        defaultValue: CONSTANTS.UUID,
+        primaryKey: true,
+        comment: "Feedback Id",
+      },
+      user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      message: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      status: {
+        type: DataTypes.STRING,
+        values: Object.values(FeedbackStatus),
+        defaultValue: FeedbackStatus.OPEN,
+      },
+      resolved_by: {
+        type: DataTypes.STRING,
+      },
     },
-    feedback_id: {
-      type: DataTypes.STRING,
-      defaultValue: CONSTANTS.UUID,
-      primaryKey: true,
-      comment: "Feedback Id",
-    },
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    message: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    status: {
-      type: DataTypes.STRING,
-      values: Object.values(FeedbackStatus),
-      defaultValue: FeedbackStatus.OPEN,
-    },
-    resolved_by: {
-      type: DataTypes.STRING,
-    },
-  },
-  {
-    timestamps: true,
-    tableName: "Feedback",
-    version: true,
-  }
-);
-
-export { Feedback };
+    {
+      timestamps: true,
+      tableName: "Feedback",
+      version: true,
+    }
+  );
+  return Feedback;
+}

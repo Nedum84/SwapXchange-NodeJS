@@ -1,4 +1,23 @@
 "use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -40,18 +59,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
-var models_1 = __importDefault(require("../models"));
+var models_1 = __importStar(require("../models"));
 var error_response_1 = require("../apiresponse/error.response");
-var subcategory_model_1 = require("../models/subcategory.model");
 var product_utils_1 = __importDefault(require("../utils/product.utils"));
 var product_enum_1 = require("../enum/product.enum");
 var sequelize_1 = require("sequelize");
 var user_service_1 = __importDefault(require("./user.service"));
+var category_service_1 = __importDefault(require("./category.service"));
 var findOne = function (sub_category_id) { return __awaiter(void 0, void 0, void 0, function () {
     var subCat;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, subcategory_model_1.SubCategory.findOne({ where: { sub_category_id: sub_category_id } })];
+            case 0: return [4 /*yield*/, models_1.SubCategory.findOne({ where: { sub_category_id: sub_category_id } })];
             case 1:
                 subCat = _a.sent();
                 if (!subCat) {
@@ -93,8 +112,11 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 if (!user_level || user_level == 1) {
                     throw new error_response_1.ErrorResponse("Access denied", http_status_1.default.UNAUTHORIZED);
                 }
-                return [4 /*yield*/, subcategory_model_1.SubCategory.create(body)];
+                return [4 /*yield*/, category_service_1.default.findOne(body.category_id)];
             case 1:
+                _a.sent();
+                return [4 /*yield*/, models_1.SubCategory.create(body)];
+            case 2:
                 category = _a.sent();
                 return [2 /*return*/, category];
         }
@@ -109,7 +131,7 @@ var findAll = function (req) { return __awaiter(void 0, void 0, void 0, function
                 return [4 /*yield*/, user_service_1.default.findOne(user_id)];
             case 1:
                 user = _a.sent();
-                query = "SELECT \n                  \"SubCategory\".sub_category_name, \n                  \"SubCategory\".sub_category_icon, \n                  \"SubCategory\".sub_category_id, \n                  \"SubCategory\".idx, \n                  (SELECT COUNT(id) \n                    FROM \"Product\" \n                    WHERE \"Product\".product_status = '" + product_enum_1.ProductStatus.ACTIVE + "'\n                    AND \"Product\".sub_category = \"SubCategory\".sub_category_id\n                    AND " + product_utils_1.default.radiusGeometry(user) + " < " + user.radius + "\n                  ) AS no_of_products\n\n                  FROM \"SubCategory\"\n                  ORDER BY idx ";
+                query = "SELECT \n                  \"SubCategory\".*, \n                  (SELECT COUNT(id) \n                    FROM \"Product\" \n                    WHERE \"Product\".product_status = '" + product_enum_1.ProductStatus.ACTIVE + "'\n                    AND \"Product\".sub_category = \"SubCategory\".sub_category_id\n                    AND " + product_utils_1.default.radiusGeometry(user) + " < " + user.radius + "\n                  ) AS no_of_products\n\n                  FROM \"SubCategory\"\n                  ORDER BY idx ";
                 return [4 /*yield*/, models_1.default.query(query, {
                         type: sequelize_1.QueryTypes.SELECT,
                         nest: true,
@@ -125,7 +147,7 @@ var findByCategoryId = function (category_id) { return __awaiter(void 0, void 0,
     var categories;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, subcategory_model_1.SubCategory.findAll({
+            case 0: return [4 /*yield*/, models_1.SubCategory.findAll({
                     where: { category_id: category_id },
                     order: [["id", "DESC"]],
                 })];

@@ -6,22 +6,25 @@ import { Sequelize } from "sequelize";
 import { Op } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import { Coins } from "../models/coins.model";
-import { Product } from "../models/product.model";
+import { Coins, Product } from "../models";
 import CONSTANTS from "../utils/constants";
 import { verifyReference } from "../utils/request";
 import userService from "./user.service";
 
-const findAllByUserId = async (user_id: string) => {
+const findAllByUserId = async (user_id: string, limit = 10) => {
   const user = await userService.findOne(user_id);
-  const coins = await Coins.findAll({
+  const coinsMeta = await Coins.findAll({
     where: {
       [Op.or]: [{ user_id: user.user_id }, { reference: user.user_id }],
     },
-    limit: 500,
+    limit,
     order: [["id", "DESC"]],
   });
-  return coins;
+  const balance = await getBalance(user_id);
+  return {
+    ...balance,
+    meta: coinsMeta,
+  };
 };
 const create = async (data: any) => {
   const { amount, reference, method_of_subscription, user_id } = data;
@@ -65,7 +68,7 @@ const create = async (data: any) => {
     });
     if (checkReward) {
       throw new ErrorResponse(
-        "You can't receive daily coins twice per daily. try again tomorrow"
+        "You can't receive daily coins twice per day. try again tomorrow"
       );
     }
   }

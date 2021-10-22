@@ -42,14 +42,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
 var token_enum_1 = require("../enum/token.enum");
-var token_model_1 = require("../models/token.model");
+var models_1 = require("../models");
 var token_service_1 = __importDefault(require("./token.service"));
 var user_service_1 = __importDefault(require("./user.service"));
 var logout = function (refreshToken) { return __awaiter(void 0, void 0, void 0, function () {
     var refreshTokenDoc;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, token_model_1.Token.findOne({
+            case 0: return [4 /*yield*/, models_1.Token.findOne({
                     where: {
                         token: refreshToken,
                         type: token_enum_1.TokenTypes.REFRESH,

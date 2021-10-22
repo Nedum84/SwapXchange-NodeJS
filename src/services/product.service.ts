@@ -1,15 +1,21 @@
 import { Request } from "express";
 import httpStatus from "http-status";
+import { Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import { QueryTypes } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
-import sequelize from "../models";
-import { Category } from "../models/category.model";
-import { ImageProduct } from "../models/image.product.model";
-import { Product, ProductAttributes } from "../models/product.model";
-import { SubCategory } from "../models/subcategory.model";
-import { User } from "../models/user.model";
+import { ProductStatus } from "../enum/product.enum";
+import sequelize, {
+  Category,
+  ImageProduct,
+  Product,
+  SubCategory,
+  User,
+} from "../models";
+import { ProductAttributes } from "../models/product.model";
 import Helpers from "../utils/helpers";
 import ProductUtils from "../utils/product.utils";
+import randomString from "../utils/random.string";
 import UserUtils from "../utils/user.utils";
 import categoryService from "./category.service";
 import productImageService from "./product.image.service";
@@ -29,48 +35,18 @@ const findOnlyById = async (product_id: string) => {
 const findOne = async (product_id: string) => {
   const product = await Product.findOne({
     where: { product_id },
-    include: [
-      {
-        model: User,
-        as: "user",
-        attributes: [
-          "user_id",
-          "name",
-          "mobile_number",
-          "address",
-          "profile_photo",
-        ],
-      },
-      {
-        model: ImageProduct,
-        as: "images",
-      },
-      {
-        model: Category,
-        // as: "images",
-      },
-      {
-        model: SubCategory,
-        as: "subcategory",
-      },
-    ],
+    ...ProductUtils.sequelizeFindOptions({ limit: 1, offset: 0 }),
   });
   if (!product) {
     throw new ErrorResponse("Product not found!", httpStatus.NOT_FOUND);
   }
-  const suggestions = await categoryService.findByCatIds(
-    product.product_suggestion
-  );
-
-  if (suggestions) {
-    // product.suggestions = suggestions;
-    //@ts-ignore no_of_views
-    product.setDataValue("suggestions", suggestions);
-  }
-
-  const noOfViews = await productViewsService.findAll(product.product_id);
-  //@ts-ignore
-  product.setDataValue("no_of_views", noOfViews ?? 0);
+  // const suggestions = await categoryService.findByCatIds(
+  //   product.product_suggestion
+  // );
+  // if (suggestions) {
+  //   //@ts-ignore no_of_views
+  //   product.setDataValue("suggestions", suggestions);
+  // }
 
   return product;
 };
@@ -97,6 +73,8 @@ const create = async (req: Request) => {
   const { user_id } = req.user;
   const body = req.body;
   body.user_id = user_id;
+
+  body.order_id = await randomString.generateProductOrderId();
 
   const product = await Product.create(body);
   //--> Add Images....
@@ -232,7 +210,9 @@ const findExchangeOptions = async (req: Request) => {
   const product = await findOne(product_id);
   const suggestions = product.product_suggestion.map((i) => `'${i}'`);
 
-  const extra = `AND product_id != '${product.product_id}' AND category = ANY(ARRAY[${suggestions}])`;
+  const extra = `AND product_id != '${product.product_id}' 
+                  AND user_id != '${product.user_id}' 
+                    AND category = ANY(ARRAY[${suggestions}])`;
   const query = await ProductUtils.selectQuery({ user_id, ...options, extra });
 
   const products: ProductAttributes[] = await sequelize.query(query, {
@@ -246,8 +226,10 @@ const findExchangeOptions = async (req: Request) => {
 const findMyProducts = async (req: Request) => {
   const { user_id } = req.user;
   const { limit, offset } = Helpers.getPaginate(req.query);
+  const { filters } = req.query; //...ProductStatus,all
 
   const query = `SELECT "Product".*, 
+                  ${ProductUtils.noOfViewsSubQuery()}, 
                   ${ProductUtils.imgSubQuery()}, 
                   ${ProductUtils.userSubQuery()}, 
                   ${ProductUtils.suggestionSubQuery()}
@@ -266,13 +248,15 @@ const findMyProducts = async (req: Request) => {
 };
 const findUserProducts = async (req: Request) => {
   const { user_id } = req.params;
-  const { filter } = req.query;
+  const { filters } = req.query;
   const { limit, offset } = Helpers.getPaginate(req.query);
-  const extra = filter == "all" ? "" : `AND product_status = '${filter}'`;
+  const extra =
+    filters == "all" || !filters ? "" : `AND product_status = '${filters}'`;
 
   const user = await userService.findOne(user_id);
 
   const query = `SELECT "Product".*,
+                  ${ProductUtils.noOfViewsSubQuery()}, 
                   ${ProductUtils.imgSubQuery()}, 
                   ${ProductUtils.userSubQuery()}, 
                   ${ProductUtils.suggestionSubQuery()}
@@ -314,6 +298,7 @@ const findNearUsers = async (req: Request) => {
   return result;
 };
 const findAll = async (req: Request) => {
+  // await sequelize.query(`DELETE FROM "Product" `);
   const { user_id } = req.user;
   const options = Helpers.getPaginate(req.query);
 
@@ -324,6 +309,26 @@ const findAll = async (req: Request) => {
     nest: true,
     mapToModel: true,
   });
+
+  return products;
+};
+const findSavedProducts = async (prods: Array<string>) => {
+  const products = await Product.findAll({
+    where: {
+      product_id: { [Op.in]: prods }, //[1,2,3,4]
+    },
+    ...ProductUtils.sequelizeFindOptions({ limit: 100, offset: 0 }), //anything large for lim&offset(NOT even needed here)
+  });
+
+  return products;
+};
+const markCompletedProducts = async (prods: Array<string>) => {
+  const [num, products] = await Product.update(
+    { product_status: ProductStatus.COMPLETED },
+    {
+      where: { product_id: { [Op.in]: prods } },
+    }
+  );
 
   return products;
 };
@@ -342,4 +347,6 @@ export default {
   findUserProducts,
   update,
   create,
+  findSavedProducts,
+  markCompletedProducts,
 };

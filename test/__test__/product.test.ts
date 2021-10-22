@@ -7,10 +7,9 @@ describe("Product", () => {
   it("Can add product", async () => {
     const { tokens, user } = await global.signin();
 
-    const { user_id, ...others } = productFake.fakeProduct;
-
+    const { user_id, order_id, ...others } = productFake.fakeProduct;
     const response = await request(app)
-      .post("/v1/products")
+      .post("/api/v1/products")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         ...others,
@@ -32,14 +31,14 @@ describe("Product", () => {
   it("Can get products", async () => {
     const { tokens, user } = await global.signin();
 
-    const { user_id, ...others } = productFake.fakeProduct;
+    const { user_id, order_id, ...others } = productFake.fakeProduct;
 
     await request(app)
-      .post("/v1/products")
+      .post("/api/v1/products")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         ...others,
-        order_id: faker.datatype.number({ max: 36000 }).toString(),
+        // order_id: faker.datatype.number({ max: 36000 }).toString(),
         user_address_lat: user.address_lat,
         user_address_long: user.address_long,
         images: [
@@ -53,7 +52,7 @@ describe("Product", () => {
     await productFake.createBulk();
 
     const response = await request(app)
-      .get("/v1/products/all?offset=0&limit=60")
+      .get("/api/v1/products?offset=0&limit=60")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send();
 

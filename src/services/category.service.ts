@@ -1,10 +1,10 @@
 import { Request } from "express";
 import httpStatus from "http-status";
-import sequelize from "../models";
+import sequelize, { Category } from "../models";
 import { QueryTypes } from "sequelize";
 import { Op } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
-import { Category, CategoryAttributes } from "../models/category.model";
+import { CategoryAttributes } from "../models/category.model";
 import ProductUtils from "../utils/product.utils";
 import userService from "./user.service";
 import { ProductStatus } from "../enum/product.enum";
@@ -48,10 +48,7 @@ const findAll = async (req: Request) => {
   // const categoriesz = await Category.findAll({ order: [["id", "DESC"]] });
 
   const query = `SELECT 
-                  "Category".category_name, 
-                  "Category".category_icon, 
-                  "Category".category_id, 
-                  "Category".idx, 
+                  "Category".*, 
                   (SELECT COUNT(id) 
                     FROM "Product" 
                     WHERE "Product".product_status = '${ProductStatus.ACTIVE}'
@@ -73,7 +70,14 @@ const findByCatIds = async (catIds: string[]) => {
     where: {
       category_id: { [Op.in]: catIds }, //[1,2,3,4]
     },
-    attributes: ["category_id", "category_name", "category_icon", "idx"],
+    attributes: [
+      "category_id",
+      "category_name",
+      "category_icon",
+      "idx",
+      "createdAt",
+      "updatedAt",
+    ],
   });
 
   return categories;

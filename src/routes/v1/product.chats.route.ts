@@ -26,4 +26,9 @@ router.get(
   validate(productChatsValidation.findOne),
   productChatsController.findOne
 );
+router.post(
+  "/completed/:product_chat_id",
+  validate(productChatsValidation.markCompleted),
+  productChatsController.markCompleted
+);
 export default router;

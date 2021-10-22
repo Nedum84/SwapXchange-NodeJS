@@ -10,6 +10,25 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -52,26 +71,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var sequelize_1 = require("sequelize");
+var sequelize_2 = require("sequelize");
 var error_response_1 = require("../apiresponse/error.response");
-var models_1 = __importDefault(require("../models"));
-var category_model_1 = require("../models/category.model");
-var image_product_model_1 = require("../models/image.product.model");
-var product_model_1 = require("../models/product.model");
-var subcategory_model_1 = require("../models/subcategory.model");
-var user_model_1 = require("../models/user.model");
+var product_enum_1 = require("../enum/product.enum");
+var models_1 = __importStar(require("../models"));
 var helpers_1 = __importDefault(require("../utils/helpers"));
 var product_utils_1 = __importDefault(require("../utils/product.utils"));
+var random_string_1 = __importDefault(require("../utils/random.string"));
 var user_utils_1 = __importDefault(require("../utils/user.utils"));
 var category_service_1 = __importDefault(require("./category.service"));
 var product_image_service_1 = __importDefault(require("./product.image.service"));
-var product_views_service_1 = __importDefault(require("./product.views.service"));
 var subcategory_service_1 = __importDefault(require("./subcategory.service"));
 var user_service_1 = __importDefault(require("./user.service"));
 var findOnlyById = function (product_id) { return __awaiter(void 0, void 0, void 0, function () {
     var product;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, product_model_1.Product.findOne({
+            case 0: return [4 /*yield*/, models_1.Product.findOne({
                     where: { product_id: product_id },
                 })];
             case 1:
@@ -84,55 +100,22 @@ var findOnlyById = function (product_id) { return __awaiter(void 0, void 0, void
     });
 }); };
 var findOne = function (product_id) { return __awaiter(void 0, void 0, void 0, function () {
-    var product, suggestions, noOfViews;
+    var product;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, product_model_1.Product.findOne({
-                    where: { product_id: product_id },
-                    include: [
-                        {
-                            model: user_model_1.User,
-                            as: "user",
-                            attributes: [
-                                "user_id",
-                                "name",
-                                "mobile_number",
-                                "address",
-                                "profile_photo",
-                            ],
-                        },
-                        {
-                            model: image_product_model_1.ImageProduct,
-                            as: "images",
-                        },
-                        {
-                            model: category_model_1.Category,
-                            // as: "images",
-                        },
-                        {
-                            model: subcategory_model_1.SubCategory,
-                            as: "subcategory",
-                        },
-                    ],
-                })];
+            case 0: return [4 /*yield*/, models_1.Product.findOne(__assign({ where: { product_id: product_id } }, product_utils_1.default.sequelizeFindOptions({ limit: 1, offset: 0 })))];
             case 1:
                 product = _a.sent();
                 if (!product) {
                     throw new error_response_1.ErrorResponse("Product not found!", http_status_1.default.NOT_FOUND);
                 }
-                return [4 /*yield*/, category_service_1.default.findByCatIds(product.product_suggestion)];
-            case 2:
-                suggestions = _a.sent();
-                if (suggestions) {
-                    // product.suggestions = suggestions;
-                    //@ts-ignore no_of_views
-                    product.setDataValue("suggestions", suggestions);
-                }
-                return [4 /*yield*/, product_views_service_1.default.findAll(product.product_id)];
-            case 3:
-                noOfViews = _a.sent();
-                //@ts-ignore
-                product.setDataValue("no_of_views", noOfViews !== null && noOfViews !== void 0 ? noOfViews : 0);
+                // const suggestions = await categoryService.findByCatIds(
+                //   product.product_suggestion
+                // );
+                // if (suggestions) {
+                //   //@ts-ignore no_of_views
+                //   product.setDataValue("suggestions", suggestions);
+                // }
                 return [2 /*return*/, product];
         }
     });
@@ -161,17 +144,21 @@ var update = function (req) { return __awaiter(void 0, void 0, void 0, function 
     });
 }); };
 var create = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, body, product, imgs, images;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var user_id, body, _a, product, imgs, images;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
                 user_id = req.user.user_id;
                 body = req.body;
                 body.user_id = user_id;
-                return [4 /*yield*/, product_model_1.Product.create(body)];
+                _a = body;
+                return [4 /*yield*/, random_string_1.default.generateProductOrderId()];
             case 1:
-                product = _a.sent();
-                if (!(body === null || body === void 0 ? void 0 : body.images)) return [3 /*break*/, 3];
+                _a.order_id = _b.sent();
+                return [4 /*yield*/, models_1.Product.create(body)];
+            case 2:
+                product = _b.sent();
+                if (!(body === null || body === void 0 ? void 0 : body.images)) return [3 /*break*/, 4];
                 imgs = body.images
                     .filter(function (img) { return img.image_path !== ""; })
                     .map(function (img, index) {
@@ -182,13 +169,13 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
                         idx: (_a = img.idx) !== null && _a !== void 0 ? _a : index + 1,
                     };
                 });
-                if (!(imgs.length !== 0)) return [3 /*break*/, 3];
+                if (!(imgs.length !== 0)) return [3 /*break*/, 4];
                 return [4 /*yield*/, product_image_service_1.default.createMany(imgs)];
-            case 2:
-                images = _a.sent();
+            case 3:
+                images = _b.sent();
                 product.images = images;
-                _a.label = 3;
-            case 3: 
+                _b.label = 4;
+            case 4: 
             // return product;
             return [2 /*return*/, findOne(product.product_id)];
         }
@@ -210,7 +197,7 @@ var findByCategory = function (req) { return __awaiter(void 0, void 0, void 0, f
             case 2:
                 query = _a.sent();
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -236,7 +223,7 @@ var findBySubCategory = function (req) { return __awaiter(void 0, void 0, void 0
             case 2:
                 query = _a.sent();
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -283,7 +270,7 @@ var findBySearch = function (req) { return __awaiter(void 0, void 0, void 0, fun
             case 1:
                 query = _b.sent();
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -301,7 +288,7 @@ var findSearchSuggestions = function (req) { return __awaiter(void 0, void 0, vo
                 search_query = req.query.search_query;
                 query = "SELECT DISTINCT product_name as item FROM \"Product\" WHERE product_name LIKE '%" + search_query + "%'\n              UNION\n            SELECT DISTINCT category_name as item FROM \"Category\" WHERE category_name LIKE '%" + search_query + "%'\n              UNION\n            SELECT DISTINCT sub_category_name as item FROM \"SubCategory\" WHERE sub_category_name LIKE '%" + search_query + "%'\n        ";
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -323,12 +310,12 @@ var findExchangeOptions = function (req) { return __awaiter(void 0, void 0, void
             case 1:
                 product = _a.sent();
                 suggestions = product.product_suggestion.map(function (i) { return "'" + i + "'"; });
-                extra = "AND product_id != '" + product.product_id + "' AND category = ANY(ARRAY[" + suggestions + "])";
+                extra = "AND product_id != '" + product.product_id + "' \n                  AND user_id != '" + product.user_id + "' \n                    AND category = ANY(ARRAY[" + suggestions + "])";
                 return [4 /*yield*/, product_utils_1.default.selectQuery(__assign(__assign({ user_id: user_id }, options), { extra: extra }))];
             case 2:
                 query = _a.sent();
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -339,15 +326,16 @@ var findExchangeOptions = function (req) { return __awaiter(void 0, void 0, void
     });
 }); };
 var findMyProducts = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, _a, limit, offset, query, products;
+    var user_id, _a, limit, offset, filters, query, products;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 user_id = req.user.user_id;
                 _a = helpers_1.default.getPaginate(req.query), limit = _a.limit, offset = _a.offset;
-                query = "SELECT \"Product\".*, \n                  " + product_utils_1.default.imgSubQuery() + ", \n                  " + product_utils_1.default.userSubQuery() + ", \n                  " + product_utils_1.default.suggestionSubQuery() + "\n                  FROM \"Product\"\n                      WHERE \"Product\".user_id = '" + user_id + "'\n                          ORDER BY id DESC\n                              LIMIT " + limit + " OFFSET " + offset + " ";
+                filters = req.query.filters;
+                query = "SELECT \"Product\".*, \n                  " + product_utils_1.default.noOfViewsSubQuery() + ", \n                  " + product_utils_1.default.imgSubQuery() + ", \n                  " + product_utils_1.default.userSubQuery() + ", \n                  " + product_utils_1.default.suggestionSubQuery() + "\n                  FROM \"Product\"\n                      WHERE \"Product\".user_id = '" + user_id + "'\n                          ORDER BY id DESC\n                              LIMIT " + limit + " OFFSET " + offset + " ";
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -358,20 +346,20 @@ var findMyProducts = function (req) { return __awaiter(void 0, void 0, void 0, f
     });
 }); };
 var findUserProducts = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, filter, _a, limit, offset, extra, user, query, products;
+    var user_id, filters, _a, limit, offset, extra, user, query, products;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 user_id = req.params.user_id;
-                filter = req.query.filter;
+                filters = req.query.filters;
                 _a = helpers_1.default.getPaginate(req.query), limit = _a.limit, offset = _a.offset;
-                extra = filter == "all" ? "" : "AND product_status = '" + filter + "'";
+                extra = filters == "all" || !filters ? "" : "AND product_status = '" + filters + "'";
                 return [4 /*yield*/, user_service_1.default.findOne(user_id)];
             case 1:
                 user = _b.sent();
-                query = "SELECT \"Product\".*,\n                  " + product_utils_1.default.imgSubQuery() + ", \n                  " + product_utils_1.default.userSubQuery() + ", \n                  " + product_utils_1.default.suggestionSubQuery() + "\n                  FROM \"Product\" \n                      WHERE \"Product\".user_id = '" + user.user_id + "' \n                        " + extra + "\n                          ORDER BY id DESC \n                              LIMIT " + limit + " OFFSET " + offset + " ";
+                query = "SELECT \"Product\".*,\n                  " + product_utils_1.default.noOfViewsSubQuery() + ", \n                  " + product_utils_1.default.imgSubQuery() + ", \n                  " + product_utils_1.default.userSubQuery() + ", \n                  " + product_utils_1.default.suggestionSubQuery() + "\n                  FROM \"Product\" \n                      WHERE \"Product\".user_id = '" + user.user_id + "' \n                        " + extra + "\n                          ORDER BY id DESC \n                              LIMIT " + limit + " OFFSET " + offset + " ";
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -396,7 +384,7 @@ var findNearUsers = function (req) { return __awaiter(void 0, void 0, void 0, fu
                 _a = _b.sent(), lat = _a.user_address_lat, long = _a.user_address_long;
                 query = "SELECT user_id, device_token, notification, name\n            from \"User\" \n            WHERE " + user_utils_1.default.radiusGeometry(lat, long) + " < " + user.radius + " \n            AND \"User\".user_id != '" + user_id + "'\n            LIMIT 100\n        ";
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
@@ -417,12 +405,40 @@ var findAll = function (req) { return __awaiter(void 0, void 0, void 0, function
             case 1:
                 query = _a.sent();
                 return [4 /*yield*/, models_1.default.query(query, {
-                        type: sequelize_1.QueryTypes.SELECT,
+                        type: sequelize_2.QueryTypes.SELECT,
                         nest: true,
                         mapToModel: true,
                     })];
             case 2:
                 products = _a.sent();
+                return [2 /*return*/, products];
+        }
+    });
+}); };
+var findSavedProducts = function (prods) { return __awaiter(void 0, void 0, void 0, function () {
+    var products;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0: return [4 /*yield*/, models_1.Product.findAll(__assign({ where: {
+                        product_id: (_a = {}, _a[sequelize_1.Op.in] = prods, _a), //[1,2,3,4]
+                    } }, product_utils_1.default.sequelizeFindOptions({ limit: 100, offset: 0 })))];
+            case 1:
+                products = _b.sent();
+                return [2 /*return*/, products];
+        }
+    });
+}); };
+var markCompletedProducts = function (prods) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, num, products;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0: return [4 /*yield*/, models_1.Product.update({ product_status: product_enum_1.ProductStatus.COMPLETED }, {
+                    where: { product_id: (_b = {}, _b[sequelize_1.Op.in] = prods, _b) },
+                })];
+            case 1:
+                _a = _c.sent(), num = _a[0], products = _a[1];
                 return [2 /*return*/, products];
         }
     });
@@ -441,5 +457,7 @@ exports.default = {
     findUserProducts: findUserProducts,
     update: update,
     create: create,
+    findSavedProducts: findSavedProducts,
+    markCompletedProducts: markCompletedProducts,
 };
 //# sourceMappingURL=product.service.js.map

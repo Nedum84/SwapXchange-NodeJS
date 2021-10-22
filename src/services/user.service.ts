@@ -2,7 +2,8 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import { User, UserAttributes } from "../models/user.model";
+import { User } from "../models";
+import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
 
 const createUser = async (body: UserAttributes) => {
@@ -14,12 +15,14 @@ const createUser = async (body: UserAttributes) => {
     await user.save();
     return user.reload();
   }
-  // Check if is Email is taken
-  const isEmailTaken = await User.findOne({
-    where: { email },
-  });
-  if (email && !!isEmailTaken) {
-    throw new ErrorResponse("Email already taken");
+  if (email) {
+    // Check if is Email is taken
+    const isEmailTaken = await User.findOne({
+      where: { email },
+    });
+    if (email && !!isEmailTaken) {
+      throw new ErrorResponse("Email already taken");
+    }
   }
   // body.user_id = CONSTANTS.UUID();
   const newUser = await User.create(body);

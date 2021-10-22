@@ -23,6 +23,10 @@ const findAll = async (req: Request, res: Response) => {
   const result = await productChatsService.findAll();
   ApiResponse.ok(res, { product_chat: result });
 };
+const markCompleted = async (req: Request, res: Response) => {
+  const result = await productChatsService.markCompleted(req);
+  ApiResponse.ok(res, { products: result });
+};
 
 export default {
   update,
@@ -30,4 +34,5 @@ export default {
   create,
   findLatestForTwoUsers,
   findAll,
+  markCompleted,
 };

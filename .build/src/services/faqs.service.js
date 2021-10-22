@@ -41,12 +41,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
-var faqs_model_1 = require("../models/faqs.model");
+var models_1 = require("../models");
 var findOne = function (faq_id) { return __awaiter(void 0, void 0, void 0, function () {
     var faq;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, faqs_model_1.Faqs.findOne({ where: { faq_id: faq_id } })];
+            case 0: return [4 /*yield*/, models_1.Faqs.findOne({ where: { faq_id: faq_id } })];
             case 1:
                 faq = _a.sent();
                 if (!faq) {
@@ -89,7 +89,7 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 if (!user_level || user_level == 1) {
                     throw new error_response_1.ErrorResponse("Access denied", http_status_1.default.UNAUTHORIZED);
                 }
-                return [4 /*yield*/, faqs_model_1.Faqs.create({
+                return [4 /*yield*/, models_1.Faqs.create({
                         question: question,
                         answer: answer,
                         added_by: user_id,
@@ -104,7 +104,7 @@ var findAll = function () { return __awaiter(void 0, void 0, void 0, function ()
     var faqs;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, faqs_model_1.Faqs.findAll({ order: [["id", "DESC"]] })];
+            case 0: return [4 /*yield*/, models_1.Faqs.findAll({ order: [["id", "DESC"]] })];
             case 1:
                 faqs = _a.sent();
                 return [2 /*return*/, faqs];

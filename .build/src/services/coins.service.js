@@ -56,32 +56,37 @@ var sequelize_1 = require("sequelize");
 var sequelize_2 = require("sequelize");
 var error_response_1 = require("../apiresponse/error.response");
 var coins_enum_1 = require("../enum/coins.enum");
-var coins_model_1 = require("../models/coins.model");
-var product_model_1 = require("../models/product.model");
+var models_1 = require("../models");
 var constants_1 = __importDefault(require("../utils/constants"));
 var request_1 = require("../utils/request");
 var user_service_1 = __importDefault(require("./user.service"));
-var findAllByUserId = function (user_id) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, coins;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0: return [4 /*yield*/, user_service_1.default.findOne(user_id)];
-            case 1:
-                user = _b.sent();
-                return [4 /*yield*/, coins_model_1.Coins.findAll({
-                        where: (_a = {},
-                            _a[sequelize_2.Op.or] = [{ user_id: user.user_id }, { reference: user.user_id }],
-                            _a),
-                        limit: 500,
-                        order: [["id", "DESC"]],
-                    })];
-            case 2:
-                coins = _b.sent();
-                return [2 /*return*/, coins];
-        }
+var findAllByUserId = function (user_id, limit) {
+    if (limit === void 0) { limit = 10; }
+    return __awaiter(void 0, void 0, void 0, function () {
+        var user, coinsMeta, balance;
+        var _a;
+        return __generator(this, function (_b) {
+            switch (_b.label) {
+                case 0: return [4 /*yield*/, user_service_1.default.findOne(user_id)];
+                case 1:
+                    user = _b.sent();
+                    return [4 /*yield*/, models_1.Coins.findAll({
+                            where: (_a = {},
+                                _a[sequelize_2.Op.or] = [{ user_id: user.user_id }, { reference: user.user_id }],
+                                _a),
+                            limit: limit,
+                            order: [["id", "DESC"]],
+                        })];
+                case 2:
+                    coinsMeta = _b.sent();
+                    return [4 /*yield*/, getBalance(user_id)];
+                case 3:
+                    balance = _b.sent();
+                    return [2 /*return*/, __assign(__assign({}, balance), { meta: coinsMeta })];
+            }
+        });
     });
-}); };
+};
 var create = function (data) { return __awaiter(void 0, void 0, void 0, function () {
     var amount, reference, method_of_subscription, user_id, checkRef, allowedMethods, checkBonus, verifyRef, checkReward, amounts, purchaseAmounts, coinsAmount, coin;
     var _a;
@@ -89,7 +94,7 @@ var create = function (data) { return __awaiter(void 0, void 0, void 0, function
         switch (_b.label) {
             case 0:
                 amount = data.amount, reference = data.reference, method_of_subscription = data.method_of_subscription, user_id = data.user_id;
-                return [4 /*yield*/, coins_model_1.Coins.findOne({ where: { reference: reference } })];
+                return [4 /*yield*/, models_1.Coins.findOne({ where: { reference: reference } })];
             case 1:
                 checkRef = _b.sent();
                 if (checkRef) {
@@ -104,7 +109,7 @@ var create = function (data) { return __awaiter(void 0, void 0, void 0, function
                     throw new error_response_1.ErrorResponse("Method of subscription not allowed currently");
                 }
                 if (!(method_of_subscription === coins_enum_1.MethodOfSub.REGISTRATION)) return [3 /*break*/, 3];
-                return [4 /*yield*/, coins_model_1.Coins.findOne({
+                return [4 /*yield*/, models_1.Coins.findOne({
                         where: { user_id: user_id, method_of_subscription: method_of_subscription },
                     })];
             case 2:
@@ -124,7 +129,7 @@ var create = function (data) { return __awaiter(void 0, void 0, void 0, function
                 _b.label = 5;
             case 5:
                 if (!(method_of_subscription === coins_enum_1.MethodOfSub.DAILY_OPENING)) return [3 /*break*/, 7];
-                return [4 /*yield*/, coins_model_1.Coins.findOne({
+                return [4 /*yield*/, models_1.Coins.findOne({
                         where: {
                             user_id: user_id,
                             method_of_subscription: method_of_subscription,
@@ -136,7 +141,7 @@ var create = function (data) { return __awaiter(void 0, void 0, void 0, function
             case 6:
                 checkReward = _b.sent();
                 if (checkReward) {
-                    throw new error_response_1.ErrorResponse("You can't receive daily coins twice per daily. try again tomorrow");
+                    throw new error_response_1.ErrorResponse("You can't receive daily coins twice per day. try again tomorrow");
                 }
                 _b.label = 7;
             case 7:
@@ -154,7 +159,7 @@ var create = function (data) { return __awaiter(void 0, void 0, void 0, function
                         throw new error_response_1.ErrorResponse("Invalid amount for this reference::2");
                     }
                 }
-                coin = coins_model_1.Coins.create({
+                coin = models_1.Coins.create({
                     user_id: user_id,
                     amount: amount,
                     reference: reference,
@@ -189,7 +194,7 @@ var getBalance = function (user_id) { return __awaiter(void 0, void 0, void 0, f
     var _a, _b, _c, _d, _e, _f;
     return __generator(this, function (_g) {
         switch (_g.label) {
-            case 0: return [4 /*yield*/, coins_model_1.Coins.findAll({
+            case 0: return [4 /*yield*/, models_1.Coins.findAll({
                     where: { user_id: user_id },
                     attributes: [[sequelize_1.Sequelize.fn("sum", sequelize_1.Sequelize.col("amount")), "total_coins"]],
                     raw: true,
@@ -197,7 +202,7 @@ var getBalance = function (user_id) { return __awaiter(void 0, void 0, void 0, f
             case 1:
                 userCoins = _g.sent();
                 userTotalCoins = parseInt((_b = (_a = userCoins[0]) === null || _a === void 0 ? void 0 : _a.total_coins) !== null && _b !== void 0 ? _b : 0);
-                return [4 /*yield*/, product_model_1.Product.findAll({
+                return [4 /*yield*/, models_1.Product.findAll({
                         where: { user_id: user_id },
                         attributes: [
                             [
@@ -210,7 +215,7 @@ var getBalance = function (user_id) { return __awaiter(void 0, void 0, void 0, f
             case 2:
                 uploadAmount = _g.sent();
                 totalUploadAmount = parseInt((_d = (_c = uploadAmount[0]) === null || _c === void 0 ? void 0 : _c.total_upload_amount) !== null && _d !== void 0 ? _d : 0);
-                return [4 /*yield*/, coins_model_1.Coins.findAll({
+                return [4 /*yield*/, models_1.Coins.findAll({
                         where: { reference: user_id },
                         attributes: [
                             [sequelize_1.Sequelize.fn("sum", sequelize_1.Sequelize.col("amount")), "total_transfers"],
@@ -220,7 +225,7 @@ var getBalance = function (user_id) { return __awaiter(void 0, void 0, void 0, f
             case 3:
                 transfers = _g.sent();
                 totalTransfers = parseInt((_f = (_e = transfers[0]) === null || _e === void 0 ? void 0 : _e.total_transfers) !== null && _f !== void 0 ? _f : 0);
-                return [4 /*yield*/, coins_model_1.Coins.findOne({
+                return [4 /*yield*/, models_1.Coins.findOne({
                         where: { user_id: user_id },
                         limit: 1,
                         order: [["id", "DESC"]],

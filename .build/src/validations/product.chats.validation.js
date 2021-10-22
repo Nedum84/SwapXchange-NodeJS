@@ -44,10 +44,17 @@ var create = {
             .valid.apply(_b, Object.values(product_chats_enum_1.ChatStatus)).default(product_chats_enum_1.ChatStatus.OPEN),
     }),
 };
+var markCompleted = {
+    params: joi_1.default.object().keys({
+        product_chat_id: joi_1.default.string().required(),
+    }),
+    body: joi_1.default.object().keys({}),
+};
 exports.default = {
     create: create,
     update: update,
     findOne: findOne,
     findLatestForTwoUsers: findLatestForTwoUsers,
+    markCompleted: markCompleted,
 };
 //# sourceMappingURL=product.chats.validation.js.map

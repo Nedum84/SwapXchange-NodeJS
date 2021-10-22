@@ -43,10 +43,17 @@ const create = {
       .default(ChatStatus.OPEN),
   }),
 };
+const markCompleted = {
+  params: Joi.object().keys({
+    product_chat_id: Joi.string().required(),
+  }),
+  body: Joi.object().keys({}),
+};
 
 export default {
   create,
   update,
   findOne,
   findLatestForTwoUsers,
+  markCompleted,
 };

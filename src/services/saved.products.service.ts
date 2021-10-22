@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
-import { SavedProducts } from "../models/saved.products.model";
+import { SavedProducts } from "../models";
 import Helpers from "../utils/helpers";
 import productService from "./product.service";
 
@@ -29,7 +29,10 @@ const findAllForUser = async (req: Request) => {
     where: { user_id },
     ...paginateOptions,
   });
-  return saved;
+
+  //get product string arr
+  const products = saved.map((i) => i.product_id);
+  return productService.findSavedProducts(products);
 };
 const checkSaved = async (user_id: string, product_id: string) => {
   const product = await productService.findOne(product_id);
@@ -50,7 +53,10 @@ const create = async (req: Request) => {
 
   const saved = await checkSaved(user_id, product_id);
   if (saved.is_saved) {
-    return saved;
+    const added = await SavedProducts.findOne({
+      where: { user_id, product_id: product.product_id },
+    });
+    return added!;
   }
 
   const save = await SavedProducts.create({

@@ -1,8 +1,7 @@
-import { Sequelize } from "sequelize";
+import { BuildOptions, Sequelize } from "sequelize";
 import { Model, Optional, DataTypes } from "sequelize";
-import sequelize from ".";
+import { User } from ".";
 import { MethodOfSub } from "../enum/coins.enum";
-import { User } from "./user.model";
 
 export interface CoinsAttributes {
   id: number;
@@ -22,50 +21,47 @@ interface CoinsInstance
   updatedAt?: Date;
 }
 
-const Coins = sequelize.define<CoinsInstance>(
-  "Coins",
-  {
-    id: {
-      type: DataTypes.BIGINT,
-      autoIncrement: true,
-      primaryKey: true,
-      comment: "Coins Id",
-    },
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    amount: {
-      type: DataTypes.BIGINT,
-      allowNull: false,
-    },
-    reference: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    method_of_subscription: {
-      type: DataTypes.ENUM,
-      values: Object.values(MethodOfSub),
-      allowNull: false,
-    },
-    createdAt: {
-      type: DataTypes.DATE,
-      allowNull: false,
-      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
-    },
-  },
-  {
-    timestamps: true,
-    tableName: "Coins",
-  }
-);
+export type CoinsStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): CoinsInstance;
+};
 
-function coinsAssociate(): void {
-  Coins.belongsTo(User, {
-    as: "user",
-    onDelete: "cascade",
-    foreignKey: "user_id",
-  });
+export function CoinsFactory(sequelize: Sequelize) {
+  const Coins = <CoinsStatic>sequelize.define(
+    "Coins",
+    {
+      id: {
+        type: DataTypes.BIGINT,
+        autoIncrement: true,
+        primaryKey: true,
+        comment: "Coins Id",
+      },
+      user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      amount: {
+        type: DataTypes.BIGINT,
+        allowNull: false,
+      },
+      reference: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      method_of_subscription: {
+        type: DataTypes.ENUM,
+        values: Object.values(MethodOfSub),
+        allowNull: false,
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      },
+    },
+    {
+      timestamps: true,
+      tableName: "Coins",
+    }
+  );
+  return Coins;
 }
-
-export { Coins, coinsAssociate };

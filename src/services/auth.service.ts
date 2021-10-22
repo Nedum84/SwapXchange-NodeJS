@@ -2,7 +2,7 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { TokenTypes } from "../enum/token.enum";
-import { Token } from "../models/token.model";
+import { Token } from "../models";
 import tokenService from "./token.service";
 import userService from "./user.service";
 

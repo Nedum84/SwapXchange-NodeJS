@@ -6,7 +6,7 @@ import savedProductsController from "../../controller/saved.products.controller"
 const router = express.Router();
 
 router.get(
-  "/all/:offset/:limit",
+  "/", //?=offset,limit
   validate(savedProductsValidation.findAllForUser),
   savedProductsController.findAllForUser
 );

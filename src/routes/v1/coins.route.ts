@@ -13,7 +13,7 @@ router.post(
 );
 router.get("/me", coinsController.getBalance);
 router.get(
-  "/:user_id",
+  "/:user_id", //?=> limit, offset
   validate(coinsValidation.findAllByUserId),
   coinsController.findAllByUserId
 );

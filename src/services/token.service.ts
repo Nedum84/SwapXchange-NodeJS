@@ -2,11 +2,11 @@ import jwt from "jsonwebtoken";
 import config from "../config/config";
 import moment from "moment";
 import httpStatus from "http-status";
-import { Token } from "../models/token.model";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { UserAttributes } from "../models/user.model";
 import userService from "./user.service";
 import { TokenTypes } from "../enum/token.enum";
+import { Token } from "../models";
 
 /**
  * Generate token
@@ -100,6 +100,7 @@ const verifyToken = async (token: string, tokenType: TokenTypes) => {
 const generateAuthTokens = async (user: UserAttributes) => {
   const accessTokenExpires = moment().add(
     config.jwt.accessExpirationMinutes,
+    // 900000000,
     "minutes"
   );
   const accessToken = generateToken(

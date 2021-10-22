@@ -11,6 +11,7 @@ var router = express_1.default.Router();
 router.post("", (0, validate_1.default)(coins_validation_1.default.create), coins_controller_1.default.create);
 router.post("/:user_id", (0, validate_1.default)(coins_validation_1.default.createForUser), coins_controller_1.default.createForUser);
 router.get("/me", coins_controller_1.default.getBalance);
-router.get("/:user_id", (0, validate_1.default)(coins_validation_1.default.findAllByUserId), coins_controller_1.default.findAllByUserId);
+router.get("/:user_id", //?=> limit, offset
+(0, validate_1.default)(coins_validation_1.default.findAllByUserId), coins_controller_1.default.findAllByUserId);
 exports.default = router;
 //# sourceMappingURL=coins.route.js.map

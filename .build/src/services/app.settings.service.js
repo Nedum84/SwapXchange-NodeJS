@@ -37,12 +37,12 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var error_response_1 = require("../apiresponse/error.response");
-var app_settings_model_1 = require("../models/app.settings.model");
+var models_1 = require("../models");
 var findOne = function (key) { return __awaiter(void 0, void 0, void 0, function () {
     var setting;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, app_settings_model_1.AppSettings.findOne({ where: { d_key: key } })];
+            case 0: return [4 /*yield*/, models_1.AppSettings.findOne({ where: { d_key: key } })];
             case 1:
                 setting = _a.sent();
                 if (!setting) {
@@ -66,27 +66,41 @@ var update = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 return [4 /*yield*/, setting.save()];
             case 2:
                 _c.sent();
-                updated = setting.reload();
+                return [4 /*yield*/, setting.reload()];
+            case 3:
+                updated = _c.sent();
                 return [2 /*return*/, (_b = {}, _b[key] = updated, _b)];
         }
     });
 }); };
 var addNew = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, key, value, user_id, setting;
-    var _b;
-    return __generator(this, function (_c) {
-        switch (_c.label) {
+    var _a, key, value, user_id, check, updated, setting;
+    var _b, _c;
+    return __generator(this, function (_d) {
+        switch (_d.label) {
             case 0:
                 _a = req.body, key = _a.key, value = _a.value;
                 user_id = req.user.user_id;
-                return [4 /*yield*/, app_settings_model_1.AppSettings.create({
-                        d_key: key,
-                        value: value,
-                        last_updated_by: user_id,
-                    })];
+                return [4 /*yield*/, models_1.AppSettings.findOne({ where: { d_key: key } })];
             case 1:
-                setting = _c.sent();
-                return [2 /*return*/, (_b = {}, _b[key] = setting, _b)];
+                check = _d.sent();
+                if (!check) return [3 /*break*/, 4];
+                check.value = value;
+                return [4 /*yield*/, check.save()];
+            case 2:
+                _d.sent();
+                return [4 /*yield*/, check.reload()];
+            case 3:
+                updated = _d.sent();
+                return [2 /*return*/, (_b = {}, _b[key] = updated, _b)];
+            case 4: return [4 /*yield*/, models_1.AppSettings.create({
+                    d_key: key,
+                    value: value,
+                    last_updated_by: user_id,
+                })];
+            case 5:
+                setting = _d.sent();
+                return [2 /*return*/, (_c = {}, _c[key] = setting, _c)];
         }
     });
 }); };

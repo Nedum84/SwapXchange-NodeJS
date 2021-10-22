@@ -6,7 +6,7 @@ describe("test the JWT authorization middleware", () => {
     const { tokens } = await global.signin();
 
     const response = await request(app)
-      .get("/v1/users/me")
+      .get("/api/v1/users/me")
       .expect(200)
       .set("authorization", `bearer ${tokens?.access?.token}`);
 
@@ -19,7 +19,7 @@ describe("test the JWT authorization middleware", () => {
     const invalidJwt = "OhMyToken";
 
     const response = await request(app)
-      .get("/v1/users/me")
+      .get("/api/v1/users/me")
       .expect(401)
       .set("authorization", `bearer ${invalidJwt}`);
 
@@ -32,7 +32,7 @@ describe("test the JWT authorization middleware", () => {
     const { tokens } = await global.signin();
 
     return request(app)
-      .patch("/v1/users/me")
+      .patch("/api/v1/users/me")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         mobile_number: "08066761212",
@@ -44,7 +44,7 @@ describe("test the JWT authorization middleware", () => {
     const { tokens } = await global.signin();
 
     return request(app)
-      .patch("/v1/users/me")
+      .patch("/api/v1/users/me")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         phone_number: "0809817216",

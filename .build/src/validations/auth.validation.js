@@ -10,7 +10,7 @@ var register = {
     body: joi_1.default.object()
         .keys({
         uid: joi_1.default.string().required(),
-        name: joi_1.default.string().custom(custom_validation_1.name).required(),
+        name: joi_1.default.string().custom(custom_validation_1.name),
         // mobile_number: Joi.string().custom(phone),
         mobile_number: joi_1.default.string(),
         email: joi_1.default.string().custom(custom_validation_1.email),

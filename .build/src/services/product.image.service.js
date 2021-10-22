@@ -41,16 +41,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
-var image_product_model_1 = require("../models/image.product.model");
-var product_model_1 = require("../models/product.model");
+var models_1 = require("../models");
 var product_service_1 = __importDefault(require("./product.service"));
+var sequelize_1 = require("sequelize");
 var findOne = function (image_id) { return __awaiter(void 0, void 0, void 0, function () {
     var image;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, image_product_model_1.ImageProduct.findOne({
+            case 0: return [4 /*yield*/, models_1.ImageProduct.findOne({
                     where: { image_id: image_id },
-                    include: { model: product_model_1.Product, as: "product" },
+                    include: { model: models_1.Product, as: "product" },
                 })];
             case 1:
                 image = _a.sent();
@@ -65,7 +65,7 @@ var findAll = function (product_id) { return __awaiter(void 0, void 0, void 0, f
     var images;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, image_product_model_1.ImageProduct.findAll({ where: { product_id: product_id } })];
+            case 0: return [4 /*yield*/, models_1.ImageProduct.findAll({ where: { product_id: product_id } })];
             case 1:
                 images = _a.sent();
                 return [2 /*return*/, images];
@@ -78,7 +78,7 @@ var deleteOne = function (req) { return __awaiter(void 0, void 0, void 0, functi
         switch (_a.label) {
             case 0:
                 image_id = req.params.image_id;
-                user_id = req.params.user_id;
+                user_id = req.user.user_id;
                 return [4 /*yield*/, findOne(image_id)];
             case 1:
                 image = _a.sent();
@@ -96,7 +96,7 @@ var createMany = function (body) { return __awaiter(void 0, void 0, void 0, func
     var images;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, image_product_model_1.ImageProduct.bulkCreate(body, {
+            case 0: return [4 /*yield*/, models_1.ImageProduct.bulkCreate(body, {
                     fields: ["image_id", "product_id", "image_path", "idx"],
                     updateOnDuplicate: ["image_id"],
                 })];
@@ -110,7 +110,7 @@ var createOne = function (body) { return __awaiter(void 0, void 0, void 0, funct
     var image;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, image_product_model_1.ImageProduct.create(body)];
+            case 0: return [4 /*yield*/, models_1.ImageProduct.create(body)];
             case 1:
                 image = _a.sent();
                 return [2 /*return*/, image];
@@ -118,7 +118,7 @@ var createOne = function (body) { return __awaiter(void 0, void 0, void 0, funct
     });
 }); };
 var update = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var image_id, idx, image;
+    var image_id, idx, image, updateOthers;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -127,9 +127,14 @@ var update = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 return [4 /*yield*/, findOne(image_id)];
             case 1:
                 image = _a.sent();
+                return [4 /*yield*/, models_1.ImageProduct.update(
+                    // { idx: Sequelize.literal("idx + 1") },
+                    { idx: sequelize_1.Sequelize.fn("1 + ", sequelize_1.Sequelize.col("idx")) }, { where: { product_id: image.product_id } })];
+            case 2:
+                updateOthers = _a.sent();
                 image.idx = idx;
                 return [4 /*yield*/, image.save()];
-            case 2:
+            case 3:
                 _a.sent();
                 return [2 /*return*/, image.reload()];
         }

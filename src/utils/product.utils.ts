@@ -1,4 +1,7 @@
+import { FindOptions } from "sequelize";
+import { Sequelize } from "sequelize";
 import { ProductStatus } from "../enum/product.enum";
+import { Category, ImageProduct, Product, SubCategory, User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import userService from "../services/user.service";
 
@@ -40,11 +43,21 @@ class ProductUtils {
         cat.category_id, 
         cat.category_name,
         cat.category_icon,
-        cat.idx
+        cat.idx,
+        cat."createdAt",
+        cat."updatedAt"
         from "Category" cat
         where cat.category_id = ANY(ARRAY["Product".product_suggestion])        
       ) cat
     ) AS suggestions`;
+  };
+
+  static noOfViewsSubQuery = () => {
+    return `
+    (SELECT COUNT(id) 
+      FROM "ProductViews" WHERE 
+      "ProductViews".product_id = "Product".product_id
+    ) AS no_of_views`;
   };
 
   static radiusGeometry = (user: UserAttributes) => {
@@ -70,10 +83,7 @@ class ProductUtils {
 
     return `SELECT 
           "Product".*, 
-          (SELECT COUNT(id) 
-            FROM "ProductViews" WHERE 
-            "ProductViews".product_id = "Product".product_id
-          ) AS no_of_views,
+          ${this.noOfViewsSubQuery()},
           ${this.radiusGeometry(user)} AS distance,
   
           -- Product Images objects array
@@ -90,6 +100,75 @@ class ProductUtils {
           ${orderBy}
           LIMIT ${limit} OFFSET ${offset} 
         `;
+  };
+
+  static sequelizeFindOptions = (prop: { limit: number; offset: number }) => {
+    const { limit, offset } = prop;
+    const options: FindOptions = {
+      limit,
+      offset,
+      include: [
+        {
+          model: User,
+          as: "user",
+          attributes: [
+            "user_id",
+            "name",
+            "mobile_number",
+            "address",
+            "profile_photo",
+          ],
+        },
+        {
+          model: ImageProduct,
+          as: "images",
+          order: ["idx"],
+        },
+        {
+          model: Category,
+          // as: "category",
+        },
+        {
+          model: SubCategory,
+          as: "subcategory",
+        },
+      ],
+      attributes: {
+        include: [
+          [
+            //no of views
+            Sequelize.literal(`
+              (SELECT COUNT(id) 
+                FROM "ProductViews" WHERE 
+                "ProductViews".product_id = "Product".product_id
+              )
+            `),
+            "no_of_views",
+          ],
+          [
+            // add suggestions
+            Sequelize.literal(`
+              (
+                select array_to_json(array_agg(row_to_json(cat)))
+                from (
+                  select 
+                  cat.category_id, 
+                  cat.category_name,
+                  cat.category_icon,
+                  cat.idx,
+                  cat."createdAt",
+                  cat."updatedAt"
+                  from "Category" cat
+                  where cat.category_id = ANY(ARRAY["Product".product_suggestion])        
+                ) cat
+              )
+            `),
+            "suggestions",
+          ],
+        ],
+      },
+    };
+    return options;
   };
 
   //---> MISCELENOES

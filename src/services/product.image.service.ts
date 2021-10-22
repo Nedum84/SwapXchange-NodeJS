@@ -1,12 +1,12 @@
 import { Request } from "express";
 import httpStatus from "http-status";
+import sequelize from "../models";
 import { ErrorResponse } from "../apiresponse/error.response";
-import {
-  ImageProduct,
-  ImageProductAttributes,
-} from "../models/image.product.model";
-import { Product } from "../models/product.model";
+import { ImageProduct, Product } from "../models";
+import { ImageProductAttributes } from "../models/image.product.model";
 import productService from "./product.service";
+import { QueryTypes } from "sequelize";
+import { Sequelize } from "sequelize";
 
 const findOne = async (image_id: string) => {
   const image = await ImageProduct.findOne({
@@ -24,9 +24,10 @@ const findAll = async (product_id: string) => {
 };
 const deleteOne = async (req: Request) => {
   const { image_id } = req.params;
-  const { user_id } = req.params;
+  const { user_id } = req.user;
   const image = await findOne(image_id);
   const product = await productService.findOnlyById(image.product_id);
+
   if (product.user_id !== user_id) {
     throw new ErrorResponse(
       "No permission to delete image",
@@ -51,6 +52,13 @@ const update = async (req: Request) => {
   const { idx } = req.body;
 
   const image = await findOne(image_id);
+
+  //increment others by 1
+  const updateOthers = await ImageProduct.update(
+    // { idx: Sequelize.literal("idx + 1") },
+    { idx: Sequelize.fn("1 + ", Sequelize.col("idx")) },
+    { where: { product_id: image.product_id } }
+  );
 
   image.idx = idx;
   await image.save();

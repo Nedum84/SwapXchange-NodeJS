@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
-import { Faqs } from "../models/faqs.model";
+import { Faqs } from "../models";
 
 const findOne = async (faq_id: string) => {
   const faq = await Faqs.findOne({ where: { faq_id } });

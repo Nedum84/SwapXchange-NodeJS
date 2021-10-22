@@ -11,7 +11,7 @@ var removeSaved = {
     }),
 };
 var findAllForUser = {
-    params: joi_1.default.object().keys(custom_validation_1.paginateDefault),
+    query: joi_1.default.object().keys(custom_validation_1.paginateDefault),
 };
 var checkSaved = {
     params: joi_1.default.object().keys({

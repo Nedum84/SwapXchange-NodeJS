@@ -1,7 +1,6 @@
-import { Model, Optional, DataTypes } from "sequelize";
-import sequelize from ".";
+import { Model, Optional, DataTypes, BuildOptions, Sequelize } from "sequelize";
+import { Product } from ".";
 import CONSTANTS from "../utils/constants";
-import { Product } from "./product.model";
 
 export interface SubCategoryAttributes {
   id: number;
@@ -19,56 +18,54 @@ interface SubCategoryInstance
   extends Model<SubCategoryAttributes, SubCategoryCreationAttributes>,
     SubCategoryAttributes {}
 
-const SubCategory = sequelize.define<SubCategoryInstance>(
-  "SubCategory",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    sub_category_id: {
-      type: DataTypes.STRING,
-      defaultValue: CONSTANTS.UUID,
-      primaryKey: true,
-      comment: "SubCategory Id",
-    },
-    sub_category_name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    sub_category_icon: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    category_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    idx: {
-      type: DataTypes.INTEGER,
-      defaultValue: 200,
-    },
-  },
-  {
-    timestamps: true,
-    tableName: "SubCategory",
-    version: true,
-  }
-);
-
-SubCategory.prototype.toJSON = function () {
-  const values = { ...this.get() };
-  const exclude = ["version", "id", "createdAt", "updatedAt"];
-  exclude.forEach((e) => delete values[e]);
-  return values;
+export type SubCategoryStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): SubCategoryInstance;
 };
-function subcategoryAssociate(): void {
-  SubCategory.hasMany(Product, {
-    as: "products",
-    onDelete: "cascade",
-    foreignKey: "sub_category",
-    sourceKey: "sub_category_id",
-  });
+
+export function SubCategoryFactory(sequelize: Sequelize) {
+  const SubCategory = <SubCategoryStatic>sequelize.define(
+    "SubCategory",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      sub_category_id: {
+        type: DataTypes.STRING,
+        defaultValue: CONSTANTS.UUID,
+        primaryKey: true,
+        comment: "SubCategory Id",
+      },
+      sub_category_name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      sub_category_icon: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      category_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      idx: {
+        type: DataTypes.INTEGER,
+        defaultValue: 200,
+      },
+    },
+    {
+      timestamps: true,
+      tableName: "SubCategory",
+      version: true,
+    }
+  );
+
+  SubCategory.prototype.toJSON = function () {
+    const values = { ...this.get() };
+    const exclude = ["version", "id"];
+    exclude.forEach((e) => delete values[e]);
+    return values;
+  };
+  return SubCategory;
 }
-export { SubCategory, subcategoryAssociate };

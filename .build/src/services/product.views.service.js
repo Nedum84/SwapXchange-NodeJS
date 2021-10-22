@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var product_views_model_1 = require("../models/product.views.model");
+var models_1 = require("../models");
 var product_service_1 = __importDefault(require("./product.service"));
 var findAll = function (product_id) { return __awaiter(void 0, void 0, void 0, function () {
     var product, views;
@@ -48,7 +48,7 @@ var findAll = function (product_id) { return __awaiter(void 0, void 0, void 0, f
             case 0: return [4 /*yield*/, product_service_1.default.findOnlyById(product_id)];
             case 1:
                 product = _a.sent();
-                return [4 /*yield*/, product_views_model_1.ProductViews.count({
+                return [4 /*yield*/, models_1.ProductViews.count({
                         where: { product_id: product.product_id },
                     })];
             case 2:
@@ -64,7 +64,7 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
             case 0:
                 user_id = req.user.user_id;
                 product_id = req.body.product_id;
-                return [4 /*yield*/, product_views_model_1.ProductViews.findOne({ where: { user_id: user_id, product_id: product_id } })];
+                return [4 /*yield*/, models_1.ProductViews.findOne({ where: { user_id: user_id, product_id: product_id } })];
             case 1:
                 view = _a.sent();
                 if (!view) return [3 /*break*/, 3];
@@ -72,7 +72,7 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
             case 2:
                 _a.sent();
                 return [2 /*return*/, view.reload()];
-            case 3: return [4 /*yield*/, product_views_model_1.ProductViews.create({
+            case 3: return [4 /*yield*/, models_1.ProductViews.create({
                     user_id: user_id,
                     product_id: product_id,
                 })];

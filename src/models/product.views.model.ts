@@ -1,5 +1,4 @@
-import { Model, Optional, DataTypes } from "sequelize";
-import sequelize from ".";
+import { Model, Optional, DataTypes, BuildOptions, Sequelize } from "sequelize";
 import CONSTANTS from "../utils/constants";
 
 export interface ProductViewsAttributes {
@@ -16,34 +15,39 @@ interface ProductViewsInstance
   extends Model<ProductViewsAttributes, ProductViewsCreationAttributes>,
     ProductViewsAttributes {}
 
-const ProductViews = sequelize.define<ProductViewsInstance>(
-  "ProductViews",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    view_id: {
-      type: DataTypes.STRING,
-      defaultValue: CONSTANTS.UUID,
-      primaryKey: true,
-      comment: "ProductViews Id",
-    },
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    product_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: true,
-    tableName: "ProductViews",
-    version: true,
-  }
-);
+export type ProductViewsStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): ProductViewsInstance;
+};
 
-export { ProductViews };
+export function ProductViewsFactory(sequelize: Sequelize) {
+  const ProductViews = <ProductViewsStatic>sequelize.define(
+    "ProductViews",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      view_id: {
+        type: DataTypes.STRING,
+        defaultValue: CONSTANTS.UUID,
+        primaryKey: true,
+        comment: "ProductViews Id",
+      },
+      user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      product_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: true,
+      tableName: "ProductViews",
+      version: true,
+    }
+  );
+  return ProductViews;
+}

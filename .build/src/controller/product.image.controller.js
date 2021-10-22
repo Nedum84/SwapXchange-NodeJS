@@ -102,7 +102,7 @@ var update = function (req, res) { return __awaiter(void 0, void 0, void 0, func
             case 0: return [4 /*yield*/, product_image_service_1.default.update(req)];
             case 1:
                 result = _a.sent();
-                api_response_1.default.created(res, { image_product: result });
+                api_response_1.default.ok(res, { image_product: result });
                 return [2 /*return*/];
         }
     });

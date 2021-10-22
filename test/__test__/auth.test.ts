@@ -5,7 +5,7 @@ import customFake from "../factories/custom.fake";
 beforeAll(async () => {});
 describe("Auth test", () => {
   it("returns a 201 on successful signup", async () => {
-    const res = await request(app).post("/v1/auth").send({
+    const res = await request(app).post("/api/v1/auth").send({
       uid: customFake.fakeUuid,
       name: customFake.fakeName,
       mobile_number: customFake.fakePhone,
@@ -20,7 +20,7 @@ describe("Auth test", () => {
 
   it("should fail when signup with invalid/incomplete details", async () => {
     const response = await request(app)
-      .post("/v1/auth")
+      .post("/api/v1/auth")
       .send({
         uid: customFake.fakeUuid,
         name: customFake.fakeName,
@@ -33,7 +33,7 @@ describe("Auth test", () => {
     });
   });
   it("returns a 200 on successful refresh token", async () => {
-    const res = await request(app).post("/v1/auth").send({
+    const res = await request(app).post("/api/v1/auth").send({
       uid: customFake.fakeUuid,
       name: customFake.fakeName,
       mobile_number: customFake.fakePhone,
@@ -47,7 +47,7 @@ describe("Auth test", () => {
     const { tokens } = res.body.data;
 
     return request(app)
-      .post("/v1/auth/refreshtoken")
+      .post("/api/v1/auth/refreshtoken")
       .send({
         refresh_token: tokens?.refresh?.token,
       })

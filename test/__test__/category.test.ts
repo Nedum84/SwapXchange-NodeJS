@@ -6,7 +6,7 @@ describe("Category test", () => {
     const { tokens } = await global.signin();
 
     const response = await request(app)
-      .post("/v1/category")
+      .post("/api/v1/category")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send({
         category_name: "Shoess",
@@ -25,7 +25,7 @@ describe("Category test", () => {
     const { tokens } = await global.signin();
 
     const response = await request(app)
-      .get("/v1/category")
+      .get("/api/v1/category")
       .set("authorization", `bearer ${tokens?.access?.token}`)
       .send();
 

@@ -23,7 +23,7 @@ const create = async (req: Request, res: Response) => {
 };
 const update = async (req: Request, res: Response) => {
   const result = await productImageService.update(req);
-  ApiResponse.created(res, { image_product: result });
+  ApiResponse.ok(res, { image_product: result });
 };
 
 export default {

@@ -42,7 +42,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
 var coins_enum_1 = require("../enum/coins.enum");
-var user_model_1 = require("../models/user.model");
+var models_1 = require("../models");
 var coins_service_1 = __importDefault(require("./coins.service"));
 var createUser = function (body) { return __awaiter(void 0, void 0, void 0, function () {
     var uid, email, user, isEmailTaken, newUser, amount, reference, method_of_subscription, data, coin;
@@ -50,7 +50,7 @@ var createUser = function (body) { return __awaiter(void 0, void 0, void 0, func
         switch (_a.label) {
             case 0:
                 uid = body.uid, email = body.email;
-                return [4 /*yield*/, user_model_1.User.findOne({ where: { uid: uid } })];
+                return [4 /*yield*/, models_1.User.findOne({ where: { uid: uid } })];
             case 1:
                 user = _a.sent();
                 if (!user) return [3 /*break*/, 3];
@@ -59,16 +59,19 @@ var createUser = function (body) { return __awaiter(void 0, void 0, void 0, func
             case 2:
                 _a.sent();
                 return [2 /*return*/, user.reload()];
-            case 3: return [4 /*yield*/, user_model_1.User.findOne({
-                    where: { email: email },
-                })];
+            case 3:
+                if (!email) return [3 /*break*/, 5];
+                return [4 /*yield*/, models_1.User.findOne({
+                        where: { email: email },
+                    })];
             case 4:
                 isEmailTaken = _a.sent();
                 if (email && !!isEmailTaken) {
                     throw new error_response_1.ErrorResponse("Email already taken");
                 }
-                return [4 /*yield*/, user_model_1.User.create(body)];
-            case 5:
+                _a.label = 5;
+            case 5: return [4 /*yield*/, models_1.User.create(body)];
+            case 6:
                 newUser = _a.sent();
                 amount = coins_enum_1.AmountsEnum.H500;
                 reference = newUser.uid + "-" + newUser.user_id;
@@ -80,7 +83,7 @@ var createUser = function (body) { return __awaiter(void 0, void 0, void 0, func
                     user_id: newUser.user_id,
                 };
                 return [4 /*yield*/, coins_service_1.default.create(data)];
-            case 6:
+            case 7:
                 coin = _a.sent();
                 return [2 /*return*/, newUser];
         }
@@ -90,7 +93,7 @@ var findMe = function (user_id) { return __awaiter(void 0, void 0, void 0, funct
     var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, user_model_1.User.findOne({ where: { user_id: user_id } })];
+            case 0: return [4 /*yield*/, models_1.User.findOne({ where: { user_id: user_id } })];
             case 1:
                 user = _a.sent();
                 if (!user) {
@@ -104,7 +107,7 @@ var findOne = function (user_id) { return __awaiter(void 0, void 0, void 0, func
     var user;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, user_model_1.User.findOne({ where: { user_id: user_id } })];
+            case 0: return [4 /*yield*/, models_1.User.findOne({ where: { user_id: user_id } })];
             case 1:
                 user = _a.sent();
                 if (!user) {

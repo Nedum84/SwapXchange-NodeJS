@@ -103,11 +103,24 @@ var findAll = function (req, res) { return __awaiter(void 0, void 0, void 0, fun
         }
     });
 }); };
+var markCompleted = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, product_chats_service_1.default.markCompleted(req)];
+            case 1:
+                result = _a.sent();
+                api_response_1.default.ok(res, { products: result });
+                return [2 /*return*/];
+        }
+    });
+}); };
 exports.default = {
     update: update,
     findOne: findOne,
     create: create,
     findLatestForTwoUsers: findLatestForTwoUsers,
     findAll: findAll,
+    markCompleted: markCompleted,
 };
 //# sourceMappingURL=product.chats.controller.js.map

@@ -23,6 +23,7 @@ const create = async (req: Request) => {
     role,
     privilegeExpiredTs
   );
+
   return tokenA;
 };
 

@@ -52,7 +52,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
-var saved_products_model_1 = require("../models/saved.products.model");
+var models_1 = require("../models");
 var helpers_1 = __importDefault(require("../utils/helpers"));
 var product_service_1 = __importDefault(require("./product.service"));
 var removeSaved = function (req) { return __awaiter(void 0, void 0, void 0, function () {
@@ -65,7 +65,7 @@ var removeSaved = function (req) { return __awaiter(void 0, void 0, void 0, func
                 return [4 /*yield*/, product_service_1.default.findOne(product_id)];
             case 1:
                 product = _a.sent();
-                return [4 /*yield*/, saved_products_model_1.SavedProducts.findOne({
+                return [4 /*yield*/, models_1.SavedProducts.findOne({
                         where: { user_id: user_id, product_id: product.product_id },
                     })];
             case 2:
@@ -81,16 +81,17 @@ var removeSaved = function (req) { return __awaiter(void 0, void 0, void 0, func
     });
 }); };
 var findAllForUser = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, paginateOptions, saved;
+    var user_id, paginateOptions, saved, products;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 user_id = req.user.user_id;
                 paginateOptions = helpers_1.default.getPaginate(req.params);
-                return [4 /*yield*/, saved_products_model_1.SavedProducts.findAll(__assign({ where: { user_id: user_id } }, paginateOptions))];
+                return [4 /*yield*/, models_1.SavedProducts.findAll(__assign({ where: { user_id: user_id } }, paginateOptions))];
             case 1:
                 saved = _a.sent();
-                return [2 /*return*/, saved];
+                products = saved.map(function (i) { return i.product_id; });
+                return [2 /*return*/, product_service_1.default.findSavedProducts(products)];
         }
     });
 }); };
@@ -101,7 +102,7 @@ var checkSaved = function (user_id, product_id) { return __awaiter(void 0, void 
             case 0: return [4 /*yield*/, product_service_1.default.findOne(product_id)];
             case 1:
                 product = _a.sent();
-                return [4 /*yield*/, saved_products_model_1.SavedProducts.findOne({
+                return [4 /*yield*/, models_1.SavedProducts.findOne({
                         where: { user_id: user_id, product_id: product.product_id },
                     })];
             case 2:
@@ -114,7 +115,7 @@ var checkSaved = function (user_id, product_id) { return __awaiter(void 0, void 
     });
 }); };
 var create = function (req) { return __awaiter(void 0, void 0, void 0, function () {
-    var user_id, product_id, product, saved, save;
+    var user_id, product_id, product, saved, added, save;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -126,14 +127,18 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
                 return [4 /*yield*/, checkSaved(user_id, product_id)];
             case 2:
                 saved = _a.sent();
-                if (saved.is_saved) {
-                    return [2 /*return*/, saved];
-                }
-                return [4 /*yield*/, saved_products_model_1.SavedProducts.create({
-                        product_id: product.product_id,
-                        user_id: user_id,
+                if (!saved.is_saved) return [3 /*break*/, 4];
+                return [4 /*yield*/, models_1.SavedProducts.findOne({
+                        where: { user_id: user_id, product_id: product.product_id },
                     })];
             case 3:
+                added = _a.sent();
+                return [2 /*return*/, added];
+            case 4: return [4 /*yield*/, models_1.SavedProducts.create({
+                    product_id: product.product_id,
+                    user_id: user_id,
+                })];
+            case 5:
                 save = _a.sent();
                 return [2 /*return*/, save];
         }

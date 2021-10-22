@@ -12,7 +12,7 @@ var updateUser = {
         .keys({
         uid: joi_1.default.string(),
         name: joi_1.default.string().custom(custom_validation_1.name),
-        mobile_number: joi_1.default.string().custom(custom_validation_1.phone),
+        mobile_number: joi_1.default.string(),
         email: joi_1.default.string().custom(custom_validation_1.email),
         radius: (_a = joi_1.default.number()).valid.apply(_a, Object.values(user_enum_1.UserRadius)),
         address: joi_1.default.string(),
@@ -27,7 +27,7 @@ var updateUser = {
             chat: joi_1.default.boolean(),
             product: joi_1.default.boolean(),
         }),
-        user_level: joi_1.default.number(),
+        // user_level: Joi.number(),
         // online_status: Joi.string().valid('away','offline',"online"),
         online_status: (_b = joi_1.default.string()).valid.apply(_b, Object.values(user_enum_1.OnlineStatus)),
         user_app_version: joi_1.default.number(),

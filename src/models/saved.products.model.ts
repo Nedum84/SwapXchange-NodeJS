@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { BuildOptions, Sequelize } from "sequelize";
 import { Model, Optional, DataTypes } from "sequelize";
 import sequelize from ".";
 
@@ -15,28 +15,33 @@ interface SavedProductsInstance
   extends Model<SavedProductsAttributes, SavedProductsCreationAttributes>,
     SavedProductsAttributes {}
 
-const SavedProducts = sequelize.define<SavedProductsInstance>(
-  "SavedProducts",
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-      comment: "SavedProducts Id",
-    },
-    product_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-  },
-  {
-    timestamps: true,
-    tableName: "SavedProducts",
-  }
-);
+export type SavedProductsStatic = typeof Model & {
+  new (values?: object, options?: BuildOptions): SavedProductsInstance;
+};
 
-export { SavedProducts };
+export function SavedProductsFactory(sequelize: Sequelize) {
+  const SavedProducts = <SavedProductsStatic>sequelize.define(
+    "SavedProducts",
+    {
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        comment: "SavedProducts Id",
+      },
+      product_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+      user_id: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
+    },
+    {
+      timestamps: true,
+      tableName: "SavedProducts",
+    }
+  );
+  return SavedProducts;
+}

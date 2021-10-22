@@ -52,13 +52,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var http_status_1 = __importDefault(require("http-status"));
 var error_response_1 = require("../apiresponse/error.response");
-var feedback_model_1 = require("../models/feedback.model");
+var models_1 = require("../models");
 var helpers_1 = __importDefault(require("../utils/helpers"));
 var findOne = function (feedback_id) { return __awaiter(void 0, void 0, void 0, function () {
     var feedback;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, feedback_model_1.Feedback.findOne({ where: { feedback_id: feedback_id } })];
+            case 0: return [4 /*yield*/, models_1.Feedback.findOne({ where: { feedback_id: feedback_id } })];
             case 1:
                 feedback = _a.sent();
                 if (!feedback) {
@@ -97,7 +97,7 @@ var create = function (req) { return __awaiter(void 0, void 0, void 0, function 
             case 0:
                 message = req.body.message;
                 user_id = req.user.user_id;
-                return [4 /*yield*/, feedback_model_1.Feedback.create({
+                return [4 /*yield*/, models_1.Feedback.create({
                         message: message,
                         user_id: user_id,
                     })];
@@ -115,7 +115,7 @@ var findAll = function (req) { return __awaiter(void 0, void 0, void 0, function
                 paginateOptions = helpers_1.default.getPaginate(req.query);
                 status = req.query.status;
                 where = status === "all" ? {} : { status: status };
-                return [4 /*yield*/, feedback_model_1.Feedback.findAll(__assign({ where: where, order: [["id", "DESC"]] }, paginateOptions))];
+                return [4 /*yield*/, models_1.Feedback.findAll(__assign({ where: where, order: [["id", "DESC"]] }, paginateOptions))];
             case 1:
                 feedbacks = _a.sent();
                 return [2 /*return*/, feedbacks];

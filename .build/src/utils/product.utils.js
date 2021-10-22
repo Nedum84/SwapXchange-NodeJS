@@ -39,7 +39,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var sequelize_1 = require("sequelize");
 var product_enum_1 = require("../enum/product.enum");
+var models_1 = require("../models");
 var user_service_1 = __importDefault(require("../services/user.service"));
 var ProductUtils = /** @class */ (function () {
     function ProductUtils() {
@@ -53,7 +55,10 @@ var ProductUtils = /** @class */ (function () {
         return "(\n        select array_to_json(array_agg(row_to_json(img)))\n        from (\n          select \n          img.image_id, \n          img.product_id,\n          img.image_path,\n          img.idx\n          from \"ImageProduct\" img\n          where \"Product\".product_id = img.product_id        \n        ) img\n      ) AS images";
     };
     ProductUtils.suggestionSubQuery = function () {
-        return "(\n      select array_to_json(array_agg(row_to_json(cat)))\n      from (\n        select \n        cat.category_id, \n        cat.category_name,\n        cat.category_icon,\n        cat.idx\n        from \"Category\" cat\n        where cat.category_id = ANY(ARRAY[\"Product\".product_suggestion])        \n      ) cat\n    ) AS suggestions";
+        return "(\n      select array_to_json(array_agg(row_to_json(cat)))\n      from (\n        select \n        cat.category_id, \n        cat.category_name,\n        cat.category_icon,\n        cat.idx,\n        cat.\"createdAt\",\n        cat.\"updatedAt\"\n        from \"Category\" cat\n        where cat.category_id = ANY(ARRAY[\"Product\".product_suggestion])        \n      ) cat\n    ) AS suggestions";
+    };
+    ProductUtils.noOfViewsSubQuery = function () {
+        return "\n    (SELECT COUNT(id) \n      FROM \"ProductViews\" WHERE \n      \"ProductViews\".product_id = \"Product\".product_id\n    ) AS no_of_views";
     };
     ProductUtils.radiusGeometry = function (user) {
         return "(\n        (((acos(sin((" + user.address_lat + "*pi()/180)) * \n        sin((\"Product\".user_address_lat*pi()/180))+cos((" + user.address_lat + "*pi()/180))\n        *  cos((\"Product\".user_address_lat*pi()/180)) * \n        cos(((" + user.address_long + "- \"Product\".user_address_long)*pi()/180))))*180/pi())*60*1.1515)\n    )";
@@ -68,10 +73,58 @@ var ProductUtils = /** @class */ (function () {
                 case 1:
                     user = _d.sent();
                     orderBy = order !== null && order !== void 0 ? order : "ORDER BY \"Product\".id DESC";
-                    return [2 /*return*/, "SELECT \n          \"Product\".*, \n          (SELECT COUNT(id) \n            FROM \"ProductViews\" WHERE \n            \"ProductViews\".product_id = \"Product\".product_id\n          ) AS no_of_views,\n          " + this.radiusGeometry(user) + " AS distance,\n  \n          -- Product Images objects array\n          " + this.imgSubQuery() + ",\n          -- User object\n          " + this.userSubQuery() + ",\n          -- Product Suggestions\n          " + this.suggestionSubQuery() + "\n  \n  \n          FROM \"Product\" \n        WHERE \"Product\".\"product_status\" = '" + product_status + "' " + extra + " \n          AND " + this.radiusGeometry(user) + " < " + user.radius + "\n          " + orderBy + "\n          LIMIT " + limit + " OFFSET " + offset + " \n        "];
+                    return [2 /*return*/, "SELECT \n          \"Product\".*, \n          " + this.noOfViewsSubQuery() + ",\n          " + this.radiusGeometry(user) + " AS distance,\n  \n          -- Product Images objects array\n          " + this.imgSubQuery() + ",\n          -- User object\n          " + this.userSubQuery() + ",\n          -- Product Suggestions\n          " + this.suggestionSubQuery() + "\n  \n  \n          FROM \"Product\" \n        WHERE \"Product\".\"product_status\" = '" + product_status + "' " + extra + " \n          AND " + this.radiusGeometry(user) + " < " + user.radius + "\n          " + orderBy + "\n          LIMIT " + limit + " OFFSET " + offset + " \n        "];
             }
         });
     }); };
+    ProductUtils.sequelizeFindOptions = function (prop) {
+        var limit = prop.limit, offset = prop.offset;
+        var options = {
+            limit: limit,
+            offset: offset,
+            include: [
+                {
+                    model: models_1.User,
+                    as: "user",
+                    attributes: [
+                        "user_id",
+                        "name",
+                        "mobile_number",
+                        "address",
+                        "profile_photo",
+                    ],
+                },
+                {
+                    model: models_1.ImageProduct,
+                    as: "images",
+                    order: ["idx"],
+                },
+                {
+                    model: models_1.Category,
+                    // as: "category",
+                },
+                {
+                    model: models_1.SubCategory,
+                    as: "subcategory",
+                },
+            ],
+            attributes: {
+                include: [
+                    [
+                        //no of views
+                        sequelize_1.Sequelize.literal("\n              (SELECT COUNT(id) \n                FROM \"ProductViews\" WHERE \n                \"ProductViews\".product_id = \"Product\".product_id\n              )\n            "),
+                        "no_of_views",
+                    ],
+                    [
+                        // add suggestions
+                        sequelize_1.Sequelize.literal("\n              (\n                select array_to_json(array_agg(row_to_json(cat)))\n                from (\n                  select \n                  cat.category_id, \n                  cat.category_name,\n                  cat.category_icon,\n                  cat.idx,\n                  cat.\"createdAt\",\n                  cat.\"updatedAt\"\n                  from \"Category\" cat\n                  where cat.category_id = ANY(ARRAY[\"Product\".product_suggestion])        \n                ) cat\n              )\n            "),
+                        "suggestions",
+                    ],
+                ],
+            },
+        };
+        return options;
+    };
     return ProductUtils;
 }());
 exports.default = ProductUtils;

@@ -42,10 +42,10 @@ var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 var config_1 = __importDefault(require("../config/config"));
 var moment_1 = __importDefault(require("moment"));
 var http_status_1 = __importDefault(require("http-status"));
-var token_model_1 = require("../models/token.model");
 var error_response_1 = require("../apiresponse/error.response");
 var user_service_1 = __importDefault(require("./user.service"));
 var token_enum_1 = require("../enum/token.enum");
+var models_1 = require("../models");
 /**
  * Generate token
  * @param {Object} data
@@ -75,7 +75,7 @@ var saveToken = function (token, user_id, expires, tokenType) { return __awaiter
     var tk, tokenDoc;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, token_model_1.Token.findOne({
+            case 0: return [4 /*yield*/, models_1.Token.findOne({
                     where: { user_id: user_id, type: tokenType },
                 })];
             case 1:
@@ -92,7 +92,7 @@ var saveToken = function (token, user_id, expires, tokenType) { return __awaiter
             case 3:
                 _a.sent();
                 return [2 /*return*/, tk];
-            case 4: return [4 /*yield*/, token_model_1.Token.create({
+            case 4: return [4 /*yield*/, models_1.Token.create({
                     token: token,
                     user_id: user_id,
                     expires: expires.toDate(),
@@ -119,7 +119,7 @@ var verifyToken = function (token, tokenType) { return __awaiter(void 0, void 0,
                 if (payload == null) {
                     throw new error_response_1.ErrorResponse("Invalid or Expired token");
                 }
-                return [4 /*yield*/, token_model_1.Token.findOne({
+                return [4 /*yield*/, models_1.Token.findOne({
                         where: {
                             token: token,
                             type: tokenType,
@@ -145,7 +145,9 @@ var generateAuthTokens = function (user) { return __awaiter(void 0, void 0, void
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                accessTokenExpires = (0, moment_1.default)().add(config_1.default.jwt.accessExpirationMinutes, "minutes");
+                accessTokenExpires = (0, moment_1.default)().add(config_1.default.jwt.accessExpirationMinutes, 
+                // 900000000,
+                "minutes");
                 accessToken = generateToken({ user_id: user.user_id, user_level: user.user_level }, accessTokenExpires, token_enum_1.TokenTypes.ACCESS);
                 refreshTokenExpires = (0, moment_1.default)().add(config_1.default.jwt.refreshExpirationDays, "days");
                 refreshToken = generateToken({ user_id: user.user_id, user_level: user.user_level }, refreshTokenExpires, token_enum_1.TokenTypes.REFRESH);

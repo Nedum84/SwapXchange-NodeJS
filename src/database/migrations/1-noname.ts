@@ -1,6 +1,8 @@
 "use strict";
 
+import { Sequelize } from "sequelize";
 import {
+  DataTypes,
   INTEGER,
   STRING,
   DATE,
@@ -16,6 +18,14 @@ import {
   QueryInterfaceCreateTableOptions,
   QueryInterfaceIndexOptions,
 } from "sequelize";
+import { MethodOfSub } from "../../enum/coins.enum";
+import { FeedbackStatus } from "../../enum/feedback.enum";
+import { ChatStatus } from "../../enum/product.chats.enum";
+import { ProductCondition, ProductStatus } from "../../enum/product.enum";
+import { ReportedProductStatus } from "../../enum/reported.products.enum";
+import { TokenTypes } from "../../enum/token.enum";
+import { BaseCurrency, OnlineStatus } from "../../enum/user.enum";
+import CONSTANTS from "../../utils/constants";
 
 /**
  * Actions summary:
@@ -60,1083 +70,617 @@ var migrationCommands = [
   {
     fn: "createTable",
     params: [
-      "BusinessCategories",
+      "AppSettings",
       {
         id: {
-          type: INTEGER,
-          field: "id",
-          primaryKey: true,
-          unique: true,
+          type: DataTypes.INTEGER,
           autoIncrement: true,
-        },
-        slug: {
-          type: STRING,
-          field: "slug",
-          unique: true,
-          required: true,
-          allowNull: false,
-        },
-        name: {
-          type: STRING,
-          field: "name",
-          required: true,
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "ErrorQueueLogs",
-      {
-        id: {
-          type: UUID,
-          field: "id",
-          defaultValue: UUIDV4,
           primaryKey: true,
         },
-        payload: {
-          type: TEXT,
-          field: "payload",
-          allowNull: false,
+        d_key: {
+          type: DataTypes.STRING,
         },
-        error: {
-          type: STRING,
-          field: "error",
-          allowNull: false,
+        value: {
+          type: DataTypes.TEXT,
         },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Files",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          primaryKey: true,
-          unique: true,
-          autoIncrement: true,
-        },
-        ext: {
-          type: STRING,
-          field: "ext",
-          allowNull: false,
-        },
-        key: {
-          type: STRING,
-          field: "key",
-          unique: true,
-          allowNull: false,
-        },
-        file_name: {
-          type: STRING,
-          field: "file_name",
-        },
-        url: {
-          type: STRING,
-          field: "url",
-        },
-        bucket: {
-          type: STRING,
-          field: "bucket",
-        },
-        disk: {
-          type: STRING,
-          field: "disk",
-          defaultValue: "s3",
-        },
-        verified_at: {
-          type: DATE,
-          field: "verified_at",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Industries",
-      {
-        id: {
-          type: INTEGER,
-          field: "id",
-          primaryKey: true,
-          unique: true,
-          autoIncrement: true,
-        },
-        name: {
-          type: STRING,
-          field: "name",
-          allowNull: false,
-        },
-        mcc: {
-          type: STRING,
-          field: "mcc",
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Merchants",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          primaryKey: true,
-          unique: true,
-          autoIncrement: true,
-        },
-        account_id: {
-          type: STRING,
-          field: "account_id",
-          unique: true,
-          allowNull: false,
-        },
-        slug: {
-          type: STRING,
-          field: "slug",
-          unique: true,
-          allowNull: false,
-        },
-        display_name: {
-          type: STRING,
-          field: "display_name",
-          allowNull: false,
-        },
-        description: {
-          type: STRING,
-          field: "description",
-        },
-        acquirer_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
+        last_updated_by: {
+          type: DataTypes.STRING,
           allowNull: true,
-          field: "acquirer_id",
         },
-        refer_fee: {
-          type: DECIMAL,
-          field: "refer_fee",
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Category",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
         },
-        phone: {
-          type: STRING,
-          field: "phone",
+        category_id: {
+          type: DataTypes.STRING,
+          primaryKey: true,
+          defaultValue: CONSTANTS.UUID,
+          comment: "Category Id",
         },
-        phone_verified_at: {
-          type: DATE,
-          field: "phone_verified_at",
+        category_name: {
+          type: DataTypes.STRING,
         },
+        category_icon: {
+          type: DataTypes.STRING,
+        },
+        idx: {
+          type: DataTypes.INTEGER,
+          defaultValue: 200,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Coins",
+      {
+        id: {
+          type: DataTypes.BIGINT,
+          autoIncrement: true,
+          primaryKey: true,
+          comment: "Coins Id",
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        amount: {
+          type: DataTypes.BIGINT,
+          allowNull: false,
+        },
+        reference: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        method_of_subscription: {
+          type: DataTypes.ENUM,
+          values: Object.values(MethodOfSub),
+          allowNull: false,
+        },
+        createdAt: {
+          type: DataTypes.DATE,
+          allowNull: false,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Faqs",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        faq_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "Faqs Id",
+        },
+        question: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        answer: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        category: {
+          type: DataTypes.STRING,
+          defaultValue: 0,
+        },
+        added_by: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Feedback",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        feedback_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "Feedback Id",
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        message: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        status: {
+          type: DataTypes.STRING,
+          values: Object.values(FeedbackStatus),
+          defaultValue: FeedbackStatus.OPEN,
+        },
+        resolved_by: {
+          type: DataTypes.STRING,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "ImageProduct",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        image_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "ImageProduct Id",
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        image_path: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        idx: {
+          type: DataTypes.INTEGER,
+          defaultValue: 200,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "ProductChats",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        product_chat_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "ProductChats Id",
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        offer_product_id: {
+          type: DataTypes.STRING,
+        },
+        sender_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        receiver_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        sender_closed_deal: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+        receiver_closed_deal: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
+        },
+        chat_status: {
+          type: DataTypes.ENUM,
+          values: Object.values(ChatStatus),
+          defaultValue: ChatStatus.OPEN,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Product",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "Product Id",
+        },
+        order_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+          unique: true,
+        },
+        product_name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        category: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        sub_category: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        price: {
+          type: DataTypes.INTEGER,
+          allowNull: false,
+        },
+        product_description: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        product_suggestion: {
+          type: DataTypes.ARRAY(DataTypes.STRING),
+          allowNull: false,
+        },
+        product_condition: {
+          type: DataTypes.ENUM,
+          values: Object.values(ProductCondition),
+          defaultValue: ProductCondition.FAIRLY_USED,
+        },
+        product_status: {
+          type: DataTypes.ENUM,
+          values: Object.values(ProductStatus),
+          defaultValue: ProductStatus.ACTIVE,
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        user_address: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        user_address_city: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        user_address_lat: {
+          type: DataTypes.FLOAT,
+          allowNull: false,
+        },
+        user_address_long: {
+          type: DataTypes.FLOAT,
+          allowNull: false,
+        },
+        upload_price: {
+          type: DataTypes.INTEGER,
+          defaultValue: 100,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "ProductViews",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        view_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "ProductViews Id",
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "ReportedProducts",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        reported_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "ReportedProducts Id",
+        },
+        reported_by: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        reported_message: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        uploaded_by: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        status: {
+          type: DataTypes.ENUM,
+          values: Object.values(ReportedProductStatus),
+          defaultValue: ReportedProductStatus.OPEN,
+        },
+        resolved_by: {
+          type: DataTypes.STRING,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "SavedProducts",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+          comment: "SavedProducts Id",
+        },
+        product_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "SubCategory",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        sub_category_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "SubCategory Id",
+        },
+        sub_category_name: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        sub_category_icon: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        category_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        idx: {
+          type: DataTypes.INTEGER,
+          defaultValue: 200,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "Token",
+      {
+        id: {
+          type: DataTypes.INTEGER,
+          autoIncrement: true,
+          primaryKey: true,
+          comment: "Token Id",
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        type: {
+          type: DataTypes.STRING,
+          values: Object.values(TokenTypes),
+          defaultValue: TokenTypes.REFRESH,
+        },
+        token: {
+          type: DataTypes.STRING,
+          allowNull: false,
+        },
+        expires: {
+          type: DataTypes.DATE,
+          allowNull: false,
+        },
+      },
+      {},
+    ],
+  },
+  {
+    fn: "createTable",
+    params: [
+      "User",
+      {
+        id: {
+          type: DataTypes.BIGINT,
+          autoIncrement: true,
+          primaryKey: true,
+        },
+        user_id: {
+          type: DataTypes.STRING,
+          defaultValue: CONSTANTS.UUID,
+          primaryKey: true,
+          comment: "Users Id",
+        },
+        uid: {
+          type: DataTypes.STRING,
+          primaryKey: true,
+          allowNull: false,
+        },
+        name: DataTypes.STRING,
+        mobile_number: DataTypes.STRING,
         email: {
-          type: STRING,
-          field: "email",
-          validate: {
-            isEmail: true,
+          type: DataTypes.STRING,
+          unique: true,
+        },
+        radius: DataTypes.INTEGER,
+        address: DataTypes.STRING,
+        address_lat: DataTypes.FLOAT,
+        address_long: DataTypes.FLOAT,
+        state: DataTypes.STRING,
+        profile_photo: DataTypes.STRING,
+        device_token: DataTypes.STRING,
+        notification: {
+          type: DataTypes.JSONB,
+          defaultValue: {
+            general: true,
+            call: true,
+            chat: true,
+            product: true,
           },
-          allowNull: false,
         },
-        email_verified_at: {
-          type: DATE,
-          field: "email_verified_at",
+        user_level: DataTypes.INTEGER,
+        online_status: {
+          type: DataTypes.ENUM,
+          values: Object.values(OnlineStatus),
+          defaultValue: OnlineStatus.ONLINE,
         },
-        address: {
-          type: STRING,
-          field: "address",
+        user_app_version: DataTypes.INTEGER,
+        base_currency: {
+          type: DataTypes.ENUM,
+          values: Object.values(BaseCurrency),
+          defaultValue: BaseCurrency.NGN,
         },
-        logo_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "Files",
-            key: "id",
-          },
-          allowNull: true,
-          field: "logo_id",
+        last_login: {
+          type: DataTypes.DATE,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
         },
-        is_live: {
-          type: BOOLEAN,
-          field: "is_live",
-          defaultValue: false,
-        },
-        is_developer: {
-          type: BOOLEAN,
-          field: "is_developer",
-          defaultValue: false,
-        },
-        is_system: {
-          type: BOOLEAN,
-          field: "is_system",
+        suspended: {
+          type: DataTypes.BOOLEAN,
           defaultValue: false,
         },
         suspended_at: {
-          type: DATE,
-          field: "suspended_at",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Accounts",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        gt_account_number: {
-          type: STRING,
-          field: "gt_account_number",
-        },
-        gt_account_name: {
-          type: STRING,
-          field: "gt_account_name",
-        },
-        dom_account_number: {
-          type: STRING,
-          field: "dom_account_number",
-        },
-        dom_account_name: {
-          type: STRING,
-          field: "dom_account_name",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Beneficiaries",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        name: {
-          type: STRING,
-          field: "name",
-          allowNull: false,
-        },
-        account_number: {
-          type: STRING,
-          field: "account_number",
-          allowNull: false,
-        },
-        currency_id: {
-          type: STRING,
-          field: "currency_id",
-          allowNull: false,
-        },
-        bank_name: {
-          type: STRING,
-          field: "bank_name",
-          allowNull: false,
-        },
-        bank_code: {
-          type: STRING,
-          field: "bank_code",
-          allowNull: false,
-        },
-        phone_number: {
-          type: STRING,
-          field: "phone_number",
-        },
-        email: {
-          type: STRING,
-          field: "email",
-        },
-        nick_name: {
-          type: STRING,
-          field: "nick_name",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "DevKits",
-      {
-        id: {
-          type: INTEGER,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-          allowNull: false,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        test_p_key: {
-          type: STRING,
-          field: "test_p_key",
-          unique: true,
-          allowNull: false,
-        },
-        test_s_key: {
-          type: STRING,
-          field: "test_s_key",
-          unique: true,
-          allowNull: false,
-        },
-        live_p_key: {
-          type: STRING,
-          field: "live_p_key",
-          unique: true,
-        },
-        live_s_key: {
-          type: STRING,
-          field: "live_s_key",
-          unique: true,
-        },
-        redirect_url: {
-          type: STRING,
-          field: "redirect_url",
-        },
-        webhook_url: {
-          type: STRING,
-          field: "webhook_url",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "KYC",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        bank: {
-          type: STRING,
-          field: "bank",
-        },
-        bank_code: {
-          type: STRING,
-          field: "bank_code",
-        },
-        account_number: {
-          type: STRING,
-          field: "account_number",
-        },
-        account_name: {
-          type: STRING,
-          field: "account_name",
-        },
-        bvn: {
-          type: STRING,
-          field: "bvn",
-        },
-        nin: {
-          type: STRING,
-          field: "nin",
-        },
-        rc_number: {
-          type: STRING,
-          field: "rc_number",
-        },
-        business_name: {
-          type: STRING,
-          field: "business_name",
-        },
-        business_desc: {
-          type: STRING,
-          field: "business_desc",
-        },
-        country_code: {
-          type: STRING,
-          field: "country_code",
-        },
-        country: {
-          type: STRING,
-          field: "country",
-        },
-        state_id: {
-          type: STRING,
-          field: "state_id",
-        },
-        state: {
-          type: STRING,
-          field: "state",
-        },
-        city: {
-          type: STRING,
-          field: "city",
-        },
-        address: {
-          type: STRING,
-          field: "address",
-        },
-        cac_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "Files",
-            key: "id",
-          },
-          allowNull: true,
-          field: "cac_id",
-        },
-        memo_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "Files",
-            key: "id",
-          },
-          allowNull: true,
-          field: "memo_id",
-        },
-        category_id: {
-          type: INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "BusinessCategories",
-            key: "id",
-          },
-          allowNull: true,
-          field: "category_id",
-        },
-        industry_id: {
-          type: INTEGER,
-          onUpdate: "CASCADE",
-          onDelete: "set null",
-          references: {
-            model: "Industries",
-            key: "id",
-          },
-          allowNull: true,
-          field: "industry_id",
-        },
-        completed_at: {
-          type: DATE,
-          field: "completed_at",
-        },
-        approved_at: {
-          type: DATE,
-          field: "approved_at",
-        },
-        last_reject_at: {
-          type: DATE,
-          field: "last_reject_at",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "KycFiles",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          unique: true,
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        kyc_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "KYC",
-            key: "id",
-          },
-          allowNull: true,
-          field: "kyc_id",
-        },
-        file_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Files",
-            key: "id",
-          },
-          allowNull: true,
-          field: "file_id",
-        },
-        group: {
-          type: BIGINT,
-          field: "group",
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "KYCHistory",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        kyc_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "KYC",
-            key: "id",
-          },
-          field: "kyc_id",
-          allowNull: false,
-        },
-        admin_id: {
-          type: STRING,
-          field: "admin_id",
-          required: true,
-          allowNull: false,
-        },
-        admin_name: {
-          type: STRING,
-          field: "admin_name",
-          required: true,
-          allowNull: false,
-        },
-        reason: {
-          type: TEXT,
-          field: "reason",
-          required: true,
-          allowNull: false,
-        },
-        approved: {
-          type: BOOLEAN,
-          field: "approved",
-          required: true,
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "KYCPersonnel",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        kyc_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "KYC",
-            key: "id",
-          },
-          field: "kyc_id",
-          allowNull: false,
-        },
-        name: {
-          type: STRING,
-          field: "name",
-          required: true,
-          allowNull: false,
-        },
-        email: {
-          type: STRING,
-          field: "email",
-          required: true,
-          allowNull: false,
-        },
-        job_title: {
-          type: STRING,
-          field: "job_title",
-          required: true,
-          allowNull: false,
-        },
-        bvn: {
-          type: STRING,
-          field: "bvn",
-          required: true,
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Otps",
-      {
-        id: {
-          type: INTEGER,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-          allowNull: false,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        code: {
-          type: STRING,
-          field: "code",
-          allowNull: false,
-        },
-        medium: {
-          type: STRING,
-          field: "medium",
-          defaultValue: "phone",
-        },
-        expire_at: {
-          type: DATE,
-          field: "expire_at",
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "Settings",
-      {
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          primaryKey: true,
-          allowNull: false,
-        },
-        key: {
-          type: STRING,
-          field: "key",
-          primaryKey: true,
-          allowNull: false,
-        },
-        value: {
-          type: STRING,
-          field: "value",
-          allowNull: false,
-        },
-        data_type: {
-          type: STRING,
-          field: "data_type",
-          defaultValue: "string",
-        },
-        admin_lock: {
-          type: BOOLEAN,
-          field: "admin_lock",
+          type: DataTypes.DATE,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        un_suspended_at: {
+          type: DataTypes.DATE,
+          defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        },
+        ip_ban: {
+          type: DataTypes.BOOLEAN,
           defaultValue: false,
         },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
+        is_verified: {
+          type: DataTypes.BOOLEAN,
+          defaultValue: false,
         },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
+        version: {
+          type: DataTypes.INTEGER,
           allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
+          defaultValue: 0,
         },
       },
       {},
     ],
   },
-  {
-    fn: "createTable",
-    params: [
-      "Settlements",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        currency_id: {
-          type: STRING,
-          field: "currency_id",
-          defaultValue: "NGN",
-          allowNull: false,
-        },
-        flat_fee: {
-          type: INTEGER,
-          field: "flat_fee",
-          defaultValue: 5000,
-          allowNull: false,
-        },
-        service_charge: {
-          type: DECIMAL,
-          field: "service_charge",
-          defaultValue: 1.2,
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "createTable",
-    params: [
-      "StatusHistory",
-      {
-        id: {
-          type: BIGINT,
-          field: "id",
-          autoIncrement: true,
-          primaryKey: true,
-        },
-        merchant_id: {
-          type: BIGINT,
-          onUpdate: "CASCADE",
-          onDelete: "cascade",
-          references: {
-            model: "Merchants",
-            key: "id",
-          },
-          field: "merchant_id",
-          allowNull: false,
-        },
-        admin_id: {
-          type: STRING,
-          field: "admin_id",
-          required: true,
-          allowNull: false,
-        },
-        admin_name: {
-          type: STRING,
-          field: "admin_name",
-          required: true,
-          allowNull: false,
-        },
-        reason: {
-          type: TEXT,
-          field: "reason",
-          required: true,
-          allowNull: false,
-        },
-        suspended: {
-          type: BOOLEAN,
-          field: "suspended",
-          required: true,
-          allowNull: false,
-        },
-        createdAt: {
-          type: DATE,
-          field: "createdAt",
-          allowNull: false,
-        },
-        updatedAt: {
-          type: DATE,
-          field: "updatedAt",
-          allowNull: false,
-        },
-        deletedAt: {
-          type: DATE,
-          field: "deletedAt",
-        },
-      },
-      {},
-    ],
-  },
-  {
-    fn: "addIndex",
-    params: [
-      "Otps",
-      ["merchant_id", "code"],
-      {
-        indexName: "otps_merchant_id_code",
-        name: "otps_merchant_id_code",
-        indicesType: "UNIQUE",
-        type: "UNIQUE",
-      },
-    ],
-  },
+  //   {
+  //     fn: "addIndex",
+  //     params: [
+  //       "Otps",
+  //       ["merchant_id", "code"],
+  //       {
+  //         indexName: "otps_merchant_id_code",
+  //         name: "otps_merchant_id_code",
+  //         indicesType: "UNIQUE",
+  //         type: "UNIQUE",
+  //       },
+  //     ],
+  //   },
 ];
+
+const dateDefault: ModelAttributes<Model<any, any>, any> = {
+  createdAt: {
+    type: DATE,
+    field: "createdAt",
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+    allowNull: false,
+  },
+  updatedAt: {
+    type: DATE,
+    field: "updatedAt",
+    defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+    allowNull: false,
+  },
+  deletedAt: {
+    type: DATE,
+    field: "deletedAt",
+  },
+  version: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+  },
+};
 
 function up({ queryInterface }: { queryInterface: QueryInterface }) {
   var index = 0;
@@ -1147,6 +691,8 @@ function up({ queryInterface }: { queryInterface: QueryInterface }) {
         console.log("[#" + index + "] execute: " + command.fn);
         index++;
         //@ts-ignore
+        // command.params[1] = { ...command.params[1], ...dateDefault };
+        //@ts-ignore
         // queryInterface[command.fn]
         //   .apply(queryInterface, command.params)
         //   .then(next, reject);
@@ -1156,8 +702,9 @@ function up({ queryInterface }: { queryInterface: QueryInterface }) {
           const tableName = params[0] as string;
           const model = params[1] as ModelAttributes<Model<any, any>, any>;
           const options = params[2] as QueryInterfaceCreateTableOptions;
+          const attributes = { ...model, ...dateDefault };
           queryInterface
-            .createTable(tableName, model, options)
+            .createTable(tableName, attributes, options)
             .then(next, reject);
         } else if (command.fn == "addIndex") {
           const { params } = command;
