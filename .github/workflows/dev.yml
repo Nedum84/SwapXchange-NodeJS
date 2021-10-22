@@ -1,4 +1,4 @@
-name: Develop Deploy
+name: Dev Deploy
 
 on:
   workflow_dispatch:
@@ -70,6 +70,10 @@ jobs:
 
       - name: Deploy Lambda functions (serverless deploy)
         run: serverless deploy --stage dev --region $AWS_DEFAULT_REGION
+
+   # Run migration
+      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
+#      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
 
 
 #        env: # or if using AWS credentials directly

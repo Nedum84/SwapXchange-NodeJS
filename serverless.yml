@@ -12,7 +12,6 @@ provider:
 #  stage: "dev"
   region: eu-west-2
   iam:
-#    role: arn:aws:iam::899172222060:user/edum
     role: arn:aws:iam::899172222060:role/XchangeRole
 #    role: arn:aws:iam::899172222060:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway
   vpc:
@@ -28,6 +27,9 @@ plugins:
   - serverless-offline
 
 functions:
+  cli:
+    handler: src/aws/lambda-cli.handler
+    timeout: 300 # 5 minutes
   api:
     handler: src/aws/lambda.handler
     timeout: 30
