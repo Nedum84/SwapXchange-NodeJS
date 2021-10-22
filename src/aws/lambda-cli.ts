@@ -1,8 +1,8 @@
 import cli from './cli';
-import { APIGatewayProxyEvent, APIGatewayProxyResultV2, Handler } from 'aws-lambda';
+import {APIGatewayProxyEvent, Context} from 'aws-lambda';
 
 
-const handler:Handler = async function (event:APIGatewayProxyEvent, context, callback) {
+const handler = async function (event:APIGatewayProxyEvent, context:Context, callback:any) {
   // context.callbackWaitsForEmptyEventLoop = false;
 
   await cli(event, context, (error:any, stdout:any, stderr:any) => {
