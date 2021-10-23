@@ -13,7 +13,7 @@ on:
 #        default: 'The Octoverse'
 jobs:
 
-  deploy_to_lambda_dev:
+  deploy-dev:
     name: Deploy to AWS Dev
     runs-on: ubuntu-latest
 
@@ -76,8 +76,9 @@ jobs:
       - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
 #      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
 
-
-#        env: # or if using AWS credentials directly
-#           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        env: # or if using AWS credentials directly
+         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+         AGORA_APP_ID: ${{ secrets.AGORA_APP_ID }}
+         AGORA_APP_CERT: ${{ secrets.AGORA_APP_CERT }}
 
