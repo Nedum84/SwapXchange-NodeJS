@@ -4,6 +4,7 @@ import sequelize from "../models";
 import postMigration from "../database/post-migration";
 require("dotenv").config();
 
+import sd from "ts-node"
 const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   console.log(`Executing "${cmd}"`);
   console.log(" ");
@@ -19,9 +20,8 @@ const execCommand = (cmd: any, callback: any = null, throwError = true) => {
     });
   });
 };
-
 // const s_cli = _resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
-const s_cli = _resolve(__dirname, '../../node_modules/ts-node');
+const s_cli = _resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
 // const s_cli = "npm run";
 
 const dropDB = () => execCommand(`${s_cli} db:drop`);
