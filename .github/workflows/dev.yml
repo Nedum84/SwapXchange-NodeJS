@@ -69,7 +69,7 @@ jobs:
 #          cat .env
 
       - name: Install NPM dependencies
-        run: npm install --only=prod
+        run: npm install
 
       - name: Deploy Lambda functions (serverless deploy)
         run: serverless deploy --stage dev --region $AWS_DEFAULT_REGION
