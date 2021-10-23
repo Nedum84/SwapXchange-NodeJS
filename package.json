@@ -10,7 +10,7 @@
     "test": "NODE_ENV=test jest --runInBand --no-cache",
     "dev-test": "NODE_ENV=test jest --runInBand --watchAll --no-cache",
     "db:drop": "./node_modules/.bin/ts-node-dev src/database/umzug/db:drop.ts",
-    "db:create": "ts-node-dev src/database/umzug/create.ts",
+    "db:create": "./node_modules/.bin/ts-node-dev src/database/umzug/create.ts",
     "db:migrate": "./node_modules/.bin/ts-node-dev src/database/umzug/migrate.ts",
     "db:seed:all": "ts-node-dev src/database/umzug/seed.ts",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate",
