@@ -25,7 +25,6 @@ provider:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
-  - ts-node-dev
 
 functions:
   cli:
