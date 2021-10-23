@@ -25,6 +25,13 @@ provider:
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
+  - serverless-plugin-scripts
+
+
+custom:
+  scripts:
+    hooks:
+      'afetr:deploy:finalize': npm run db:migrate
 
 functions:
   cli:
