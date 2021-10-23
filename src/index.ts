@@ -1,6 +1,7 @@
 import { app } from "./app";
 import config from "./config/config";
 import logger from "./config/logger";
+import shell from "shelljs";
 
 //Start app server
 const start = async () => {
