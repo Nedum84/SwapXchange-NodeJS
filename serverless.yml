@@ -31,7 +31,7 @@ plugins:
 custom:
   scripts:
     hooks:
-      'afetr:deploy:finalize': npm run db:migrate
+      'after:deploy:finalize': npm run db:migrate
 
 functions:
   cli:
