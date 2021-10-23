@@ -19,6 +19,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+        with:
+          clean: 'false'
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
@@ -44,27 +46,27 @@ jobs:
 #          ${{ secrets.ENV }}
 #          EOF
 
-#        run: |
-#          cat << EOF > .env
-#          DB_HOST=${{ secrets.DB_HOST }}
-#          DB_PORT=${{ secrets.DB_PORT }}
-#          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-#          DB_USERNAME=${{ secrets.DB_USERNAME }}
-#          DB_NAME=${{ secrets.DB_NAME }}
-#          JWT_SECRET=${{ secrets.JWT_SECRET }}
-#          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
-#          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
-#          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
-#          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
-#          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
-#          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
-#          EOF
-
         run: |
-          touch .env
-          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
-          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
-          cat .env
+          cat << EOF > .env
+          DB_HOST=${{ secrets.DB_HOST }}
+          DB_PORT=${{ secrets.DB_PORT }}
+          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+          DB_USERNAME=${{ secrets.DB_USERNAME }}
+          DB_NAME=${{ secrets.DB_NAME }}
+          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
+          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
+          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
+          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
+          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
+          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
+          EOF
+
+#        run: |
+#          touch .env
+#          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
+#          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
+#          cat .env
 
       - name: Install NPM dependencies
         run: npm install --only=prod
