@@ -44,27 +44,27 @@ jobs:
 #          ${{ secrets.ENV }}
 #          EOF
 
-        run: |
-          cat << EOF > .env
-          DB_HOST=${{ secrets.DB_HOST }}
-          DB_PORT=${{ secrets.DB_PORT }}
-          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_NAME=${{ secrets.DB_NAME }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
-          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
-          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
-          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
-          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
-          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
-          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
-          EOF
+#        run: |
+#          cat << EOF > .env
+#          DB_HOST=${{ secrets.DB_HOST }}
+#          DB_PORT=${{ secrets.DB_PORT }}
+#          DB_PASSWORD=${{ secrets.DB_PASSWORD }}
+#          DB_USERNAME=${{ secrets.DB_USERNAME }}
+#          DB_NAME=${{ secrets.DB_NAME }}
+#          JWT_SECRET=${{ secrets.JWT_SECRET }}
+#          JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
+#          JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
+#          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
+#          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
+#          AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
+#          AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
+#          EOF
 
-#        run4: |
-#          touch .env
-#          echo API_ENDPOINT="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
-#          echo API_KEY=${{ secrets.API_KEY }} >> .env
-#          cat .env
+        run: |
+          touch .env
+          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
+          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
+          cat .env
 
       - name: Install NPM dependencies
         run: npm install --only=prod
@@ -76,9 +76,7 @@ jobs:
       - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
 #      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
 
-        env: # or if using AWS credentials directly
-         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-         AGORA_APP_ID: ${{ secrets.AGORA_APP_ID }}
-         AGORA_APP_CERT: ${{ secrets.AGORA_APP_CERT }}
+#        env: # or if using AWS credentials directly
+#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
