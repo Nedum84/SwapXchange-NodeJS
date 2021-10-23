@@ -119,6 +119,7 @@ User.hasMany(Product, {
 
 (async () => {
   // await sequelize.sync({ force: true });
+  await sequelize.sync();
 })();
 export default sequelize;
 
