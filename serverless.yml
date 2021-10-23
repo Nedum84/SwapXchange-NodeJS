@@ -34,6 +34,9 @@ custom:
 #      'after:deploy:finalize': npm run db:migrate
 
 functions:
+  databaseMigrations:
+    handler: src/aws/lambda-migrate.handler
+    timeout: 300 # 5 minutes
   cli:
     handler: src/aws/lambda-cli.handler
     timeout: 300 # 5 minutes
