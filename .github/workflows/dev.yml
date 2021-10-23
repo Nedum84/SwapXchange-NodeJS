@@ -76,7 +76,7 @@ jobs:
 
    # Run migration
       - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
-#      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
 
 #        env: # or if using AWS credentials directly
 #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

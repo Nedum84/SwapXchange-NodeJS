@@ -8,7 +8,7 @@ export const verifyReference = async (reference: string) => {
       `https://api.paystack.co/transaction/verify/${reference}`,
       {
         headers: {
-          Authorization: `Bearer ${config.PAYSTACK_TEST_KEY}`,
+          Authorization: `Bearer ${config.PAYSTACK_TEST_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
       }

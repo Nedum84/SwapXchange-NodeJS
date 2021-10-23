@@ -22,8 +22,8 @@ const envVarsSchema = Joi.object()
     DB_PASSWORD: Joi.string().default("1223"),
     DB_HOST: Joi.string().default("localhost"),
     DB_PORT: Joi.number().default(5432),
-    PAYSTACK_TEST_KEY: Joi.string().default("key"),
-    PAYSTACK_LIVE_KEY: Joi.string().default("key"),
+    PAYSTACK_TEST_SECRET_KEY: Joi.string().default("key"),
+    PAYSTACK_LIVE_SECRET_KEY: Joi.string().default("key"),
     AGORA_APP_ID: Joi.string().default("agora_app_id"),
     AGORA_APP_CERT: Joi.string().default("agora_app_cert"),
   })
@@ -49,8 +49,8 @@ export default {
   DB_PASSWORD: envVars.DB_PASSWORD,
   DB_HOST: envVars.DB_HOST,
   DB_PORT: envVars.DB_PORT,
-  PAYSTACK_TEST_KEY: envVars.PAYSTACK_TEST_KEY,
-  PAYSTACK_LIVE_KEY: envVars.PAYSTACK_LIVE_KEY,
+  PAYSTACK_TEST_SECRET_KEY: envVars.PAYSTACK_TEST_SECRET_KEY,
+  PAYSTACK_LIVE_SECRET_KEY: envVars.PAYSTACK_LIVE_SECRET_KEY,
   AGORA_APP_ID: envVars.AGORA_APP_ID,
   AGORA_APP_CERT: envVars.AGORA_APP_CERT,
   jwt: {
