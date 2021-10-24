@@ -23,7 +23,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       env: process.env
     }
 
-    exec(`${tsNode} db:drop`, options, (error, stdout, stderr) => {
+    exec(`node db:drop`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);
