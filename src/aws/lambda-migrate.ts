@@ -1,5 +1,5 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
-require('ts-node/register');
+import 'ts-node/register';
 import shell from 'shelljs';
 import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
@@ -39,18 +39,18 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
     });
 
 
-    // exec(`${tsNode} ./src/database/umzug/migrate.ts`, (error, stdout, stderr) => {
-    //   if (error) {
-    //     console.error(`error: ${error.message}`);
-    //     shell.echo( `Error running migration: ${error.message} `);
-    //   }
-    //   if (stderr) {
-    //     console.log(`stderr: ${stderr}`);
-    //     shell.echo('Error running migration.');
-    //   }
-    //   console.log(`stdout: ${stdout}`);
-    //   shell.echo('Migration successfully.');
-    // })
+    exec(`ts-node ./src/database/umzug/migrate.ts`, (error, stdout, stderr) => {
+      if (error) {
+        console.error(`error: ${error.message}`);
+        shell.echo( `Error running migration: ${error.message} `);
+      }
+      if (stderr) {
+        console.log(`stderr: ${stderr}`);
+        shell.echo('Error running migration.');
+      }
+      console.log(`stdout: ${stdout}`);
+      shell.echo('Migration successfully.');
+    })
   })
 
   return promise
