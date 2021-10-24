@@ -8,8 +8,8 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
   const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
   shell.echo("Hello world!!! "+tsNode)
   // shell.exec(`ts-node src/database/umzug/migrate.ts`);
-  shell.exec(`${tsNode} src/database/umzug/migrate.ts`);
-  // shell.exec(`npx ts-node src/database/umzug/migrate.ts`);
+  // shell.exec(`${tsNode} src/database/umzug/migrate.ts`);
+  shell.exec(`npx ts-node src/database/umzug/migrate.ts`);
 };
 
 export = {
