@@ -1,5 +1,5 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
-import 'ts-node/register';
+// import 'ts-node/register';
 import shell from 'shelljs';
 import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
@@ -10,9 +10,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
 
   console.log("----------",process.env, "::::HERE:::")
   const s_cli = resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
-  // const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
-  const tsNode = resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
-  // shell.echo("Hello world!!! "+tsNode)
+  const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
   // shell.exec(`ts-node src/database/umzug/migrate.ts`);
   // shell.exec(`${tsNode} src/database/umzug/migrate.ts`);
   // exec(`${tsNode} src/database/umzug/migrate.ts`);
@@ -38,19 +36,6 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       shell.echo('Migration successfully.');
     });
 
-
-    exec(`ts-node ./src/database/umzug/migrate.ts`, (error, stdout, stderr) => {
-      if (error) {
-        console.error(`error: ${error.message}`);
-        shell.echo( `Error running migration: ${error.message} `);
-      }
-      if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        shell.echo('Error running migration.');
-      }
-      console.log(`stdout: ${stdout}`);
-      shell.echo('Migration successfully.');
-    })
   })
 
   return promise
