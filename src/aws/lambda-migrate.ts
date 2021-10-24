@@ -1,13 +1,14 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
 require('ts-node/register');
 import shell from 'shelljs';
-import tn from 'ts-node';
+import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
 import { exec } from "child_process";
 
 
 const handler = async function (event:APIGatewayProxyEvent, context:Context, callback:any) {
 
+  // console.log(m)
   const s_cli = resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
   // const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
   const tsNode = resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
