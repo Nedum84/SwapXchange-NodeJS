@@ -23,7 +23,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       env: process.env
     }
 
-    exec(`ts-node ./src/database/umzug/migrate.ts`, options, (error, stdout, stderr) => {
+    exec(`npx ts-node ./src/database/umzug/migrate.ts`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);
