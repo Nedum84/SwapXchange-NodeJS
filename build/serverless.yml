@@ -14,7 +14,7 @@ provider:
     role: arn:aws:iam::899172222060:role/XchangeRole
 #    role: arn:aws:iam::899172222060:role/aws-service-role/ops.apigateway.amazonaws.com/AWSServiceRoleForAPIGateway
   environment:
-    NODE_OPTIONS: "--enable-source-maps"
+    NODE_OPTIONS: --enable-source-maps
   vpc:
     securityGroupIds:
       - sg-0e16ecd2de3007de4 #Private

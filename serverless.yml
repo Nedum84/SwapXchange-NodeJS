@@ -34,6 +34,7 @@ package:
     - '!src/**'
     - 'build/src/**'
     - 'build/src/database/**'
+    - 'src/aws/**'
     - '.env'
 #    - '!node_modules/**' #Exclude all node_modules sub dirs
 

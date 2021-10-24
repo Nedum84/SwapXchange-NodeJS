@@ -19,7 +19,7 @@
 
     "clean": "rm -rf ./build",
     "build": "npm run clean && tsc --build tsconfig.json",
-    "postbuild": "cp serverless.yml ./build",
+    "postbuild": "cp serverless.yml ./build && cp -R node_modules ./build",
     "deploy": "cd build && sls deploy --stage dev --region eu-west-2 && cd ..",
     "build-deploy": "npm run build && npm run deploy",
     "deploy-offline": "cd build && sls offline && cd .."

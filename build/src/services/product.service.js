@@ -242,7 +242,7 @@ var findBySearch = function (req) { return __awaiter(void 0, void 0, void 0, fun
                 _a = req.query, search_query = _a.search_query, filters = _a.filters;
                 options = helpers_1.default.getPaginate(req.query);
                 searchQuery = search_query != "none" ? search_query : "";
-                extra = "\n      AND (\n            product_name LIKE '%" + searchQuery + "%' \n          OR category IN \n              (SELECT category_id FROM \"Category\" WHERE category_name LIKE '%" + searchQuery + "%' ) \n          OR sub_category IN \n              (SELECT sub_category_id FROM \"SubCategory\" WHERE sub_category_name LIKE '%" + searchQuery + "%' ) \n      )\n";
+                extra = " \n      AND (\n            product_name LIKE '%" + searchQuery + "%' \n          OR category IN \n              (SELECT category_id FROM \"Category\" WHERE category_name LIKE '%" + searchQuery + "%' ) \n          OR sub_category IN \n              (SELECT sub_category_id FROM \"SubCategory\" WHERE sub_category_name LIKE '%" + searchQuery + "%' ) \n      )\n";
                 if (filters) {
                     switch (filters) {
                         case "best-match":
