@@ -23,9 +23,9 @@ provider:
       - subnet-047d66d6a250068ae
 
 package:
-  include: #https://stackoverflow.com/questions/54980249/include-exclude-packages-in-serverless-yml-from-same-folder
-    - src/database/**
-#    - node_modules/.bin
+  patterns:
+    - 'src/database/**'
+#    - '!node_modules/**' #Exclude all node_modules sub dirs
 
 plugins:
   - serverless-plugin-typescript
