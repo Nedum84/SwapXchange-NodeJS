@@ -1,5 +1,7 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
+require('ts-node/register');
 import shell from 'shelljs';
+import tn from 'ts-node';
 import { resolve  } from "path";
 import { exec } from "child_process";
 
@@ -19,7 +21,8 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       maxBuffer: 10000000,
       env: process.env
     }
-    exec(`${s_cli} db:drop`, options, (error, stdout, stderr) => {
+
+    exec(`${tn} db:drop`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);
