@@ -21,7 +21,8 @@ provider:
       - subnet-06ac3f82667ebe9f0
       - subnet-0f979ac6191ee988b
       - subnet-047d66d6a250068ae
-  package:
+
+package:
     include: #https://stackoverflow.com/questions/54980249/include-exclude-packages-in-serverless-yml-from-same-folder
       - src/database
       - node_modules/.bin
