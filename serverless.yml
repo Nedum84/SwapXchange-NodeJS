@@ -9,7 +9,6 @@ provider:
   tags:
     service: swapxchange
   lambdaHashingVersion: "20201221"
-#  stage: "dev"
   region: eu-west-2
   iam:
     role: arn:aws:iam::899172222060:role/XchangeRole

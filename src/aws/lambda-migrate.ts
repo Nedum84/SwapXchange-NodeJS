@@ -4,7 +4,7 @@ import shell from 'shelljs';
 import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
 import { exec } from "child_process";
-
+require("dotenv").config();
 
 const handler = async function (event:APIGatewayProxyEvent, context:Context, callback:any) {
 
