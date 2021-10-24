@@ -139,7 +139,7 @@ const findBySearch = async (req: Request) => {
   const options = Helpers.getPaginate(req.query);
 
   const searchQuery = search_query != "none" ? search_query : "";
-  const extra = `
+  const extra = ` 
       AND (
             product_name LIKE '%${searchQuery}%' 
           OR category IN 
@@ -148,7 +148,7 @@ const findBySearch = async (req: Request) => {
               (SELECT sub_category_id FROM "SubCategory" WHERE sub_category_name LIKE '%${searchQuery}%' ) 
       )
 `;
-  let order = null;
+  let order;
   if (filters) {
     switch (filters) {
       case "best-match":

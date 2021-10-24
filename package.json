@@ -2,7 +2,7 @@
   "name": "swapxchange-nodejs",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
+  "//type": "module",
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=development ts-node-dev --poll src/index.ts",
@@ -15,7 +15,13 @@
     "db:migrate": "ts-node src/database/umzug/migrate.ts",
     "db:seed:all": "ts-node src/database/umzug/seed.ts",
     "db:reset": "npm run db:drop && npm run db:create && npm run db:migrate",
-    "db:reset:all": "npm start && npm run db:reset && npm run db:seed:all"
+    "db:reset:all": "npm start && npm run db:reset && npm run db:seed:all",
+
+    "clean": "rm -rf ./build",
+    "build": "npm run clean && tsc --build tsconfig.json",
+    "postbuild": "cp serverless.yml ./build",
+    "deploy": "cd build && sls offline && cd ..",
+    "build-deploy": "npm run build && npm run deploy"
   },
   "jest": {
     "preset": "ts-jest",

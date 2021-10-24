@@ -4,7 +4,6 @@ import sequelize from "../models";
 import postMigration from "../database/post-migration";
 require("dotenv").config();
 
-import sd from "ts-node"
 const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   console.log(`Executing "${cmd}"`);
   console.log(" ");
