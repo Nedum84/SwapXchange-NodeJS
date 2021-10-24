@@ -1,7 +1,7 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
 import 'ts-node/register';
 import shell from 'shelljs';
-// import * as m from '../database/umzug/migrate';
+import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
 import { exec } from "child_process";
 
