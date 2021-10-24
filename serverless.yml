@@ -4,7 +4,7 @@ frameworkVersion: "2"
 provider:
   name: aws
   runtime: nodejs14.x
-  memorySize: 512
+  memorySize: 128
   timeout: 10
   tags:
     service: swapxchange
@@ -32,12 +32,13 @@ custom:
   scripts:
     hooks:
 #      'after:deploy:finalize': npm run db:migrate
-      'aws:deploy:finalize:cleanup': npm run db:migrate
+#      'aws:deploy:finalize:cleanup': npm run db:migrate
 
 functions:
   databaseMigrations:
     handler: src/aws/lambda-migrate.handler
     timeout: 300 # 5 minutes
+    memorySize: 512
   cli:
     handler: src/aws/lambda-cli.handler
     timeout: 300 # 5 minutes
