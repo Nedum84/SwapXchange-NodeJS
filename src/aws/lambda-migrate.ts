@@ -10,6 +10,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
 
   const s_cli = resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
   // const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
+  const tsNode = resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
   // shell.echo("Hello world!!! "+tsNode)
   // shell.exec(`ts-node src/database/umzug/migrate.ts`);
   // shell.exec(`${tsNode} src/database/umzug/migrate.ts`);
@@ -22,7 +23,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       env: process.env
     }
 
-    exec(`${tn} db:drop`, options, (error, stdout, stderr) => {
+    exec(`${tsNode} db:drop`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);
