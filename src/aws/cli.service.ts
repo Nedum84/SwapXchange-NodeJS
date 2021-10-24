@@ -21,7 +21,6 @@ const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   });
 };
 // const s_cli = _resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
-// const s_cli = _resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
 const s_cli = "npx run";
 
 const dropDB = () => execCommand(`${s_cli} db:drop`);

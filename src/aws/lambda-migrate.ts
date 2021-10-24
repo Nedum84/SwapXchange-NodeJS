@@ -32,7 +32,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       }
       if (stderr) {
         console.log(`stderr::: ${stderr}`);
-        shell.echo('Error running migration boss.');
+        shell.echo('Error running migration.');
       }
       console.log(`stdout: ${stdout}`);
       shell.echo('Migration successfully.');
