@@ -8,7 +8,7 @@ require("dotenv").config();
 
 const handler = async function (event:APIGatewayProxyEvent, context:Context, callback:any) {
 
-  // console.log(m)
+  console.log("----------",process.env, "::::HERE:::")
   const s_cli = resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
   // const tsNode = resolve(__dirname, '../../node_modules/.bin/ts-node');
   const tsNode = resolve(__dirname, '../../node_modules/ts-node/dist/index.js');
