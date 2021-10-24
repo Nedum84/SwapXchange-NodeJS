@@ -23,7 +23,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       env: process.env
     }
 
-    exec(`node db:drop`, options, (error, stdout, stderr) => {
+    exec(`node ./src/database/umzug/migrate.ts`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);
@@ -37,7 +37,11 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       shell.echo('Migration successfully.');
     });
 
-    // exec("ls -la");
+    exec("ls -la",(error, stdout, stderr) => {
+
+      console.log(`stdout: ${stdout}`);
+      shell.echo('Migration successfully.: '+stdout);
+    });
 
     // exec(`${tsNode} ./src/database/umzug/migrate.ts`, (error, stdout, stderr) => {
     //   if (error) {
