@@ -58,6 +58,7 @@ jobs:
           PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
           AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
           AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
+          AGORA_APP_CERTZZZ=${{ secrets.AGORA_APP_CERT }}
           EOF
 
 #        run: |

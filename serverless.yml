@@ -25,6 +25,7 @@ provider:
 package:
   patterns:
     - 'src/database/**'
+    - '.env'
 #    - '!node_modules/**' #Exclude all node_modules sub dirs
 
 plugins:
