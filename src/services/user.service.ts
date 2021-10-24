@@ -2,14 +2,14 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import sequelize, { User } from "../models";
+import  { User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
-  console.log(process.env)
-  await sequelize.sync({force:true});
+  // console.log(process.env)
+  // await sequelize.sync({force:true});
 
   const user = await User.findOne({ where: { uid } });
   if (user) {
