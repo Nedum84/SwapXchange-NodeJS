@@ -1,4 +1,4 @@
-service: auth-products-service
+service: swapxchange-service
 frameworkVersion: "2"
 
 provider:
