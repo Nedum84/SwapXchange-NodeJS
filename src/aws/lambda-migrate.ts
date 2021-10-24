@@ -1,7 +1,7 @@
 import {APIGatewayProxyEvent, Context} from 'aws-lambda';
 import 'ts-node/register';
 import shell from 'shelljs';
-import * as m from '../database/umzug/migrate';
+// import * as m from '../database/umzug/migrate';
 import { resolve  } from "path";
 import { exec } from "child_process";
 
@@ -31,8 +31,8 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
         shell.echo( `Error running migration: ${error.message} `);
       }
       if (stderr) {
-        console.log(`stderr: ${stderr}`);
-        shell.echo('Error running migration.');
+        console.log(`stderr::: ${stderr}`);
+        shell.echo('Error running migration boss.');
       }
       console.log(`stdout: ${stdout}`);
       shell.echo('Migration successfully.');
