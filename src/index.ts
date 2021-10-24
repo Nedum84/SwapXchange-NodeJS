@@ -1,17 +1,12 @@
 import { app } from "./app";
 import config from "./config/config";
 import logger from "./config/logger";
-import shell from "shelljs";
-import {resolve} from "path";
+
 
 //Start app server
 const start = async () => {
   const server = app.listen(config.PORT, () => {
-    console.log(`Listening on port http://localhost:${config.PORT} !...`);
-    //
-    const tsNode = resolve(__dirname, '../node_modules/.bin/ts-node');
-    console.log(tsNode)
-    // shell.exec(`${tsNode} src/database/umzug/migrate.ts`);
+    console.log(`Listening on port http://localhost:${config.PORT}...!`);
   });
 
   const exitHandler = () => {
