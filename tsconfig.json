@@ -29,7 +29,7 @@
     /* eg. src/* -> build/src/* */
     "resolveJsonModule": true,
 
-//    Added by me
+//    Added by me(Nelson)
     "esModuleInterop": true,                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
   },
   /* Directories to include in the TypeScript build */
