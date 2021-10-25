@@ -6,7 +6,7 @@ const umzug = new Umzug({
   migrations: {
     // indicates the folder containing the migration .js files
     path: path.join(__dirname, "../migrations"),
-    pattern: /\.ts$/,
+    pattern: /\.ts|\.js$/,
     // inject sequelize's QueryInterface in the migrations
     params: [sequelize],
     // params: [sequelize.getQueryInterface()],

@@ -23,7 +23,7 @@ const handler = async function (event:APIGatewayProxyEvent, context:Context, cal
       env: process.env
     }
 
-    exec(`node ./src/database/umzug/migrate.js`, options, (error, stdout, stderr) => {
+    exec(`node ./src/database/umzug/migrate`, options, (error, stdout, stderr) => {
       shell.echo(`Running: ${options.env}`)
       if (error) {
         console.error(`error: ${error.message}`);

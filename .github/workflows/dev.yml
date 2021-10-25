@@ -71,7 +71,6 @@ jobs:
       - name: Install NPM dependencies
 #        run: npm install
         run: npm install --only=prod
-      - run: cp .env ./build
       - run: npm run build && npm run postbuild
       - name: Deploy Lambda functions (serverless deploy)
         run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
