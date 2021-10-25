@@ -37,5 +37,5 @@
   "include": ["src/**/*"],
 
   /* Directories to exclude in the TypeScript build */
-//  "exclude": ["node_modules", "**/*.test.ts"]
+  "exclude": ["node_modules", "**/*.test.ts",".build"]
 }
