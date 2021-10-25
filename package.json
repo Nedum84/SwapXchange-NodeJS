@@ -10,7 +10,6 @@
     "test": "NODE_ENV=test jest --runInBand --no-cache",
     "dev-test": "NODE_ENV=test jest --runInBand --watchAll --no-cache",
     "db:drop": "./node_modules/.bin/ts-node src/database/umzug/drop.ts",
-    "//db:drop": "./node_modules/ts-node/dist/index.js src/database/umzug/drop.ts",
     "db:create": "ts-node src/database/umzug/migrate.ts",
     "db:migrate": "ts-node src/database/umzug/migrate.ts",
     "db:seed:all": "ts-node src/database/umzug/seed.ts",

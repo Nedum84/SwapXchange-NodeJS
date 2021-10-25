@@ -35,8 +35,8 @@ package:
 #    - 'build/node_modules/**' #Include
 #    - '!src/**'
 #    - 'build/src/**'
-#    - 'src/database/**'
-    - 'build/src/database/**'
+    - 'src/database/**'
+#    - 'build/src/database/**'
 #    - 'src/aws/**'
     - '.env'
 
