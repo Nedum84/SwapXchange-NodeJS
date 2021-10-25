@@ -76,8 +76,8 @@ jobs:
         run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
 
    # Run migration
-#      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
+#      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
       - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
 
 #        env: # or if using AWS credentials directly

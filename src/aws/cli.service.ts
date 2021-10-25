@@ -1,8 +1,15 @@
 import { exec } from "child_process";
-import { resolve as _resolve } from "path";
 import sequelize from "../models";
 import postMigration from "../database/post-migration";
-require("dotenv").config();
+import dotenv from "dotenv";
+dotenv.config();
+
+const cmdPaths = {
+  drop:"./src/database/umzug/drop",
+  create:"./src/database/umzug/create",
+  migrate:"./src/database/umzug/migrate",
+  seed:"./src/database/umzug/seed",
+}
 
 const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   console.log(`Executing "${cmd}"`);
@@ -20,14 +27,14 @@ const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   });
 };
 // const s_cli = _resolve(__dirname, '../../node_modules/sequelize-cli/lib/sequelize');
-const s_cli = "npx run";
+const s_cli = "node";
 
-const dropDB = () => execCommand(`${s_cli} db:drop`);
-const dbCreate = () => execCommand(`${s_cli} db:create`, null, false);
+const dropDB = () => execCommand(`${s_cli} ${cmdPaths.drop}`);
+const dbCreate = () => execCommand(`${s_cli} ${cmdPaths.create}`, null, false);
 
 const dbMigrate = (args: any, callback: any) => {
   return execCommand(
-    `${s_cli} db:migrate`,
+    `${s_cli} ${cmdPaths.migrate}`,
     (error: any, stdout: any, stderr: any) => {
       if (error || stderr) return callback(error, stdout, stderr);
 
@@ -41,7 +48,7 @@ const dbMigrate = (args: any, callback: any) => {
     }
   );
 };
-const dbSeedAll = () => execCommand(`${s_cli} db:seed:all`);
+const dbSeedAll = () => execCommand(`${s_cli} ${cmdPaths.seed}`);
 const dbSync = () => sequelize.sync({ force: true });
 const bash = (args: any) =>
   args.cmd
