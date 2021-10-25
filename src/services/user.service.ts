@@ -8,8 +8,6 @@ import coinsService from "./coins.service";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
-  console.log(process.env)
-  // await sequelize.sync({force:true});
 
   const user = await User.findOne({ where: { uid } });
   if (user) {

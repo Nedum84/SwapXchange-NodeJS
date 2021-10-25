@@ -10,13 +10,13 @@ async function up({ queryInterface }: { queryInterface: QueryInterface }) {
   //     replacements: ['admin'],
   //     type: QueryTypes.SELECT
   //   })
-  await queryInterface.addColumn("UserPeoplexz", "emails", {
+  await queryInterface.addColumn("UserPeopleTest", "emails", {
     type: DataTypes.STRING,
   });
 }
 
 async function down({ queryInterface }: { queryInterface: QueryInterface }) {
-  await queryInterface.dropTable("UserPeoplexz");
+  await queryInterface.dropTable("UserPeopleTest");
 }
 
 export default { up, down };

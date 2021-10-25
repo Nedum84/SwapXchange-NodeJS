@@ -97,8 +97,10 @@ const create = async (data: any) => {
     reference,
     method_of_subscription,
   });
-  return coin;
+  // return coin;
+  return getBalance(user_id);
 };
+
 const createForUser = async (req: Request) => {
   const { user_level } = req.user;
   const { user_id } = req.params;
