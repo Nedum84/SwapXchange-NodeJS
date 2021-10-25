@@ -34,8 +34,8 @@
   },
   /* Directories to include in the TypeScript build */
   /* In our project, we want to build and deploy our src code */
-  "include": ["src/**/*", "serverless.yml","package.json","package-lock.json"],
+  "include": [ "src/**/*", "serverless.yml","package.json","package-lock.json",".env"],
 
   /* Directories to exclude in the TypeScript build */
-  "exclude": ["node_modules", "**/*.test.ts",".build"]
+  "exclude": ["node_modules","**/*.test.ts", ".build"]
 }
