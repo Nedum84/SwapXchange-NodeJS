@@ -1,6 +1,8 @@
 name: Dev Deploy
 
 on:
+  push:
+    branches: [ develop ]
   workflow_dispatch:
 #    inputs:
 #      name:
