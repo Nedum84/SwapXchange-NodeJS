@@ -1,18 +1,8 @@
-name: Dev Deploy
+name: Prod Deploy
 
 on:
-  push:
-    branches: [ develop ]
   workflow_dispatch:
-#    inputs:
-#      name:
-#        description: 'Person to greet'
-#        required: true
-#        default: 'Mona the Octocat'
-#      home:
-#        description: 'location'
-#        required: false
-#        default: 'The Octoverse'
+
 jobs:
 
   deploy-dev:
@@ -32,19 +22,7 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-#        OR
-#      - name: Serverless AWS authentication
-#        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Create env file
-#        run: | # cp .env
-#          cat > .env << EOF
-#          ${{ secrets.ENV }}
-#          EOF
-
-#        run2: |
-#          cat << EOF > .env
-#          ${{ secrets.ENV }}
-#          EOF
 
         run: |
           cat > .env << EOF
@@ -60,28 +38,20 @@ jobs:
           PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
           AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
           AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
-          NODE_ENV=development
+          NODE_ENV=prod
           EOF
 
-#        run: |
-#          touch .env
-#          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
-#          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
-#          cat .env
 
       - name: Install NPM dependencies
         run: npm install --only=prod
       - run: npm run build && npm run postbuild
       - name: Deploy Lambda functions (serverless deploy)
-        run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
+        run: cd build && serverless deploy --stage prod --region $AWS_DEFAULT_REGION
 
    # Run migration
-      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
-#      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function cli -d db:seed:all --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:drop --stage prod --region $AWS_DEFAULT_REGION
+#      - run: sls invoke --function databaseMigrations --stage prod --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:migrate --stage prod --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:seed:all --stage prod --region $AWS_DEFAULT_REGION
 
-#        env: # or if using AWS credentials directly
-#         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-#         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 

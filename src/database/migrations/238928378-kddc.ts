@@ -4,7 +4,7 @@ async function up({ queryInterface }: { queryInterface: QueryInterface }) {
   // async function up(context) {
   // const queryInterface: QueryInterface = context.sequelize.queryInterface;
 
-  await queryInterface.createTable("UserPeoplexz", {
+  await queryInterface.createTable("UserPeopleTest", {
     id: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -31,7 +31,7 @@ async function up({ queryInterface }: { queryInterface: QueryInterface }) {
 }
 
 async function down({ queryInterface }: { queryInterface: QueryInterface }) {
-  await queryInterface.dropTable("UserPeoplesvkm");
+  await queryInterface.dropTable("UserPeopleTest");
 }
 
 export default { up, down };

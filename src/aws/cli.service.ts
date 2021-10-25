@@ -67,7 +67,6 @@ const handler = async function (event: any, context: any, callback: any) {
     const all: any = { ...register, ...registerDev };
     handle = all[command];
   } else {
-    //@ts-ignore
     handle = register[command];
   }
 

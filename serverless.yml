@@ -23,21 +23,10 @@ provider:
       - subnet-0f979ac6191ee988b
       - subnet-047d66d6a250068ae
 
-#package:
-#  patterns:
-#    - 'src/database/**'
-#    - '.env'
-#    - '!node_modules/**' #Exclude all node_modules sub dirs
-
 package:
   patterns:
 #    - '!node_modules/**' #Exclude all node_modules sub dirs
-#    - 'build/node_modules/**' #Include
-#    - '!src/**'
-#    - 'build/src/**'
     - 'src/database/**'
-#    - 'build/src/database/**'
-#    - 'src/aws/**'
     - '.env'
 
 plugins:
@@ -53,10 +42,6 @@ custom:
 #      'aws:deploy:finalize:cleanup': npm run db:migrate
 
 functions:
-  databaseMigrations:
-    handler: src/aws/lambda-migrate.handler
-    timeout: 300 # 5 minutes
-    memorySize: 512
   cli:
     handler: src/aws/lambda-cli.handler
     timeout: 300 # 5 minutes

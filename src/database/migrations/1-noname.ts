@@ -3,15 +3,7 @@
 import { Sequelize } from "sequelize";
 import {
   DataTypes,
-  INTEGER,
-  STRING,
   DATE,
-  UUID,
-  UUIDV4,
-  TEXT,
-  BIGINT,
-  DECIMAL,
-  BOOLEAN,
   QueryInterface,
   ModelAttributes,
   Model,
