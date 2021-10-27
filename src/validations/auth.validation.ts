@@ -23,7 +23,7 @@ const register = {
         chat: Joi.boolean().default(true),
         product: Joi.boolean().default(true),
       }),
-      user_level: Joi.number().default(1),
+      // user_level: Joi.number().default(1),
     })
     .min(3),
 };

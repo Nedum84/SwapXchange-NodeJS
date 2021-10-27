@@ -14,6 +14,9 @@ export const verifyReference = async (reference: string) => {
       }
     );
 
+    console.log(result.data);
+    console.log(result.headers);
+    console.log(result);
     if (!result) {
       throw new ErrorResponse(
         "Payment verification error, try again or contact support"
