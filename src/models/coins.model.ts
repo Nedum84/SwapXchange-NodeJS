@@ -67,11 +67,10 @@ export function CoinsFactory(sequelize: Sequelize) {
                 name:"reference_idx",
                 fields:[
                     "reference",
-                    {
-                        name:"reference",
-                        order:"DESC",
-
-                    }
+                    // {
+                    //     name:"reference",
+                    //     order:"DESC",
+                    // }
                 ],
             },
         ]

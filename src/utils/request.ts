@@ -4,6 +4,7 @@ import config from "../config/config";
 
 export const verifyReference = async (reference: string) => {
   console.log(reference, "-=fd-=f-d=-f=d-f=d-f=d-f=df Hello")
+  console.log(`KEY: ${config.PAYSTACK_TEST_SECRET_KEY}`)
   try {
     const result = await axios.get(
       `https://api.paystack.co/transaction/verify/${reference}`,
@@ -28,6 +29,7 @@ export const verifyReference = async (reference: string) => {
     }
     return false;
   } catch (error: any) {
+    console.log(error)
     return false;
     // throw new ErrorResponse(error?.response?.data?.message);
   }
