@@ -61,6 +61,20 @@ export function CoinsFactory(sequelize: Sequelize) {
     {
       timestamps: true,
       tableName: "Coins",
+        indexes:[
+            {
+                type:"FULLTEXT",
+                name:"reference_idx",
+                fields:[
+                    "reference",
+                    {
+                        name:"reference",
+                        order:"DESC",
+
+                    }
+                ],
+            },
+        ]
     }
   );
   return Coins;

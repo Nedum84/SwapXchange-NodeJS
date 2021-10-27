@@ -1,6 +1,14 @@
 import randomstring from "randomstring";
 import { Product } from "../models";
 
+// alphanumeric - [0-9 a-z A-Z]
+// alphabetic - [a-z A-Z]
+// numeric - [0-9]
+// hex - [0-9 a-f]
+// binary - [01]
+// octal - [0-7]
+// custom - any given characters
+
 const generateChars = (
   length = 12,
   charset = "alphanumeric",

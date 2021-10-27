@@ -3,6 +3,7 @@ import axios from "axios";
 import config from "../config/config";
 
 export const verifyReference = async (reference: string) => {
+  console.log(reference, "-=fd-=f-d=-f=d-f=d-f=d-f=df Hello")
   try {
     const result = await axios.get(
       `https://api.paystack.co/transaction/verify/${reference}`,

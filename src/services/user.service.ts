@@ -5,6 +5,7 @@ import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
 import  { User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
+import randomString from "../utils/random.string";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
@@ -24,7 +25,7 @@ const createUser = async (body: UserAttributes) => {
       throw new ErrorResponse("Email already taken");
     }
   }
-  // body.user_id = CONSTANTS.UUID();
+  body.user_id = await randomString.generateUniqueCharsForColumn(User, "user_id", 10, "numeric");
   const newUser = await User.create(body);
 
   //Add Registration Coins Bonus
