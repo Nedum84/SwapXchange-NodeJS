@@ -6,7 +6,7 @@ import { Sequelize } from "sequelize";
 import { Op } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import { Coins, Product } from "../models";
+import sequelize, { Coins, Product } from "../models";
 import CONSTANTS from "../utils/constants";
 import { verifyReference } from "../utils/request";
 import userService from "./user.service";
@@ -84,6 +84,10 @@ const create = async (data: any) => {
     if (purchaseAmounts.length < 3) {
       throw new ErrorResponse("Invalid reference number");
     }
+
+    if (purchaseAmounts?.[2]!==user_id) {
+      throw new ErrorResponse("Reference doesn't belong to this user.");
+    }
     const coinsAmount = parseInt(purchaseAmounts[1]);
     if (coinsAmount !== amount) {
       throw new ErrorResponse("Invalid amount for this reference::2");
@@ -91,7 +95,7 @@ const create = async (data: any) => {
   }
 
   //--> CREATE COIN
-  const coin = Coins.create({
+  const coin = await Coins.create({
     user_id,
     amount,
     reference,
@@ -154,6 +158,7 @@ const getBalance = async (user_id: string) => {
   //@ts-ignore
   last_credit?.current_time = CONSTANTS.NOW;
   const balance = userTotalCoins - totalUploadAmount - totalTransfers;
+
   return {
     total_coins: userTotalCoins,
     total_upload_amount: totalUploadAmount,
