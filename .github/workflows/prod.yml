@@ -34,8 +34,8 @@ jobs:
           JWT_SECRET=${{ secrets.JWT_SECRET }}
           JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
           JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
-          PAYSTACK_TEST_KEY=${{ secrets.PAYSTACK_TEST_KEY }}
-          PAYSTACK_LIVE_KEY=${{ secrets.PAYSTACK_LIVE_KEY }}
+          PAYSTACK_LIVE_SECRET_KEY=${{ secrets.PAYSTACK_LIVE_SECRET_KEY }}
+          PAYSTACK_TEST_SECRET_KEY=${{ secrets.PAYSTACK_TEST_SECRET_KEY }}
           AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
           AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
           NODE_ENV=prod
