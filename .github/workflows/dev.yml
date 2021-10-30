@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: '14'
       - name: Install Serverless Framework
-        run: npm install -g serverless serverless-plugin-typescript serverless-offline
+        run: npm install -g serverless serverless-offline
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -72,7 +72,7 @@ jobs:
       - name: Install NPM dependencies
         run: npm install --only=prod
       # Clean redundant files in node_modules
-#      - run: sh "./clean.sh"
+      - run: sh "./clean.sh"
       - run: npm run build && npm run postbuild
       - name: Deploy Lambda functions (serverless deploy)
         run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
