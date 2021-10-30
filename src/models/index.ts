@@ -117,6 +117,7 @@ User.hasMany(Product, {
 //   // sourceKey: "user_id",
 // });
 
+
 (async () => {
   // await sequelize.sync({ force: true });
   // await sequelize.sync();
