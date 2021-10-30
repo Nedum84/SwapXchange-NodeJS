@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: '14'
       - name: Install Serverless Framework
-        run: npm install -g serverless serverless-plugin-typescript ts-node
+        run: npm install -g serverless serverless-plugin-typescript serverless-offline
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
