@@ -30,7 +30,7 @@ package:
     - '.env'
 
 plugins:
-#  - serverless-plugin-typescript
+  - serverless-plugin-typescript
   - serverless-offline
 #  - serverless-plugin-scripts
 
