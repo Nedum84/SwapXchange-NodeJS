@@ -21,7 +21,7 @@
     "deploy": "cd build && npm install --only=prod && sls deploy --stage dev --region eu-west-2 && cd ..",
     "deploy2": "sls deploy --stage dev --region eu-west-2",
     "build-deploy": "npm run build && npm run deploy2",
-    "deploy-offline": "sls offline"
+    "deploy-offline": "npm run postbuild && cd build && sls offline"
   },
   "jest": {
     "preset": "ts-jest",
