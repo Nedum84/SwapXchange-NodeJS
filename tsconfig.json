@@ -32,7 +32,6 @@
 //    Added by me(Nelson)
     "esModuleInterop": true,                        /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     "skipLibCheck": true,
-    "types": [],
   },
   /* Directories to include in the TypeScript build */
   /* In our project, we want to build and deploy our src code */
