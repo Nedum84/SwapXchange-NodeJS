@@ -74,7 +74,7 @@ jobs:
       # Clean redundant files in node_modules
       - run: sh "./clean.sh"
       - run: npm run build && npm run postbuild
-#      - run: sh "./clean.sh" # Clean redundant files in ts build node_modules esp typescript module
+      - run: rm -rf build/node_modules/typescript # Clean redundant files in ts build node_modules esp typescript module
       - name: Deploy Lambda functions (serverless deploy)
         run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
 
