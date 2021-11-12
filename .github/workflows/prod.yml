@@ -5,7 +5,7 @@ on:
 
 jobs:
   deploy-dev:
-    name: Deploy to AWS Dev
+    name: Deploy to AWS Prod
     runs-on: ubuntu-latest
 
     steps:
@@ -25,7 +25,7 @@ jobs:
 
         run: |
           cat > .env << EOF
-          DB_HOST=${{ secrets.DB_HOST }}
+          DB_HOST=${{ secrets.DB_HOST_LIVE }}
           DB_PORT=${{ secrets.DB_PORT }}
           DB_PASSWORD="${{ secrets.DB_PASSWORD_LIVE }}"
           DB_USERNAME=${{ secrets.DB_USERNAME_LIVE }}
