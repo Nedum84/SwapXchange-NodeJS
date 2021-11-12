@@ -18,7 +18,7 @@ provider:
     NODE_OPTIONS: --enable-source-maps
   vpc:
     securityGroupIds:
-      - sg-0e16ecd2de3007de4 #Dev
+      # - sg-0e16ecd2de3007de4 #Dev
       - sg-05521c3074f1dc2fd #Dev
     subnetIds:
       # - subnet-06ac3f82667ebe9f0 #Dev
