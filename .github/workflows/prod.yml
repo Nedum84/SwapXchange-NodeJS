@@ -4,7 +4,6 @@ on:
   workflow_dispatch:
 
 jobs:
-
   deploy-dev:
     name: Deploy to AWS Dev
     runs-on: ubuntu-latest
@@ -13,14 +12,14 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
       - name: Install Serverless Framework
         run: npm install -g serverless serverless-plugin-typescript ts-node
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID_LIVE }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_LIVE }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
       - name: Create env file
 
@@ -28,10 +27,10 @@ jobs:
           cat > .env << EOF
           DB_HOST=${{ secrets.DB_HOST }}
           DB_PORT=${{ secrets.DB_PORT }}
-          DB_PASSWORD="${{ secrets.DB_PASSWORD }}"
-          DB_USERNAME=${{ secrets.DB_USERNAME }}
-          DB_NAME=${{ secrets.DB_NAME }}
-          JWT_SECRET=${{ secrets.JWT_SECRET }}
+          DB_PASSWORD="${{ secrets.DB_PASSWORD_LIVE }}"
+          DB_USERNAME=${{ secrets.DB_USERNAME_LIVE }}
+          DB_NAME=${{ secrets.DB_NAME_LIVE }}
+          JWT_SECRET=${{ secrets.JWT_SECRET_LIVE }}
           JWT_ACCESS_EXPIRATION_MINUTES=${{ secrets.JWT_ACCESS_EXPIRATION_MINUTES }}
           JWT_REFRESH_EXPIRATION_DAYS=${{ secrets.JWT_REFRESH_EXPIRATION_DAYS }}
           PAYSTACK_LIVE_SECRET_KEY=${{ secrets.PAYSTACK_LIVE_SECRET_KEY }}
@@ -41,19 +40,19 @@ jobs:
           NODE_ENV=prod
           EOF
 
-
       - name: Install NPM dependencies
         run: npm install --only=prod
-      # Clean redundant files in node_modules
-      - run: sh "./clean.sh"
-      - run: npm run build && npm run postbuild
+      - name: Clean redundant files in node_modules
+        run: sh "./clean.sh"
+      - name: Build ts files on build dir output
+        run: npm run build && npm run postbuild
+      - name: Clean redundant files(typescript module)
+        run: sh "./clean.sh" # Clean redundant files again in ts build node_modules esp typescript module
       - name: Deploy Lambda functions (serverless deploy)
         run: cd build && serverless deploy --stage prod --region $AWS_DEFAULT_REGION
 
-   # Run migration
+      # Run migration
       - run: sls invoke --function cli -d db:drop --stage prod --region $AWS_DEFAULT_REGION
-#      - run: sls invoke --function databaseMigrations --stage prod --region $AWS_DEFAULT_REGION
+      #      - run: sls invoke --function databaseMigrations --stage prod --region $AWS_DEFAULT_REGION
       - run: sls invoke --function cli -d db:migrate --stage prod --region $AWS_DEFAULT_REGION
       - run: sls invoke --function cli -d db:seed:all --stage prod --region $AWS_DEFAULT_REGION
-
-

@@ -1,6 +1,5 @@
 import { BuildOptions, Sequelize } from "sequelize";
 import { Model, Optional, DataTypes } from "sequelize";
-import { User } from ".";
 import { MethodOfSub } from "../enum/coins.enum";
 
 export interface CoinsAttributes {
@@ -34,6 +33,7 @@ export function CoinsFactory(sequelize: Sequelize) {
         autoIncrement: true,
         primaryKey: true,
         comment: "Coins Id",
+        // references: { model: sequelize.model("Users"),key:"id to be referenced" },
       },
       user_id: {
         type: DataTypes.STRING,
@@ -61,19 +61,19 @@ export function CoinsFactory(sequelize: Sequelize) {
     {
       timestamps: true,
       tableName: "Coins",
-        indexes:[
-            {
-                type:"FULLTEXT",
-                name:"reference_idx",
-                fields:[
-                    "reference",
-                    // {
-                    //     name:"reference",
-                    //     order:"DESC",
-                    // }
-                ],
-            },
-        ]
+      indexes: [
+        {
+          type: "FULLTEXT",
+          name: "reference_idx",
+          fields: [
+            "reference",
+            // {
+            //     name:"reference",
+            //     order:"DESC",
+            // }
+          ],
+        },
+      ],
     }
   );
   return Coins;

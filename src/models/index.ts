@@ -81,6 +81,7 @@ Product.belongsTo(User, {
   as: "user",
   foreignKey: "user_id",
   targetKey: "user_id",
+  foreignKeyConstraint: true,
 });
 Product.hasMany(ImageProduct, {
   as: "images",
@@ -116,7 +117,6 @@ User.hasMany(Product, {
 //   // targetKey: "product_id",
 //   // sourceKey: "user_id",
 // });
-
 
 (async () => {
   // await sequelize.sync({ force: true });
