@@ -1,7 +1,7 @@
 import { FindOptions } from "sequelize";
 import { Sequelize } from "sequelize";
 import { ProductStatus } from "../enum/product.enum";
-import { Category, ImageProduct, Product, SubCategory, User } from "../models";
+import { Category, ImageProduct, SubCategory, User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import userService from "../services/user.service";
 
