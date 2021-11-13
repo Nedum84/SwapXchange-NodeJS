@@ -63,12 +63,12 @@ const handler = async function (event: any, context: any, callback: any) {
 
   const env = process.env.NODE_ENV;
   let handle;
-  // if (["development", "staging", "test"].includes(env!)) {
-  const all: any = { ...register, ...registerDev };
-  handle = all[command];
-  // } else {
-  //   handle = register[command];
-  // }
+  if (["development", "staging", "test"].includes(env!)) {
+    const all: any = { ...register, ...registerDev };
+    handle = all[command];
+  } else {
+    handle = register[command];
+  }
 
   try {
     let res = "";

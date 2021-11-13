@@ -22,13 +22,14 @@ const generateUniqueCharsForColumn = async (
   model: any,
   column: string,
   length = 12,
-  charset = "alphanumeric"
+  charset = "alphanumeric",
+  capitalization?: string
 ) => {
   //:Promise<Model<TModelAttributes, TCreationAttributes>>
   let exists;
   let string;
   do {
-    string = generateChars(length, charset);
+    string = generateChars(length, charset, capitalization);
     exists = await model.findOne({ where: { [column]: string } });
   } while (exists);
 
