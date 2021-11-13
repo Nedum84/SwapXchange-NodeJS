@@ -40,14 +40,6 @@ const findOne = async (product_id: string) => {
   if (!product) {
     throw new ErrorResponse("Product not found!", httpStatus.NOT_FOUND);
   }
-  // const suggestions = await categoryService.findByCatIds(
-  //   product.product_suggestion
-  // );
-  // if (suggestions) {
-  //   //@ts-ignore no_of_views
-  //   product.setDataValue("suggestions", suggestions);
-  // }
-
   return product;
 };
 const update = async (req: Request) => {

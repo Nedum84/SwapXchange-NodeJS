@@ -12,7 +12,7 @@ import { Product } from "../models";
 const generateChars = (
   length = 12,
   charset = "alphanumeric",
-  capitalization = "uppercase",
+  capitalization?: string,
   readable = true
 ) => {
   return randomstring.generate({ length, readable, charset, capitalization });
@@ -36,7 +36,7 @@ const generateUniqueCharsForColumn = async (
 };
 
 const generateProductOrderId = async () => {
-  return generateUniqueCharsForColumn(Product, "order_id", 10);
+  return generateUniqueCharsForColumn(Product, "order_id", 11, "uppercase");
 };
 
 export default {
