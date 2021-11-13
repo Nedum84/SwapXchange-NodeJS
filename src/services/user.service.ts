@@ -2,13 +2,16 @@ import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import  { User } from "../models";
+import { User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
 import randomString from "../utils/random.string";
+import config from "../config/config";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
+
+  console.log("ENV::", config);
 
   const user = await User.findOne({ where: { uid } });
   if (user) {
@@ -25,7 +28,12 @@ const createUser = async (body: UserAttributes) => {
       throw new ErrorResponse("Email already taken");
     }
   }
-  body.user_id = await randomString.generateUniqueCharsForColumn(User, "user_id", 10, "numeric");
+  body.user_id = await randomString.generateUniqueCharsForColumn(
+    User,
+    "user_id",
+    10,
+    "numeric"
+  );
   const newUser = await User.create(body);
 
   //Add Registration Coins Bonus
