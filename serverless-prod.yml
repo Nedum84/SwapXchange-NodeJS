@@ -11,17 +11,17 @@ provider:
   lambdaHashingVersion: "20201221"
   region: eu-west-2
   iam:
-    role: arn:aws:iam::899172222060:role/XchangeRole #Dev
+    role: arn:aws:iam::100798749361:role/XchangeRole
 
   environment:
     NODE_OPTIONS: --enable-source-maps
   vpc:
     securityGroupIds:
-      - sg-0e16ecd2de3007de4 #Dev
+      - sg-05521c3074f1dc2fd
     subnetIds:
-      - subnet-06ac3f82667ebe9f0 #Dev
-      - subnet-0f979ac6191ee988b #Dev
-      - subnet-047d66d6a250068ae #Dev
+      - subnet-0d7c9144f345010d8
+      - subnet-0d58d6451fa4f2daa
+      - subnet-0c5be8ea063cd4adc
 
 package:
   patterns:
@@ -30,15 +30,7 @@ package:
     - ".env"
 
 plugins:
-  #  - serverless-plugin-typescript
   - serverless-offline
-#  - serverless-plugin-scripts
-
-custom:
-  scripts:
-    hooks:
-#      'after:deploy:finalize': npm run db:migrate
-#      'aws:deploy:finalize:cleanup': npm run db:migrate
 
 functions:
   cli:

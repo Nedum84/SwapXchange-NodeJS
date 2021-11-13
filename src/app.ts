@@ -21,8 +21,6 @@ if (config.env !== "test") {
   app.use(morgan.errorHandler);
 }
 
-console.log("ENV::", config);
-
 // set security HTTP headers
 app.use(helmet());
 

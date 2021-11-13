@@ -11,8 +11,6 @@ import config from "../config/config";
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
 
-  console.log("ENV::", config);
-
   const user = await User.findOne({ where: { uid } });
   if (user) {
     user.last_login = new Date();
