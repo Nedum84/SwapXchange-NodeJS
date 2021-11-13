@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { Faqs } from "../models";
+import randomString from "../utils/random.string";
 
 const findOne = async (faq_id: string) => {
   const faq = await Faqs.findOne({ where: { faq_id } });
@@ -31,8 +32,13 @@ const create = async (req: Request) => {
   if (!user_level || user_level == 1) {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
+  const faq_id = await randomString.generateUniqueCharsForColumn(
+    Faqs,
+    "faq_id"
+  );
   const faq = await Faqs.create({
     question,
+    faq_id,
     answer,
     added_by: user_id,
   });

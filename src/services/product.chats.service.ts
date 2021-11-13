@@ -4,6 +4,7 @@ import { Op } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { ChatStatus } from "../enum/product.chats.enum";
 import { ProductChats } from "../models";
+import randomString from "../utils/random.string";
 import productImageService from "./product.image.service";
 import productService from "./product.service";
 import userService from "./user.service";
@@ -46,10 +47,12 @@ const create = async (req: Request) => {
     order: [["id", "DESC"]],
   });
 
-  console.log(chat?.toJSON(), sender_id, req.user);
-
   //create
   if (!chat) {
+    body.product_chat_id = await randomString.generateUniqueCharsForColumn(
+      ProductChats,
+      "product_chat_id"
+    );
     const newChat = await ProductChats.create(body);
     return findOne(newChat.product_chat_id);
   }

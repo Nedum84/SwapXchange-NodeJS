@@ -8,6 +8,7 @@ import { ProductStatus } from "../enum/product.enum";
 import { QueryTypes } from "sequelize";
 import userService from "./user.service";
 import categoryService from "./category.service";
+import randomString from "../utils/random.string";
 
 const findOne = async (sub_category_id: string) => {
   const subCat = await SubCategory.findOne({ where: { sub_category_id } });
@@ -40,6 +41,11 @@ const create = async (req: Request) => {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
   await categoryService.findOne(body.category_id);
+
+  body.sub_category_id = await randomString.generateUniqueCharsForColumn(
+    SubCategory,
+    "sub_category_id"
+  );
   const category = await SubCategory.create(body);
   return category;
 };

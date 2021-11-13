@@ -7,6 +7,7 @@ import { ImageProductAttributes } from "../models/image.product.model";
 import productService from "./product.service";
 import { QueryTypes } from "sequelize";
 import { Sequelize } from "sequelize";
+import randomString from "../utils/random.string";
 
 const findOne = async (image_id: string) => {
   const image = await ImageProduct.findOne({
@@ -44,6 +45,10 @@ const createMany = async (body: ImageProductAttributes[]) => {
   return images;
 };
 const createOne = async (body: ImageProductAttributes) => {
+  body.image_id = await randomString.generateUniqueCharsForColumn(
+    ImageProduct,
+    "image_id"
+  );
   const image = await ImageProduct.create(body);
   return image;
 };

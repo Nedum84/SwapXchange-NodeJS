@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { ProductViews } from "../models";
+import randomString from "../utils/random.string";
 import productService from "./product.service";
 
 const findAll = async (product_id: string) => {
@@ -21,8 +22,13 @@ const create = async (req: Request) => {
     return view.reload();
   }
 
+  const view_id = await randomString.generateUniqueCharsForColumn(
+    ProductViews,
+    "view_id"
+  );
   const newView = await ProductViews.create({
     user_id,
+    view_id,
     product_id,
   });
   return newView;

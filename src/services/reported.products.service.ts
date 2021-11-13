@@ -3,6 +3,7 @@ import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { ReportedProducts } from "../models";
 import Helpers from "../utils/helpers";
+import randomString from "../utils/random.string";
 import productService from "./product.service";
 
 const findOne = async (reported_id: string) => {
@@ -30,9 +31,14 @@ const create = async (req: Request) => {
 
   const product = await productService.findOne(product_id);
 
+  const reported_id = await randomString.generateUniqueCharsForColumn(
+    ReportedProducts,
+    "reported_id"
+  );
   const report = await ReportedProducts.create({
     reported_by,
     product_id,
+    reported_id,
     reported_message,
     uploaded_by: product.user_id,
   });

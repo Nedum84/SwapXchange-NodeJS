@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request } from "express";
 import httpStatus from "http-status";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { SavedProducts } from "../models";

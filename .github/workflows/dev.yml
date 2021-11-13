@@ -2,7 +2,7 @@ name: Dev Deploy
 
 on:
   push:
-    branches: [ develop ]
+    branches: [master]
   workflow_dispatch:
 #    inputs:
 #      name:
@@ -14,7 +14,6 @@ on:
 #        required: false
 #        default: 'The Octoverse'
 jobs:
-
   deploy-dev:
     name: Deploy to AWS Dev
     runs-on: ubuntu-latest
@@ -23,7 +22,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: "14"
       - name: Install Serverless Framework
         run: npm install -g serverless serverless-offline
       - name: Configure AWS Credentials
@@ -32,19 +31,19 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
-#        OR
-#      - name: Serverless AWS authentication
-#        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #        OR
+      #      - name: Serverless AWS authentication
+      #        run: serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: Create env file
-#        run: | # cp .env
-#          cat > .env << EOF
-#          ${{ secrets.ENV }}
-#          EOF
+        #        run: | # cp .env
+        #          cat > .env << EOF
+        #          ${{ secrets.ENV }}
+        #          EOF
 
-#        run2: |
-#          cat << EOF > .env
-#          ${{ secrets.ENV }}
-#          EOF
+        #        run2: |
+        #          cat << EOF > .env
+        #          ${{ secrets.ENV }}
+        #          EOF
 
         run: |
           cat > .env << EOF
@@ -63,11 +62,11 @@ jobs:
           NODE_ENV=development
           EOF
 
-#        run: |
-#          touch .env
-#          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
-#          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
-#          cat .env
+      #        run: |
+      #          touch .env
+      #          echo API_ENDPOINTXXZ="https://xxx.execute-api.us-west-2.amazonaws.com" >> .env
+      #          echo API_KEY=${{ secrets.AGORA_APP_ID }} >> .env
+      #          cat .env
 
       - name: Install NPM dependencies
         run: npm install --only=prod
@@ -80,12 +79,11 @@ jobs:
       - name: Deploy Lambda functions (serverless deploy)
         run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
 
-   # Run migration
-#      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
-#      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
+      # Run migration
+      #      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
+      #      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
       - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
       - run: sls invoke --function cli -d db:seed:all --stage dev --region $AWS_DEFAULT_REGION
-
 #        env: # or if using AWS credentials directly
 #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

@@ -75,6 +75,10 @@ const create = async (req: Request) => {
   body.user_id = user_id;
 
   body.order_id = await randomString.generateProductOrderId();
+  body.product_id = await randomString.generateUniqueCharsForColumn(
+    Product,
+    "product_id"
+  );
 
   const product = await Product.create(body);
   //--> Add Images....

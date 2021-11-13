@@ -8,6 +8,7 @@ import { CategoryAttributes } from "../models/category.model";
 import ProductUtils from "../utils/product.utils";
 import userService from "./user.service";
 import { ProductStatus } from "../enum/product.enum";
+import randomString from "../utils/random.string";
 
 const findOne = async (category_id: string) => {
   const cat = await Category.findOne({ where: { category_id } });
@@ -39,6 +40,10 @@ const create = async (req: Request) => {
     throw new ErrorResponse("Access denied", httpStatus.UNAUTHORIZED);
   }
 
+  body.category_id = await randomString.generateUniqueCharsForColumn(
+    Category,
+    "category_id"
+  );
   const category = await Category.create(body);
   return category;
 };

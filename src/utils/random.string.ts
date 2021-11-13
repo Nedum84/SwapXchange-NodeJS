@@ -22,8 +22,9 @@ const generateUniqueCharsForColumn = async (
   model: any,
   column: string,
   length = 12,
-  charset = "alphabetic"
-) => {//:Promise<Model<TModelAttributes, TCreationAttributes>>
+  charset = "alphanumeric"
+) => {
+  //:Promise<Model<TModelAttributes, TCreationAttributes>>
   let exists;
   let string;
   do {
