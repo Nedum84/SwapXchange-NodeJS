@@ -27,7 +27,7 @@ jobs:
           cat > .env << EOF
           DB_HOST=${{ secrets.DB_HOST_LIVE }}
           DB_PORT=${{ secrets.DB_PORT }}
-          DB_PASSWORD="${{ secrets.DB_PASSWORD_LIVE }}"
+          DB_PASSWORD=${{ secrets.DB_PASSWORD_LIVE }}
           DB_USERNAME=${{ secrets.DB_USERNAME_LIVE }}
           DB_NAME=${{ secrets.DB_NAME_LIVE }}
           JWT_SECRET=${{ secrets.JWT_SECRET_LIVE }}

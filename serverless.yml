@@ -19,7 +19,7 @@ provider:
   vpc:
     securityGroupIds:
       # - sg-0e16ecd2de3007de4 #Dev
-      - sg-05521c3074f1dc2fd #Dev
+      - sg-05521c3074f1dc2fd
     subnetIds:
       # - subnet-06ac3f82667ebe9f0 #Dev
       # - subnet-0f979ac6191ee988b #Dev
