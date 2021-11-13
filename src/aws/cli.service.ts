@@ -5,11 +5,11 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const cmdPaths = {
-  drop:"./src/database/umzug/drop",
-  create:"./src/database/umzug/create",
-  migrate:"./src/database/umzug/migrate",
-  seed:"./src/database/umzug/seed",
-}
+  drop: "./src/database/umzug/drop",
+  create: "./src/database/umzug/create",
+  migrate: "./src/database/umzug/migrate",
+  seed: "./src/database/umzug/seed",
+};
 
 const execCommand = (cmd: any, callback: any = null, throwError = true) => {
   console.log(`Executing "${cmd}"`);
@@ -63,12 +63,12 @@ const handler = async function (event: any, context: any, callback: any) {
 
   const env = process.env.NODE_ENV;
   let handle;
-  if (["development", "staging", "test"].includes(env!)) {
-    const all: any = { ...register, ...registerDev };
-    handle = all[command];
-  } else {
-    handle = register[command];
-  }
+  // if (["development", "staging", "test"].includes(env!)) {
+  const all: any = { ...register, ...registerDev };
+  handle = all[command];
+  // } else {
+  //   handle = register[command];
+  // }
 
   try {
     let res = "";

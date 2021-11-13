@@ -88,7 +88,10 @@ export function UserFactory(sequelize: Sequelize) {
           product: true,
         },
       },
-      user_level: DataTypes.INTEGER,
+      user_level: {
+        type: DataTypes.INTEGER,
+        defaultValue: 1,
+      },
       online_status: {
         type: DataTypes.ENUM,
         values: Object.values(OnlineStatus),
