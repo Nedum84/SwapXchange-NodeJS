@@ -50,12 +50,12 @@ const create = async (data: any) => {
       throw new ErrorResponse("User already claimed registration bonus");
     }
   }
-  if (method_of_subscription === MethodOfSub.PURCHASE) {
-    const verifyRef = await verifyReference(reference);
-    if (!verifyRef) {
-      throw new ErrorResponse("Invalid reference");
-    }
-  }
+  // if (method_of_subscription === MethodOfSub.PURCHASE) {
+  //   const verifyRef = await verifyReference(reference);
+  //   if (!verifyRef) {
+  //     throw new ErrorResponse("Invalid reference");
+  //   }
+  // }
   if (method_of_subscription === MethodOfSub.DAILY_OPENING) {
     const checkReward = await Coins.findOne({
       where: {
@@ -85,7 +85,7 @@ const create = async (data: any) => {
       throw new ErrorResponse("Invalid reference number");
     }
 
-    if (purchaseAmounts?.[2]!==user_id) {
+    if (purchaseAmounts?.[2] !== user_id) {
       throw new ErrorResponse("Reference doesn't belong to this user.");
     }
     const coinsAmount = parseInt(purchaseAmounts[1]);
