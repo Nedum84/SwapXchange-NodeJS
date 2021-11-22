@@ -29,9 +29,6 @@ package:
     - "src/database/**"
     - ".env"
 
-plugins:
-  - serverless-offline
-
 functions:
   cli:
     handler: src/aws/lambda-cli.handler
