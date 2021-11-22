@@ -82,10 +82,10 @@ jobs:
         run: cd build && serverless deploy --config serverless-dev.yml --stage dev --region $AWS_DEFAULT_REGION
 
       # Run migration
-      #      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:drop --config serverless-dev.yml --stage dev --region $AWS_DEFAULT_REGION
       #      - run: sls invoke --function databaseMigrations --stage dev --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function cli -d db:migrate --stage dev --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function cli -d db:seed:all --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:migrate --config serverless-dev.yml --stage dev --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:seed:all --config serverless-dev.yml --stage dev --region $AWS_DEFAULT_REGION
 #        env: # or if using AWS credentials directly
 #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
 #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
