@@ -79,7 +79,7 @@ jobs:
       - name: Clean redundant files(typescript module)
         run: sh "./clean.sh" # Clean redundant files again in ts build node_modules esp typescript module
       - name: Deploy Lambda functions (serverless deploy)
-        run: cd build && serverless deploy --stage dev --region $AWS_DEFAULT_REGION
+        run: cd build && serverless deploy --config serverless-dev.yml --stage prod --region $AWS_DEFAULT_REGION
 
       # Run migration
       #      - run: sls invoke --function cli -d db:drop --stage dev --region $AWS_DEFAULT_REGION

@@ -7,6 +7,7 @@ import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
 import randomString from "../utils/random.string";
 import config from "../config/config";
+import crypt from "../utils/crypt";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
@@ -33,6 +34,7 @@ const createUser = async (body: UserAttributes) => {
     "numeric"
   );
   const newUser = await User.create(body);
+  const { user_id } = newUser;
 
   //Add Registration Coins Bonus
   const amount = AmountsEnum.H500;
@@ -42,10 +44,13 @@ const createUser = async (body: UserAttributes) => {
     amount,
     reference,
     method_of_subscription,
-    user_id: newUser.user_id,
   };
 
-  const coin = await coinsService.create(data);
+  //Enc the payload
+  const payloadEnc = crypt.encryptStringWithRsaPublicKey(JSON.stringify(data));
+  const payload = { payload: payloadEnc };
+
+  const coin = await coinsService.create({ user_id, ...payload });
   return newUser;
 };
 

@@ -21,7 +21,8 @@
     "deploy": "cd build && npm install --only=prod && sls deploy --stage dev --region eu-west-2 && cd ..",
     "deploy2": "sls deploy --stage dev --region eu-west-2",
     "build-deploy": "npm run build && npm run deploy2",
-    "deploy-offline": "npm run postbuild && cd build && sls offline",
+    "deploy-offline2": "npm run postbuild && cd build && sls offline",
+    "deploy-offline": "sls offline",
     "git-push": "git add . && git commit -m 'more additions' && git push"
   },
   "jest": {
@@ -79,6 +80,7 @@
     "jest": "^27.2.0",
     "serverless": "^2.60.0",
     "serverless-offline": "^8.2.0",
+    "serverless-plugin-typescript": "^2.1.0",
     "supertest": "^6.1.5",
     "ts-jest": "^27.0.5"
   }

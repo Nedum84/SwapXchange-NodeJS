@@ -5,7 +5,13 @@ const encryptStringWithRsaPublicKey = function (toEncrypt: string) {
   const rawPublicKey = config.RSA_PUBLIC_KEY;
   const publicKey = Buffer.from(rawPublicKey, "base64").toString("ascii"); //Base64 to public key
   const buffer = Buffer.from(toEncrypt);
-  const encrypted = crypto.publicEncrypt(publicKey, buffer);
+  const encrypted = crypto.publicEncrypt(
+    {
+      key: publicKey,
+      padding: crypto.constants.RSA_PKCS1_PADDING,
+    },
+    buffer
+  );
   return encrypted.toString("base64");
 };
 
