@@ -54,5 +54,5 @@ jobs:
         run: cd build && serverless deploy --config serverless-prod.yml --stage prod --region $AWS_DEFAULT_REGION
 
       # Run migration
-      - run: sls invoke --function cli -d db:migrate --stage prod --region $AWS_DEFAULT_REGION
-      - run: sls invoke --function cli -d db:seed:all --stage prod --region $AWS_DEFAULT_REGION
+      # - run: sls invoke --function cli -d db:create --config serverless-prod.yml --stage prod --region $AWS_DEFAULT_REGION
+      - run: sls invoke --function cli -d db:migrate --config serverless-prod.yml --stage prod --region $AWS_DEFAULT_REGION
