@@ -68,6 +68,8 @@ const findAll = async (req: Request) => {
     nest: true,
     mapToModel: true,
   });
+  console.log(categories); //Remove later
+
   return categories;
 };
 const findByCatIds = async (catIds: string[]) => {
