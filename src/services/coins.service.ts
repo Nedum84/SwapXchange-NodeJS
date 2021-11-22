@@ -1,14 +1,14 @@
-import { Request, Response } from "express";
-import { dangerouslyDisableDefaultSrc } from "helmet/dist/middlewares/content-security-policy";
+import { Request } from "express";
 import httpStatus from "http-status";
 import moment from "moment";
 import { Sequelize } from "sequelize";
 import { Op } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { AmountsEnum, MethodOfSub } from "../enum/coins.enum";
-import sequelize, { Coins, Product } from "../models";
+import { Coins, Product } from "../models";
 import CONSTANTS from "../utils/constants";
-import { verifyReference } from "../utils/request";
+import crypt from "../utils/crypt";
+import coinsValidation from "../validations/coins.validation";
 import userService from "./user.service";
 
 const findAllByUserId = async (user_id: string, limit = 10) => {
@@ -27,7 +27,25 @@ const findAllByUserId = async (user_id: string, limit = 10) => {
   };
 };
 const create = async (data: any) => {
-  const { amount, reference, method_of_subscription, user_id } = data;
+  const { user_id, payload } = data;
+
+  let body: any;
+  try {
+    body = crypt.decryptStringWithRsaPrivateKey(payload);
+    body = JSON.parse(body);
+  } catch (error) {
+    throw new ErrorResponse(error.message ?? JSON.stringify(error));
+  }
+
+  const { error } = coinsValidation.createSchema.validate(body);
+
+  if (error) {
+    throw new ErrorResponse(
+      `${error.details.map((x) => x.message).join(", ")}`
+    );
+  }
+
+  const { amount, reference, method_of_subscription } = body;
 
   const checkRef = await Coins.findOne({ where: { reference } });
   if (checkRef) {

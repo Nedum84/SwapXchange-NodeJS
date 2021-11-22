@@ -6,7 +6,7 @@ const envVarsSchema = Joi.object()
   .keys({
     NODE_ENV: Joi.string().default("development"),
     REGION: Joi.string().default("eu-west-2"),
-    PORT: Joi.number().default(8000),
+    PORT: Joi.number().default(8088),
     JWT_SECRET: Joi.string()
       .description("JWT secret key")
       .default("jwt-token-secret"),
@@ -26,6 +26,8 @@ const envVarsSchema = Joi.object()
     PAYSTACK_LIVE_SECRET_KEY: Joi.string().default("key"),
     AGORA_APP_ID: Joi.string().default("agora_app_id"),
     AGORA_APP_CERT: Joi.string().default("agora_app_cert"),
+    RSA_PUBLIC_KEY: Joi.string().default("default"),
+    RSA_PRIVATE_KEY: Joi.string().default("default"),
   })
   .unknown();
 
@@ -58,4 +60,6 @@ export default {
     accessExpirationMinutes: envVars.JWT_ACCESS_EXPIRATION_MINUTES,
     refreshExpirationDays: envVars.JWT_REFRESH_EXPIRATION_DAYS,
   },
+  RSA_PUBLIC_KEY: envVars.RSA_PUBLIC_KEY,
+  RSA_PRIVATE_KEY: envVars.RSA_PRIVATE_KEY,
 };

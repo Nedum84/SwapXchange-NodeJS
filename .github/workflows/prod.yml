@@ -37,6 +37,8 @@ jobs:
           PAYSTACK_TEST_SECRET_KEY=${{ secrets.PAYSTACK_TEST_SECRET_KEY }}
           AGORA_APP_ID=${{ secrets.AGORA_APP_ID }}
           AGORA_APP_CERT=${{ secrets.AGORA_APP_CERT }}
+          RSA_PUBLIC_KEY=${{ secrets.RSA_PUBLIC_KEY_LIVE }}
+          RSA_PRIVATE_KEY=${{ secrets.RSA_PRIVATE_KEY_LIVE }}
           NODE_ENV=prod
           EOF
 
