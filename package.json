@@ -17,7 +17,7 @@
     "db:reset:all": "npm start && npm run db:reset && npm run db:seed:all",
     "clean": "rm -rf ./build",
     "build": "npm run clean && tsc --build tsconfig.json",
-    "postbuild": "cp serverless.yml ./build && cp serverless-dev.yml && cp serverless-prod.yml ./build && cp .env ./build && cp -R node_modules ./build",
+    "postbuild": "cp serverless.yml ./build && cp serverless-dev.yml ./build && cp serverless-prod.yml ./build && cp .env ./build && cp -R node_modules ./build",
     "deploy": "cd build && npm install --only=prod && sls deploy --stage dev --region eu-west-2 && cd ..",
     "deploy2": "sls deploy --stage dev --region eu-west-2",
     "build-deploy": "npm run build && npm run deploy2",
