@@ -6,14 +6,13 @@ import { User } from "../models";
 import { UserAttributes } from "../models/user.model";
 import coinsService from "./coins.service";
 import randomString from "../utils/random.string";
-import config from "../config/config";
 import crypt from "../utils/crypt";
 
 const createUser = async (body: UserAttributes) => {
   const { uid, email } = body;
 
   const user = await User.findOne({ where: { uid } });
-  if (user) {
+  if (user && user.name != null && user.address_lat != null) {
     user.last_login = new Date();
     await user.save();
     return user.reload();

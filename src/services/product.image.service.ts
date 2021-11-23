@@ -37,13 +37,24 @@ const deleteOne = async (req: Request) => {
   }
   return !!image.destroy();
 };
-const createMany = async (body: ImageProductAttributes[]) => {
-  const images = await ImageProduct.bulkCreate(body, {
+const createMany = async (images: ImageProductAttributes[]) => {
+  const uniqueImageId = await randomString.generateUniqueCharsForColumn(
+    ImageProduct,
+    "image_id",
+    10
+  );
+
+  const body: ImageProductAttributes[] = images.map((image, index) => {
+    return { ...image, image_id: `${uniqueImageId}${index + 1}` };
+  });
+
+  const imgs = await ImageProduct.bulkCreate(body, {
     fields: ["image_id", "product_id", "image_path", "idx"],
     updateOnDuplicate: ["image_id"],
   });
-  return images;
+  return imgs;
 };
+
 const createOne = async (body: ImageProductAttributes) => {
   body.image_id = await randomString.generateUniqueCharsForColumn(
     ImageProduct,

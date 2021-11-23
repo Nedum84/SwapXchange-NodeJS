@@ -1,15 +1,19 @@
 import request from "supertest";
 import { app } from "../../src/app";
 import customFake from "../factories/custom.fake";
+import * as faker from "faker";
 
 beforeAll(async () => {});
 describe("Auth test", () => {
   it("returns a 201 on successful signup", async () => {
+    const randomString = faker.random.alphaNumeric(10);
+    const email = `user-${randomString}@email.com`;
+
     const res = await request(app).post("/api/v1/auth").send({
       uid: customFake.fakeUuid,
       name: customFake.fakeName,
       mobile_number: customFake.fakePhone,
-      email: customFake.fakeEmail,
+      email,
     });
 
     expect(res.body).toHaveProperty("data");

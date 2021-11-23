@@ -69,7 +69,6 @@ const findAll = async (req: Request) => {
     nest: true,
     mapToModel: true,
   });
-  console.log(subcategories); //Remove later
   return subcategories;
 };
 const findByCategoryId = async (category_id: string) => {

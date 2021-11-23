@@ -37,7 +37,7 @@ const create = async (data: any) => {
     throw new ErrorResponse(error.message ?? JSON.stringify(error));
   }
 
-  const { error } = coinsValidation.createSchema.validate(body);
+  const { error, value } = coinsValidation.createSchema.validate(body);
 
   if (error) {
     throw new ErrorResponse(
@@ -45,7 +45,7 @@ const create = async (data: any) => {
     );
   }
 
-  const { amount, reference, method_of_subscription } = body;
+  const { amount, reference, method_of_subscription } = value; //use value bc joi has type cast the validation
 
   const checkRef = await Coins.findOne({ where: { reference } });
   if (checkRef) {
@@ -92,6 +92,8 @@ const create = async (data: any) => {
   }
   const amounts = Object.values(AmountsEnum);
   if (method_of_subscription === MethodOfSub.PURCHASE) {
+    console.log(amount, typeof amount, amounts);
+
     if (!amounts.includes(amount)) {
       throw new ErrorResponse("Invalid amount for this reference::1");
     }

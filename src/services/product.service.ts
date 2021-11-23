@@ -1,17 +1,10 @@
 import { Request } from "express";
 import httpStatus from "http-status";
-import { Sequelize } from "sequelize";
 import { Op } from "sequelize";
 import { QueryTypes } from "sequelize";
 import { ErrorResponse } from "../apiresponse/error.response";
 import { ProductStatus } from "../enum/product.enum";
-import sequelize, {
-  Category,
-  ImageProduct,
-  Product,
-  SubCategory,
-  User,
-} from "../models";
+import sequelize, { Product } from "../models";
 import { ProductAttributes } from "../models/product.model";
 import Helpers from "../utils/helpers";
 import ProductUtils from "../utils/product.utils";
@@ -90,7 +83,6 @@ const create = async (req: Request) => {
     }
   }
 
-  // return product;
   return findOne(product.product_id);
 };
 const findByCategory = async (req: Request) => {
