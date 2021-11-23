@@ -9,6 +9,7 @@ export default {
       [
         {
           user_id: "9344639296",
+          uid: "FqOzS1YbO7YXhWU1OrhUnNvY7SG",
           name: "Nelson Nedum",
           mobile_number: "08160054545",
           address: "Odumosu Street, Ketu 105102, Lagos, Nigeria",
