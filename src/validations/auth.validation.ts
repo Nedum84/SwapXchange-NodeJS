@@ -7,7 +7,6 @@ const register = {
     .keys({
       uid: Joi.string().required(),
       name: Joi.string().custom(name),
-      // mobile_number: Joi.string().custom(phone),
       mobile_number: Joi.string(),
       email: Joi.string().custom(email),
       radius: Joi.number().default(UserRadius.MILE_200),
@@ -23,7 +22,6 @@ const register = {
         chat: Joi.boolean().default(true),
         product: Joi.boolean().default(true),
       }),
-      // user_level: Joi.number().default(1),
     })
     .min(3),
 };

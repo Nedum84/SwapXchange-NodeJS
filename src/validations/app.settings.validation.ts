@@ -1,4 +1,3 @@
-// import { object, string, required, any, date } from "joi";
 import Joi from "joi";
 
 const findOne = {
