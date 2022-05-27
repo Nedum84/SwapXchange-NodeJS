@@ -7,9 +7,7 @@ const envVarsSchema = Joi.object()
     NODE_ENV: Joi.string().default("development"),
     REGION: Joi.string().default("eu-west-2"),
     PORT: Joi.number().default(8088),
-    JWT_SECRET: Joi.string()
-      .description("JWT secret key")
-      .default("jwt-token-secret"),
+    JWT_SECRET: Joi.string().description("JWT secret key").default("jwt-token-secret"),
     JWT_ACCESS_EXPIRATION_MINUTES: Joi.number()
       .default(30)
       .description("minutes after which access tokens expire"),

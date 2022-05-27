@@ -2,11 +2,10 @@ import { app } from "./app";
 import config from "./config/config";
 import logger from "./config/logger";
 
-
 //Start app server
 const start = async () => {
   const server = app.listen(config.PORT, () => {
-    console.log(`Listening on port http://localhost:${config.PORT}...!`);
+    console.log(`Listening on port http://localhost:${config.PORT} ...!`);
   });
 
   const exitHandler = () => {
